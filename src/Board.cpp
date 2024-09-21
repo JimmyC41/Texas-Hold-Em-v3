@@ -35,6 +35,11 @@ bool Board::isFlopDealt() const {
 bool Board::isTurnDealt() const {
     return communityCards.size() == 4;
 }
+
 bool Board::isRiverDealt() const {
     return communityCards.size() == 5;
+}
+
+size_t Board::getCommunityCardCount() const {
+    return communityCards.size();
 }

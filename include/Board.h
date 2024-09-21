@@ -19,6 +19,7 @@ public:
     bool isFlopDealt() const;
     bool isTurnDealt() const;
     bool isRiverDealt() const;
+    size_t getCommunityCardCount() const;
 };
 
 #endif // BOARD_H

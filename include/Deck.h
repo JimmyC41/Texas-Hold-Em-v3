@@ -19,6 +19,7 @@ public:
     Card& dealCard();
     void burnCard();
     void resetDeck();
+    size_t getDealtCardCount() const;
 };
 
 #endif // DECK_H

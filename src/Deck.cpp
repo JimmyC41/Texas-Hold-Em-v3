@@ -46,3 +46,7 @@ void Deck::shuffleDeck() {
     deckIndex = 0;
     isShuffled = true;
 }
+
+size_t Deck::getDealtCardCount() const {
+    return deckIndex;
+}

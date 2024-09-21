@@ -31,7 +31,6 @@ void Player::addChips(size_t amount) {
 
 void Player::addHoleCard(const Card& card) {
     hand.push_back(card);
-    cout << name << " dealt hole card: " << card.toString() << endl;
 }
 
 // Getter Methods
