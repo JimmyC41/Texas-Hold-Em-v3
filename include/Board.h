@@ -14,11 +14,12 @@ private:
 public:
     Board();
     void addCommunityCard(const Card& card);
-    void clearBoard();
+    void resetBoard();
     void printBoardState() const;
     bool isFlopDealt() const;
     bool isTurnDealt() const;
     bool isRiverDealt() const;
+    const vector<Card>& getCommunityCards() const;
     size_t getCommunityCardCount() const;
 };
 

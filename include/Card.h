@@ -34,7 +34,7 @@ private:
     Value value;
     void validate() const;
 public:
-    constexpr Card();
+    Card();
     explicit Card(Suit suit, Value value);
     Suit getSuit() const;
     Value getValue() const;

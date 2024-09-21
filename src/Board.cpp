@@ -8,7 +8,7 @@ void Board::addCommunityCard(const Card& card) {
     communityCards.push_back(card);
 }
 
-void Board::clearBoard() {
+void Board::resetBoard() {
     communityCards.clear();
 }
 
@@ -38,6 +38,10 @@ bool Board::isTurnDealt() const {
 
 bool Board::isRiverDealt() const {
     return communityCards.size() == 5;
+}
+
+const vector<Card>& Board::getCommunityCards() const {
+    return communityCards;
 }
 
 size_t Board::getCommunityCardCount() const {

@@ -1,7 +1,6 @@
 #include "../include/Card.h"
 
-// Default constructor with constexpr initialisation
-constexpr Card::Card() : suit(Suit::HEARTS), value(Value::TWO) {}
+Card::Card() : suit(Suit::HEARTS), value(Value::TWO) {}
 
 // Constructor with validation for suit and value
 Card::Card(Suit suit, Value value) : suit(suit), value(value) {
@@ -28,12 +27,15 @@ void Card::validate() const {
     }
 }
 
-// Operator overload to compare equality
-bool Card::operator==(const Card& other) const {
-    if (value == other.value) {
-        suit < other.suit;
+bool Card::operator<(const Card& other) const {
+    if (value != other.value) {
+        return value < other.value;
     }
-    return value < other.value;
+    return suit < other.suit;
+}
+
+bool Card::operator==(const Card& other) const {
+    return suit == other.suit && value == other.value;
 }
 
 // String representation of the card

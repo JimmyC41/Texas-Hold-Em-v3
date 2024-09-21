@@ -1,0 +1,5 @@
+/Users/jimmy/Desktop/Texas-Hold-Em-v3/build/CMakeFiles/PokerLib.dir
+/Users/jimmy/Desktop/Texas-Hold-Em-v3/build/CMakeFiles/DealTest.dir
+/Users/jimmy/Desktop/Texas-Hold-Em-v3/build/CMakeFiles/test.dir
+/Users/jimmy/Desktop/Texas-Hold-Em-v3/build/CMakeFiles/edit_cache.dir
+/Users/jimmy/Desktop/Texas-Hold-Em-v3/build/CMakeFiles/rebuild_cache.dir
