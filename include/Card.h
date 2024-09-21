@@ -2,6 +2,7 @@
 #define CARD_H
 
 #include <stdexcept>
+#include <string>
 using namespace std;
 
 enum class Suit {
@@ -39,6 +40,7 @@ public:
     Value getValue() const;
     bool operator==(const Card& other) const;
     bool operator<(const Card& other) const;
+    string toString() const;
 };
 
 #endif // CARD_H
