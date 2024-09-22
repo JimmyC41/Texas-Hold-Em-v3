@@ -24,9 +24,21 @@ bool PotManager::allPotsCreated() const {
 size_t PotManager::findMinBet() const { 
     size_t minBet = numeric_limits<size_t>::max();
     for (auto& [player, recentBet] : playerBets) {
+        if (recentBet == 0) continue; // minBet cannot be 0
         if (recentBet < minBet)  minBet = recentBet;
     }
     return minBet;
+}
+
+void PotManager::displayPlayerBets() {
+    if (playerBets.empty()) {
+        cout << "playerBets map is empty!" << endl;
+        return;
+    }
+    
+    for (const auto& [player, bet] : playerBets) {
+        cout << "Player: " << player->getName() << " | Bet: " << bet << endl;
+    }
 }
 
 void PotManager::displayPots() {
@@ -39,7 +51,7 @@ void PotManager::displayPots() {
         } else {
             cout << "The following players are eligible for Pot " << i + 1 << endl;
             for (const auto& player : pot.getEligiblePlayers()) {
-                cout << "        Player: " << player->getName();
+                cout << "Player: " << player->getName() << endl;
             }
         }
 
@@ -84,6 +96,8 @@ void PotManager::calculatePots() {
 
     while (!allPotsCreated()) {
         size_t minBet = findMinBet();
+        cout << "Current minBet is: " << minBet << endl;
+        
         Pot& curPot = getCurPot();
 
         // Add each player's contribution to the current pot
@@ -112,6 +126,15 @@ void PotManager::resetPlayerBets() {
     for (auto& [player, recentBet] : playerBets) {
         playerBets[player] = 0;
     }
+}
+
+const Pot& PotManager::getPot(int index) const {
+    if (index >= pots.size()) throw out_of_range("Invalid pot index: " + to_string(index));
+    return pots[index];
+}
+
+int PotManager::getNumPots() const {
+    return pots.size();
 }
 
 // Pot Structure

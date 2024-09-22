@@ -1,8 +1,8 @@
 CMakeFiles/PokerLib.dir/src/Dealer.cpp.o: \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/src/Dealer.cpp \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/src/../include/Dealer.h \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/include/Deck.h \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/include/Card.h \
+  /Users/jimmy/Texas-Hold-Em-v3/src/Dealer.cpp \
+  /Users/jimmy/Texas-Hold-Em-v3/src/../include/Dealer.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Deck.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Card.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/stdexcept \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__assert \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__config \
@@ -739,7 +739,7 @@ CMakeFiles/PokerLib.dir/src/Dealer.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__functional/pointer_to_binary_function.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__functional/pointer_to_unary_function.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__functional/unary_negate.h \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/include/Player.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Player.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/iostream \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/ios \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__locale \
@@ -795,4 +795,4 @@ CMakeFiles/PokerLib.dir/src/Dealer.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/_types/_nl_item.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__bsd_locale_defaults.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/cstdarg \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/include/Board.h
+  /Users/jimmy/Texas-Hold-Em-v3/include/Board.h

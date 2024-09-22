@@ -1,6 +1,7 @@
-CMakeFiles/PokerLib.dir/src/Board.cpp.o: \
-  /Users/jimmy/Texas-Hold-Em-v3/src/Board.cpp \
-  /Users/jimmy/Texas-Hold-Em-v3/src/../include/Board.h \
+CMakeFiles/PokerLib.dir/src/PotManager.cpp.o: \
+  /Users/jimmy/Texas-Hold-Em-v3/src/PotManager.cpp \
+  /Users/jimmy/Texas-Hold-Em-v3/src/../include/PotManager.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Player.h \
   /Users/jimmy/Texas-Hold-Em-v3/include/Card.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/stdexcept \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__assert \
@@ -792,4 +793,7 @@ CMakeFiles/PokerLib.dir/src/Board.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/sys/_types/_fsfilcnt_t.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/_types/_nl_item.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__bsd_locale_defaults.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/cstdarg
+  /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/cstdarg \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/set \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__tree \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/map

@@ -1,7 +1,7 @@
 CMakeFiles/PokerLib.dir/src/Deck.cpp.o: \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/src/Deck.cpp \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/src/../include/Deck.h \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/include/Card.h \
+  /Users/jimmy/Texas-Hold-Em-v3/src/Deck.cpp \
+  /Users/jimmy/Texas-Hold-Em-v3/src/../include/Deck.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Card.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/stdexcept \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__assert \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__config \

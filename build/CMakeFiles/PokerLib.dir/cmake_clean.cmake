@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/PokerLib.dir/src/Deck.cpp.o.d"
   "CMakeFiles/PokerLib.dir/src/Player.cpp.o"
   "CMakeFiles/PokerLib.dir/src/Player.cpp.o.d"
+  "CMakeFiles/PokerLib.dir/src/PotManager.cpp.o"
+  "CMakeFiles/PokerLib.dir/src/PotManager.cpp.o.d"
   "libPokerLib.a"
   "libPokerLib.pdb"
 )

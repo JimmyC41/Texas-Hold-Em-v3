@@ -57,10 +57,10 @@ RM = /opt/homebrew/Cellar/cmake/3.30.3/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/jimmy/Desktop/Texas-Hold-Em-v3
+CMAKE_SOURCE_DIR = /Users/jimmy/Texas-Hold-Em-v3
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/jimmy/Desktop/Texas-Hold-Em-v3/build
+CMAKE_BINARY_DIR = /Users/jimmy/Texas-Hold-Em-v3/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -97,9 +97,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Desktop/Texas-Hold-Em-v3/build/CMakeFiles /Users/jimmy/Desktop/Texas-Hold-Em-v3/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles /Users/jimmy/Texas-Hold-Em-v3/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Desktop/Texas-Hold-Em-v3/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -151,6 +151,19 @@ DealTest: cmake_check_build_system
 DealTest/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DealTest.dir/build.make CMakeFiles/DealTest.dir/build
 .PHONY : DealTest/fast
+
+#=============================================================================
+# Target rules for targets named PotManagerTest
+
+# Build rule for target.
+PotManagerTest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 PotManagerTest
+.PHONY : PotManagerTest
+
+# fast build rule for target.
+PotManagerTest/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PotManagerTest.dir/build.make CMakeFiles/PotManagerTest.dir/build
+.PHONY : PotManagerTest/fast
 
 src/Board.o: src/Board.cpp.o
 .PHONY : src/Board.o
@@ -272,6 +285,30 @@ src/Player.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/Player.cpp.s
 .PHONY : src/Player.cpp.s
 
+src/PotManager.o: src/PotManager.cpp.o
+.PHONY : src/PotManager.o
+
+# target to build an object file
+src/PotManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/PotManager.cpp.o
+.PHONY : src/PotManager.cpp.o
+
+src/PotManager.i: src/PotManager.cpp.i
+.PHONY : src/PotManager.i
+
+# target to preprocess a source file
+src/PotManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/PotManager.cpp.i
+.PHONY : src/PotManager.cpp.i
+
+src/PotManager.s: src/PotManager.cpp.s
+.PHONY : src/PotManager.s
+
+# target to generate assembly for a file
+src/PotManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/PotManager.cpp.s
+.PHONY : src/PotManager.cpp.s
+
 test/DealTest.o: test/DealTest.cpp.o
 .PHONY : test/DealTest.o
 
@@ -296,6 +333,30 @@ test/DealTest.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DealTest.dir/build.make CMakeFiles/DealTest.dir/test/DealTest.cpp.s
 .PHONY : test/DealTest.cpp.s
 
+test/PotManagerTest.o: test/PotManagerTest.cpp.o
+.PHONY : test/PotManagerTest.o
+
+# target to build an object file
+test/PotManagerTest.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PotManagerTest.dir/build.make CMakeFiles/PotManagerTest.dir/test/PotManagerTest.cpp.o
+.PHONY : test/PotManagerTest.cpp.o
+
+test/PotManagerTest.i: test/PotManagerTest.cpp.i
+.PHONY : test/PotManagerTest.i
+
+# target to preprocess a source file
+test/PotManagerTest.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PotManagerTest.dir/build.make CMakeFiles/PotManagerTest.dir/test/PotManagerTest.cpp.i
+.PHONY : test/PotManagerTest.cpp.i
+
+test/PotManagerTest.s: test/PotManagerTest.cpp.s
+.PHONY : test/PotManagerTest.s
+
+# target to generate assembly for a file
+test/PotManagerTest.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PotManagerTest.dir/build.make CMakeFiles/PotManagerTest.dir/test/PotManagerTest.cpp.s
+.PHONY : test/PotManagerTest.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -307,6 +368,7 @@ help:
 	@echo "... test"
 	@echo "... DealTest"
 	@echo "... PokerLib"
+	@echo "... PotManagerTest"
 	@echo "... src/Board.o"
 	@echo "... src/Board.i"
 	@echo "... src/Board.s"
@@ -322,9 +384,15 @@ help:
 	@echo "... src/Player.o"
 	@echo "... src/Player.i"
 	@echo "... src/Player.s"
+	@echo "... src/PotManager.o"
+	@echo "... src/PotManager.i"
+	@echo "... src/PotManager.s"
 	@echo "... test/DealTest.o"
 	@echo "... test/DealTest.i"
 	@echo "... test/DealTest.s"
+	@echo "... test/PotManagerTest.o"
+	@echo "... test/PotManagerTest.i"
+	@echo "... test/PotManagerTest.s"
 .PHONY : help
 
 

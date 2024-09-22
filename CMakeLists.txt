@@ -13,6 +13,7 @@ file(GLOB SRC_FILES
     src/Dealer.cpp
     src/Deck.cpp
     src/Player.cpp
+    src/PotManager.cpp
 )
 
 add_library(PokerLib ${SRC_FILES})
@@ -23,7 +24,11 @@ find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
 add_executable(DealTest test/DealTest.cpp)
+target_link_libraries(DealTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
 
-target_link_libraries(DealTest PokerLib GTest::GTest GTest::Main pthread)
+add_executable(PotManagerTest test/PotManagerTest.cpp)
+target_link_libraries(PotManagerTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
 
 add_test(NAME DealTest COMMAND DealTest)
+add_test(NAME PotManagerTest COMMAND PotManagerTest)
+

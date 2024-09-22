@@ -40,13 +40,9 @@ private:
     // Helper function to find the minimum bet of all players.
     size_t findMinBet() const;
 
-    // Display pots information
-    void displayPots();
-
 public:
     // Initalises a single pot.
     PotManager();
-
 
     // Updates the playerBets map after a bet/raises. Called after each player action.
     void addPlayerBet(const shared_ptr<Player>& player, size_t bet);
@@ -59,6 +55,11 @@ public:
 
     // Resets recent bets and dead money to 0. Called after each street.
     void resetPlayerBets();
+
+    void displayPlayerBets();
+    void displayPots();
+    const Pot& getPot(int index) const;
+    int getNumPots() const;
 };
 
 #endif // POT_MANAGER_H

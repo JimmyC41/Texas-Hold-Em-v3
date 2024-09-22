@@ -1,5 +1,5 @@
 CMakeFiles/DealTest.dir/test/DealTest.cpp.o: \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/test/DealTest.cpp \
+  /Users/jimmy/Texas-Hold-Em-v3/test/DealTest.cpp \
   /opt/homebrew/include/gtest/gtest.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/cstddef \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__assert \
@@ -842,11 +842,11 @@ CMakeFiles/DealTest.dir/test/DealTest.cpp.o: \
   /opt/homebrew/include/gtest/gtest-typed-test.h \
   /opt/homebrew/include/gtest/gtest_pred_impl.h \
   /opt/homebrew/include/gtest/gtest_prod.h \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/test/../include/Dealer.h \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/include/Deck.h \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/include/Card.h \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/include/Player.h \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/include/Board.h \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/test/../include/Deck.h \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/test/../include/Board.h \
-  /Users/jimmy/Desktop/Texas-Hold-Em-v3/test/../include/Player.h
+  /Users/jimmy/Texas-Hold-Em-v3/test/../include/Dealer.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Deck.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Card.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Player.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Board.h \
+  /Users/jimmy/Texas-Hold-Em-v3/test/../include/Deck.h \
+  /Users/jimmy/Texas-Hold-Em-v3/test/../include/Board.h \
+  /Users/jimmy/Texas-Hold-Em-v3/test/../include/Player.h
