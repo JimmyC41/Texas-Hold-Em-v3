@@ -17,7 +17,7 @@ private:
 
 public:
     static Dealer createDealer(Deck& deck, Board& board);
-    void dealPlayer(Player& player);
+    void dealPlayer(shared_ptr<Player> player);
     void dealBoard(int numCards, bool burnCard = true);
     void resetDeck();
 

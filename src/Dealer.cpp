@@ -7,10 +7,10 @@ Dealer Dealer::createDealer(Deck& deck, Board& board) {
     return Dealer(deck, board);
 }
 
-void Dealer::dealPlayer(Player& player) {
+void Dealer::dealPlayer(shared_ptr<Player> player) {
     Card& holeCard = deck.dealCard();
-    player.addHoleCard(holeCard);
-    cout << player.getName() << " has been dealt " << holeCard.toString() << endl;
+    player->addHoleCard(holeCard);
+    cout << player->getName() << " has been dealt " << holeCard.toString() << endl;
 }
 
 void Dealer::resetDeck() {
