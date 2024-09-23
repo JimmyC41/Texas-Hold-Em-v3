@@ -165,6 +165,19 @@ PotManagerTest/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PotManagerTest.dir/build.make CMakeFiles/PotManagerTest.dir/build
 .PHONY : PotManagerTest/fast
 
+#=============================================================================
+# Target rules for targets named TurnManagerTest
+
+# Build rule for target.
+TurnManagerTest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 TurnManagerTest
+.PHONY : TurnManagerTest
+
+# fast build rule for target.
+TurnManagerTest/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TurnManagerTest.dir/build.make CMakeFiles/TurnManagerTest.dir/build
+.PHONY : TurnManagerTest/fast
+
 src/Board.o: src/Board.cpp.o
 .PHONY : src/Board.o
 
@@ -309,6 +322,30 @@ src/PotManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/PotManager.cpp.s
 .PHONY : src/PotManager.cpp.s
 
+src/TurnManager.o: src/TurnManager.cpp.o
+.PHONY : src/TurnManager.o
+
+# target to build an object file
+src/TurnManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/TurnManager.cpp.o
+.PHONY : src/TurnManager.cpp.o
+
+src/TurnManager.i: src/TurnManager.cpp.i
+.PHONY : src/TurnManager.i
+
+# target to preprocess a source file
+src/TurnManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/TurnManager.cpp.i
+.PHONY : src/TurnManager.cpp.i
+
+src/TurnManager.s: src/TurnManager.cpp.s
+.PHONY : src/TurnManager.s
+
+# target to generate assembly for a file
+src/TurnManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/TurnManager.cpp.s
+.PHONY : src/TurnManager.cpp.s
+
 test/DealTest.o: test/DealTest.cpp.o
 .PHONY : test/DealTest.o
 
@@ -357,6 +394,30 @@ test/PotManagerTest.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PotManagerTest.dir/build.make CMakeFiles/PotManagerTest.dir/test/PotManagerTest.cpp.s
 .PHONY : test/PotManagerTest.cpp.s
 
+test/TurnManagerTest.o: test/TurnManagerTest.cpp.o
+.PHONY : test/TurnManagerTest.o
+
+# target to build an object file
+test/TurnManagerTest.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TurnManagerTest.dir/build.make CMakeFiles/TurnManagerTest.dir/test/TurnManagerTest.cpp.o
+.PHONY : test/TurnManagerTest.cpp.o
+
+test/TurnManagerTest.i: test/TurnManagerTest.cpp.i
+.PHONY : test/TurnManagerTest.i
+
+# target to preprocess a source file
+test/TurnManagerTest.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TurnManagerTest.dir/build.make CMakeFiles/TurnManagerTest.dir/test/TurnManagerTest.cpp.i
+.PHONY : test/TurnManagerTest.cpp.i
+
+test/TurnManagerTest.s: test/TurnManagerTest.cpp.s
+.PHONY : test/TurnManagerTest.s
+
+# target to generate assembly for a file
+test/TurnManagerTest.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TurnManagerTest.dir/build.make CMakeFiles/TurnManagerTest.dir/test/TurnManagerTest.cpp.s
+.PHONY : test/TurnManagerTest.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -369,6 +430,7 @@ help:
 	@echo "... DealTest"
 	@echo "... PokerLib"
 	@echo "... PotManagerTest"
+	@echo "... TurnManagerTest"
 	@echo "... src/Board.o"
 	@echo "... src/Board.i"
 	@echo "... src/Board.s"
@@ -387,12 +449,18 @@ help:
 	@echo "... src/PotManager.o"
 	@echo "... src/PotManager.i"
 	@echo "... src/PotManager.s"
+	@echo "... src/TurnManager.o"
+	@echo "... src/TurnManager.i"
+	@echo "... src/TurnManager.s"
 	@echo "... test/DealTest.o"
 	@echo "... test/DealTest.i"
 	@echo "... test/DealTest.s"
 	@echo "... test/PotManagerTest.o"
 	@echo "... test/PotManagerTest.i"
 	@echo "... test/PotManagerTest.s"
+	@echo "... test/TurnManagerTest.o"
+	@echo "... test/TurnManagerTest.i"
+	@echo "... test/TurnManagerTest.s"
 .PHONY : help
 
 

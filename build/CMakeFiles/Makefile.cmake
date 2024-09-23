@@ -59,4 +59,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/PokerLib.dir/DependInfo.cmake"
   "CMakeFiles/DealTest.dir/DependInfo.cmake"
   "CMakeFiles/PotManagerTest.dir/DependInfo.cmake"
+  "CMakeFiles/TurnManagerTest.dir/DependInfo.cmake"
   )
