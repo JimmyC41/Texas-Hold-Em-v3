@@ -158,3 +158,63 @@ TEST_F(TurnTest, ResetFoldedPlayers) {
     ASSERT_EQ(turnManager.getEarlyPositionToAct(), player1);
     ASSERT_EQ(turnManager.getBigBlindToAct(), player2);
 }
+
+TEST_F(TurnTest, TableRotationsWithFoldedPlayers) {
+    // Fold all players except
+    // Player 2 - BB
+    // Player 5 - M
+    // Player 7 - HJ
+    // Player 8 - CO
+    turnManager.foldPlayerInHand(player1);
+    turnManager.foldPlayerInHand(player3);
+    turnManager.foldPlayerInHand(player4);
+    turnManager.foldPlayerInHand(player6);
+    turnManager.foldPlayerInHand(player9);
+
+    ASSERT_EQ(turnManager.getEarlyPositionToAct(), player2);
+    ASSERT_EQ(turnManager.getNextToAct(), player5);
+    ASSERT_EQ(turnManager.getNextToAct(), player7);
+    ASSERT_EQ(turnManager.getNextToAct(), player8);
+    ASSERT_EQ(turnManager.getNextToAct(), player2);
+
+    // Now, positions are:
+    // Player 5 - BB
+    // Player 7 - M
+    // Player 8 - HJ
+    // Player 2 - CO
+    turnManager.rotatePositions();
+    ASSERT_EQ(turnManager.getBigBlindToAct(), player5);
+    ASSERT_EQ(turnManager.getNextToAct(), player7);
+    ASSERT_EQ(turnManager.getNextToAct(), player8);
+    ASSERT_EQ(turnManager.getNextToAct(), player2);
+    ASSERT_EQ(turnManager.getNextToAct(), player5);
+}
+
+TEST_F(TurnTest, BigBlindDealerRotations) {
+    // Fold all players except big blind and dealer
+    // Player 2 - BB
+    // Player 8 - D
+    turnManager.foldPlayerInHand(player1);
+    turnManager.foldPlayerInHand(player3);
+    turnManager.foldPlayerInHand(player4);
+    turnManager.foldPlayerInHand(player5);
+    turnManager.foldPlayerInHand(player6);
+    turnManager.foldPlayerInHand(player7);
+    turnManager.foldPlayerInHand(player8);
+
+    // Player 2 - D
+    // Player 8 - BB
+    turnManager.rotatePositions();
+    ASSERT_EQ(turnManager.getBigBlindToAct(), player8);
+    ASSERT_EQ(turnManager.getNextToAct(), player2);
+    ASSERT_EQ(turnManager.getNextToAct(), player8);
+    ASSERT_EQ(turnManager.getNextToAct(), player2);
+
+    // Player 2 - BB
+    // Player 8 - D
+    turnManager.rotatePositions();
+    ASSERT_EQ(turnManager.getBigBlindToAct(), player2);
+    ASSERT_EQ(turnManager.getNextToAct(), player8);
+    ASSERT_EQ(turnManager.getNextToAct(), player2);
+    ASSERT_EQ(turnManager.getNextToAct(), player8);
+}

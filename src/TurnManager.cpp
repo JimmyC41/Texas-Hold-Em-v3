@@ -26,8 +26,15 @@ void TurnManager::moveFoldedPlayersToInHand() {
 }
 
 void TurnManager::rotatePositions() {
-    for (auto& player : playersInHand) {
-        player->setPosition(getNextPosition(player->getPosition()));
+    int numPlayers = getNumPlayersInHand();
+    if (numPlayers < 2) return;
+
+    // Rotate players such that the first player is the first to act after rotation
+    rotate(playersInHand.begin(), playersInHand.begin() + 1, playersInHand.end());
+
+    // Update each player's new position after rotation.
+    for (size_t i = 0; i < numPlayers; ++i) {
+        playersInHand[i]->setPosition(playersInHand[(i + numPlayers - 1) & numPlayers]->getPosition());
     }
 }
 
