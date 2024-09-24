@@ -178,6 +178,43 @@ TurnManagerTest/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TurnManagerTest.dir/build.make CMakeFiles/TurnManagerTest.dir/build
 .PHONY : TurnManagerTest/fast
 
+#=============================================================================
+# Target rules for targets named ActionTest
+
+# Build rule for target.
+ActionTest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ActionTest
+.PHONY : ActionTest
+
+# fast build rule for target.
+ActionTest/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ActionTest.dir/build.make CMakeFiles/ActionTest.dir/build
+.PHONY : ActionTest/fast
+
+src/ActionManager.o: src/ActionManager.cpp.o
+.PHONY : src/ActionManager.o
+
+# target to build an object file
+src/ActionManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o
+.PHONY : src/ActionManager.cpp.o
+
+src/ActionManager.i: src/ActionManager.cpp.i
+.PHONY : src/ActionManager.i
+
+# target to preprocess a source file
+src/ActionManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/ActionManager.cpp.i
+.PHONY : src/ActionManager.cpp.i
+
+src/ActionManager.s: src/ActionManager.cpp.s
+.PHONY : src/ActionManager.s
+
+# target to generate assembly for a file
+src/ActionManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/ActionManager.cpp.s
+.PHONY : src/ActionManager.cpp.s
+
 src/Board.o: src/Board.cpp.o
 .PHONY : src/Board.o
 
@@ -346,6 +383,30 @@ src/TurnManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/TurnManager.cpp.s
 .PHONY : src/TurnManager.cpp.s
 
+test/ActionTest.o: test/ActionTest.cpp.o
+.PHONY : test/ActionTest.o
+
+# target to build an object file
+test/ActionTest.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ActionTest.dir/build.make CMakeFiles/ActionTest.dir/test/ActionTest.cpp.o
+.PHONY : test/ActionTest.cpp.o
+
+test/ActionTest.i: test/ActionTest.cpp.i
+.PHONY : test/ActionTest.i
+
+# target to preprocess a source file
+test/ActionTest.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ActionTest.dir/build.make CMakeFiles/ActionTest.dir/test/ActionTest.cpp.i
+.PHONY : test/ActionTest.cpp.i
+
+test/ActionTest.s: test/ActionTest.cpp.s
+.PHONY : test/ActionTest.s
+
+# target to generate assembly for a file
+test/ActionTest.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ActionTest.dir/build.make CMakeFiles/ActionTest.dir/test/ActionTest.cpp.s
+.PHONY : test/ActionTest.cpp.s
+
 test/DealTest.o: test/DealTest.cpp.o
 .PHONY : test/DealTest.o
 
@@ -427,10 +488,14 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... ActionTest"
 	@echo "... DealTest"
 	@echo "... PokerLib"
 	@echo "... PotManagerTest"
 	@echo "... TurnManagerTest"
+	@echo "... src/ActionManager.o"
+	@echo "... src/ActionManager.i"
+	@echo "... src/ActionManager.s"
 	@echo "... src/Board.o"
 	@echo "... src/Board.i"
 	@echo "... src/Board.s"
@@ -452,6 +517,9 @@ help:
 	@echo "... src/TurnManager.o"
 	@echo "... src/TurnManager.i"
 	@echo "... src/TurnManager.s"
+	@echo "... test/ActionTest.o"
+	@echo "... test/ActionTest.i"
+	@echo "... test/ActionTest.s"
 	@echo "... test/DealTest.o"
 	@echo "... test/DealTest.i"
 	@echo "... test/DealTest.s"

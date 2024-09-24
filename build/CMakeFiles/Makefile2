@@ -67,6 +67,7 @@ all: CMakeFiles/PokerLib.dir/all
 all: CMakeFiles/DealTest.dir/all
 all: CMakeFiles/PotManagerTest.dir/all
 all: CMakeFiles/TurnManagerTest.dir/all
+all: CMakeFiles/ActionTest.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -78,6 +79,7 @@ clean: CMakeFiles/PokerLib.dir/clean
 clean: CMakeFiles/DealTest.dir/clean
 clean: CMakeFiles/PotManagerTest.dir/clean
 clean: CMakeFiles/TurnManagerTest.dir/clean
+clean: CMakeFiles/ActionTest.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -87,12 +89,12 @@ clean: CMakeFiles/TurnManagerTest.dir/clean
 CMakeFiles/PokerLib.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=3,4,5,6,7,8,9,10 "Built target PokerLib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=5,6,7,8,9,10,11,12,13 "Built target PokerLib"
 .PHONY : CMakeFiles/PokerLib.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/PokerLib.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/PokerLib.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 0
 .PHONY : CMakeFiles/PokerLib.dir/rule
@@ -113,12 +115,12 @@ CMakeFiles/PokerLib.dir/clean:
 CMakeFiles/DealTest.dir/all: CMakeFiles/PokerLib.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DealTest.dir/build.make CMakeFiles/DealTest.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DealTest.dir/build.make CMakeFiles/DealTest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=1,2 "Built target DealTest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=3,4 "Built target DealTest"
 .PHONY : CMakeFiles/DealTest.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/DealTest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/DealTest.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 0
 .PHONY : CMakeFiles/DealTest.dir/rule
@@ -139,12 +141,12 @@ CMakeFiles/DealTest.dir/clean:
 CMakeFiles/PotManagerTest.dir/all: CMakeFiles/PokerLib.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PotManagerTest.dir/build.make CMakeFiles/PotManagerTest.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PotManagerTest.dir/build.make CMakeFiles/PotManagerTest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=11,12 "Built target PotManagerTest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=14,15 "Built target PotManagerTest"
 .PHONY : CMakeFiles/PotManagerTest.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/PotManagerTest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/PotManagerTest.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 0
 .PHONY : CMakeFiles/PotManagerTest.dir/rule
@@ -165,12 +167,12 @@ CMakeFiles/PotManagerTest.dir/clean:
 CMakeFiles/TurnManagerTest.dir/all: CMakeFiles/PokerLib.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TurnManagerTest.dir/build.make CMakeFiles/TurnManagerTest.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TurnManagerTest.dir/build.make CMakeFiles/TurnManagerTest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=13,14 "Built target TurnManagerTest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=16,17 "Built target TurnManagerTest"
 .PHONY : CMakeFiles/TurnManagerTest.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/TurnManagerTest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/TurnManagerTest.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 0
 .PHONY : CMakeFiles/TurnManagerTest.dir/rule
@@ -183,6 +185,32 @@ TurnManagerTest: CMakeFiles/TurnManagerTest.dir/rule
 CMakeFiles/TurnManagerTest.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TurnManagerTest.dir/build.make CMakeFiles/TurnManagerTest.dir/clean
 .PHONY : CMakeFiles/TurnManagerTest.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/ActionTest.dir
+
+# All Build rule for target.
+CMakeFiles/ActionTest.dir/all: CMakeFiles/PokerLib.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ActionTest.dir/build.make CMakeFiles/ActionTest.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ActionTest.dir/build.make CMakeFiles/ActionTest.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=1,2 "Built target ActionTest"
+.PHONY : CMakeFiles/ActionTest.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/ActionTest.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 11
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/ActionTest.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles 0
+.PHONY : CMakeFiles/ActionTest.dir/rule
+
+# Convenience name for target.
+ActionTest: CMakeFiles/ActionTest.dir/rule
+.PHONY : ActionTest
+
+# clean rule for target.
+CMakeFiles/ActionTest.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ActionTest.dir/build.make CMakeFiles/ActionTest.dir/clean
+.PHONY : CMakeFiles/ActionTest.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

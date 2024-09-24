@@ -13,7 +13,7 @@ public:
         return BLIND;
     }
 
-    int getAmount() const {
+    size_t getAmount() const override {
         return blindAmount;
     }
 };

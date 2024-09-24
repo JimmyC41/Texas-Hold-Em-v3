@@ -60,4 +60,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/DealTest.dir/DependInfo.cmake"
   "CMakeFiles/PotManagerTest.dir/DependInfo.cmake"
   "CMakeFiles/TurnManagerTest.dir/DependInfo.cmake"
+  "CMakeFiles/ActionTest.dir/DependInfo.cmake"
   )

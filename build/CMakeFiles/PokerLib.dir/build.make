@@ -69,10 +69,24 @@ include CMakeFiles/PokerLib.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/PokerLib.dir/flags.make
 
+CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o: CMakeFiles/PokerLib.dir/flags.make
+CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o: /Users/jimmy/Texas-Hold-Em-v3/src/ActionManager.cpp
+CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o: CMakeFiles/PokerLib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o -MF CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o.d -o CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o -c /Users/jimmy/Texas-Hold-Em-v3/src/ActionManager.cpp
+
+CMakeFiles/PokerLib.dir/src/ActionManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/PokerLib.dir/src/ActionManager.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jimmy/Texas-Hold-Em-v3/src/ActionManager.cpp > CMakeFiles/PokerLib.dir/src/ActionManager.cpp.i
+
+CMakeFiles/PokerLib.dir/src/ActionManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/PokerLib.dir/src/ActionManager.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jimmy/Texas-Hold-Em-v3/src/ActionManager.cpp -o CMakeFiles/PokerLib.dir/src/ActionManager.cpp.s
+
 CMakeFiles/PokerLib.dir/src/Board.cpp.o: CMakeFiles/PokerLib.dir/flags.make
 CMakeFiles/PokerLib.dir/src/Board.cpp.o: /Users/jimmy/Texas-Hold-Em-v3/src/Board.cpp
 CMakeFiles/PokerLib.dir/src/Board.cpp.o: CMakeFiles/PokerLib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/PokerLib.dir/src/Board.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/PokerLib.dir/src/Board.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PokerLib.dir/src/Board.cpp.o -MF CMakeFiles/PokerLib.dir/src/Board.cpp.o.d -o CMakeFiles/PokerLib.dir/src/Board.cpp.o -c /Users/jimmy/Texas-Hold-Em-v3/src/Board.cpp
 
 CMakeFiles/PokerLib.dir/src/Board.cpp.i: cmake_force
@@ -86,7 +100,7 @@ CMakeFiles/PokerLib.dir/src/Board.cpp.s: cmake_force
 CMakeFiles/PokerLib.dir/src/Card.cpp.o: CMakeFiles/PokerLib.dir/flags.make
 CMakeFiles/PokerLib.dir/src/Card.cpp.o: /Users/jimmy/Texas-Hold-Em-v3/src/Card.cpp
 CMakeFiles/PokerLib.dir/src/Card.cpp.o: CMakeFiles/PokerLib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/PokerLib.dir/src/Card.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/PokerLib.dir/src/Card.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PokerLib.dir/src/Card.cpp.o -MF CMakeFiles/PokerLib.dir/src/Card.cpp.o.d -o CMakeFiles/PokerLib.dir/src/Card.cpp.o -c /Users/jimmy/Texas-Hold-Em-v3/src/Card.cpp
 
 CMakeFiles/PokerLib.dir/src/Card.cpp.i: cmake_force
@@ -100,7 +114,7 @@ CMakeFiles/PokerLib.dir/src/Card.cpp.s: cmake_force
 CMakeFiles/PokerLib.dir/src/Dealer.cpp.o: CMakeFiles/PokerLib.dir/flags.make
 CMakeFiles/PokerLib.dir/src/Dealer.cpp.o: /Users/jimmy/Texas-Hold-Em-v3/src/Dealer.cpp
 CMakeFiles/PokerLib.dir/src/Dealer.cpp.o: CMakeFiles/PokerLib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/PokerLib.dir/src/Dealer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/PokerLib.dir/src/Dealer.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PokerLib.dir/src/Dealer.cpp.o -MF CMakeFiles/PokerLib.dir/src/Dealer.cpp.o.d -o CMakeFiles/PokerLib.dir/src/Dealer.cpp.o -c /Users/jimmy/Texas-Hold-Em-v3/src/Dealer.cpp
 
 CMakeFiles/PokerLib.dir/src/Dealer.cpp.i: cmake_force
@@ -114,7 +128,7 @@ CMakeFiles/PokerLib.dir/src/Dealer.cpp.s: cmake_force
 CMakeFiles/PokerLib.dir/src/Deck.cpp.o: CMakeFiles/PokerLib.dir/flags.make
 CMakeFiles/PokerLib.dir/src/Deck.cpp.o: /Users/jimmy/Texas-Hold-Em-v3/src/Deck.cpp
 CMakeFiles/PokerLib.dir/src/Deck.cpp.o: CMakeFiles/PokerLib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/PokerLib.dir/src/Deck.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/PokerLib.dir/src/Deck.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PokerLib.dir/src/Deck.cpp.o -MF CMakeFiles/PokerLib.dir/src/Deck.cpp.o.d -o CMakeFiles/PokerLib.dir/src/Deck.cpp.o -c /Users/jimmy/Texas-Hold-Em-v3/src/Deck.cpp
 
 CMakeFiles/PokerLib.dir/src/Deck.cpp.i: cmake_force
@@ -128,7 +142,7 @@ CMakeFiles/PokerLib.dir/src/Deck.cpp.s: cmake_force
 CMakeFiles/PokerLib.dir/src/Player.cpp.o: CMakeFiles/PokerLib.dir/flags.make
 CMakeFiles/PokerLib.dir/src/Player.cpp.o: /Users/jimmy/Texas-Hold-Em-v3/src/Player.cpp
 CMakeFiles/PokerLib.dir/src/Player.cpp.o: CMakeFiles/PokerLib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/PokerLib.dir/src/Player.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/PokerLib.dir/src/Player.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PokerLib.dir/src/Player.cpp.o -MF CMakeFiles/PokerLib.dir/src/Player.cpp.o.d -o CMakeFiles/PokerLib.dir/src/Player.cpp.o -c /Users/jimmy/Texas-Hold-Em-v3/src/Player.cpp
 
 CMakeFiles/PokerLib.dir/src/Player.cpp.i: cmake_force
@@ -142,7 +156,7 @@ CMakeFiles/PokerLib.dir/src/Player.cpp.s: cmake_force
 CMakeFiles/PokerLib.dir/src/PotManager.cpp.o: CMakeFiles/PokerLib.dir/flags.make
 CMakeFiles/PokerLib.dir/src/PotManager.cpp.o: /Users/jimmy/Texas-Hold-Em-v3/src/PotManager.cpp
 CMakeFiles/PokerLib.dir/src/PotManager.cpp.o: CMakeFiles/PokerLib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/PokerLib.dir/src/PotManager.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/PokerLib.dir/src/PotManager.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PokerLib.dir/src/PotManager.cpp.o -MF CMakeFiles/PokerLib.dir/src/PotManager.cpp.o.d -o CMakeFiles/PokerLib.dir/src/PotManager.cpp.o -c /Users/jimmy/Texas-Hold-Em-v3/src/PotManager.cpp
 
 CMakeFiles/PokerLib.dir/src/PotManager.cpp.i: cmake_force
@@ -156,7 +170,7 @@ CMakeFiles/PokerLib.dir/src/PotManager.cpp.s: cmake_force
 CMakeFiles/PokerLib.dir/src/TurnManager.cpp.o: CMakeFiles/PokerLib.dir/flags.make
 CMakeFiles/PokerLib.dir/src/TurnManager.cpp.o: /Users/jimmy/Texas-Hold-Em-v3/src/TurnManager.cpp
 CMakeFiles/PokerLib.dir/src/TurnManager.cpp.o: CMakeFiles/PokerLib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/PokerLib.dir/src/TurnManager.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/PokerLib.dir/src/TurnManager.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PokerLib.dir/src/TurnManager.cpp.o -MF CMakeFiles/PokerLib.dir/src/TurnManager.cpp.o.d -o CMakeFiles/PokerLib.dir/src/TurnManager.cpp.o -c /Users/jimmy/Texas-Hold-Em-v3/src/TurnManager.cpp
 
 CMakeFiles/PokerLib.dir/src/TurnManager.cpp.i: cmake_force
@@ -169,6 +183,7 @@ CMakeFiles/PokerLib.dir/src/TurnManager.cpp.s: cmake_force
 
 # Object files for target PokerLib
 PokerLib_OBJECTS = \
+"CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o" \
 "CMakeFiles/PokerLib.dir/src/Board.cpp.o" \
 "CMakeFiles/PokerLib.dir/src/Card.cpp.o" \
 "CMakeFiles/PokerLib.dir/src/Dealer.cpp.o" \
@@ -180,6 +195,7 @@ PokerLib_OBJECTS = \
 # External object files for target PokerLib
 PokerLib_EXTERNAL_OBJECTS =
 
+libPokerLib.a: CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o
 libPokerLib.a: CMakeFiles/PokerLib.dir/src/Board.cpp.o
 libPokerLib.a: CMakeFiles/PokerLib.dir/src/Card.cpp.o
 libPokerLib.a: CMakeFiles/PokerLib.dir/src/Dealer.cpp.o
@@ -189,7 +205,7 @@ libPokerLib.a: CMakeFiles/PokerLib.dir/src/PotManager.cpp.o
 libPokerLib.a: CMakeFiles/PokerLib.dir/src/TurnManager.cpp.o
 libPokerLib.a: CMakeFiles/PokerLib.dir/build.make
 libPokerLib.a: CMakeFiles/PokerLib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX static library libPokerLib.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX static library libPokerLib.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/PokerLib.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/PokerLib.dir/link.txt --verbose=$(VERBOSE)
 

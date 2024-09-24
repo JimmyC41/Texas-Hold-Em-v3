@@ -15,6 +15,7 @@ file(GLOB SRC_FILES
     src/Player.cpp
     src/PotManager.cpp
     src/TurnManager.cpp
+    src/ActionManager.cpp
 )
 
 add_library(PokerLib ${SRC_FILES})
@@ -33,6 +34,10 @@ target_link_libraries(PotManagerTest PRIVATE PokerLib GTest::GTest GTest::Main p
 add_executable(TurnManagerTest test/TurnManagerTest.cpp)
 target_link_libraries(TurnManagerTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
 
+add_executable(ActionTest test/ActionTest.cpp)
+target_link_libraries(ActionTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
+
 add_test(NAME DealTest COMMAND DealTest)
 add_test(NAME PotManagerTest COMMAND PotManagerTest)
 add_test(NAME TurnManagerTest COMMAND TurnManagerTest)
+add_test(NAME ActionTest COMMAND ActionTest)

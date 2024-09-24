@@ -10,6 +10,10 @@ public:
     ActionType getActionType() const override {
         return CHECK;
     }
+    
+    size_t getAmount() const override {
+        return 0;
+    }
 };
 
 #endif // CHECK_ACTION_H

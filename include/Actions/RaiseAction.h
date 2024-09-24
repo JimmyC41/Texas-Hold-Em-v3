@@ -13,7 +13,7 @@ public:
         return RAISE;
     }
 
-    int getAmount() const {
+    size_t getAmount() const override {
         return amount;
     }
 };

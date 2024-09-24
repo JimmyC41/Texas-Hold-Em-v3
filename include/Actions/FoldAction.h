@@ -10,6 +10,10 @@ public:
     ActionType getActionType() const override {
         return FOLD;
     }
+
+    size_t getAmount() const override {
+        return 0;
+    }
 };
 
 #endif // FOLD_ACTION_H

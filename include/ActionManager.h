@@ -5,6 +5,16 @@
 #include <vector>
 using namespace std;
 
+
+typedef struct PossibleAction {
+    ActionType type;
+    size_t amount;
+
+    bool operator==(const PossibleAction& other) const {
+        return type == other.type && amount == other.amount;
+    }
+} PossibleAction;
+
 class ActionManager {
 private:
     // Ordered list of betting actions in a given betting street
@@ -20,11 +30,9 @@ private:
 public:
     ActionManager();
 
-    // Clear action timeline. Called at the END of each street.
+    // Clear action timeline and set active bet to 0.
+    // Called at the END of each street.
     void clearActionTimeline();
-
-    // Resets current bet. Called at the END of each street.
-    void resetActiveBet();
 
     // Adds an Action object to the actionTimeline.
     // Sets the active bet.
@@ -32,7 +40,16 @@ public:
     void addActionToTimeline(shared_ptr<Action> action);
 
     // Retrieves possible action types given the betting action. Called when player is prompted for their action.
-    vector<ActionType> getAllowedActionTypes();
+    vector<PossibleAction> getAllowedActionTypes();
+
+    // Displays the action types in the action timeline.
+    void displayActionTimeline();
+
+    // Returns the size of the action timeline
+    size_t getNumActions() const;
+
+    // Returns the active bet
+    size_t getActiveBet() const;
 };
 
 #endif // ACTION_MANAGER_H
