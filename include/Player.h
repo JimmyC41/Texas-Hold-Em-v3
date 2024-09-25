@@ -44,6 +44,10 @@ public:
 
     static Position nextPosition(Position curPosition);
     static string positionToStr(Position position);
+
+    bool operator<(const Player& other) const {
+        return position < other.position;
+    }
 };
 
 #endif // PLAYER_H

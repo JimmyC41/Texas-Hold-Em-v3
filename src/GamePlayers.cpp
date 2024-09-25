@@ -9,18 +9,26 @@ shared_ptr<Player> GamePlayers::addPlayerToGame(const string& name, size_t chips
     }
     auto player = make_shared<Player>(name, getEmptySeatPosition(), chips);
     gamePlayers.push_back(player);
+
+    // Sort players by their position
+    sortGamePlayers();
+
     cout << "Player " << name << " added to the game!" << endl;
     return player;
 }
 
 void GamePlayers::removePlayerFromGame(const string& playerName) {
+    if (gamePlayers.size() <= MIN_NUM_PLAYERS) {
+        throw runtime_error("Removing this player would result in fewer than the minimum required number of players.");
+    }
+
     auto it = remove_if(gamePlayers.begin(), gamePlayers.end(),
                         [playerName](const shared_ptr<Player>& player) {
                             return player->getName() == playerName;
                         });
     
     if (it != gamePlayers.end()) {
-        gamePlayers.erase(it, gamePlayers.end()); 
+        gamePlayers.erase(it, gamePlayers.end());
         cout << "Player " << playerName << " removed from the game!" << endl;
     } else {
         cout << "Player " << playerName << " could not be found for removal!" << endl;
@@ -53,6 +61,13 @@ void GamePlayers::displayPlayersInGame() const {
 
 // Helper Functions
 
+void GamePlayers::sortGamePlayers() {
+    sort(gamePlayers.begin(), gamePlayers.end(),
+        [](const shared_ptr<Player>& a, const shared_ptr<Player>& b) {
+            return *a < *b;
+        });
+}
+
 bool GamePlayers::isEmptySeatInPosition(Position position) const {
     auto it = find_if(gamePlayers.begin(), gamePlayers.end(),
                     [position](const shared_ptr<Player>& player) {
@@ -63,8 +78,10 @@ bool GamePlayers::isEmptySeatInPosition(Position position) const {
 }
 
 Position GamePlayers::getEmptySeatPosition() const {
-    if (gamePlayers.size() == 0) return Position::SMALL_BLIND;
-    else if (gamePlayers.size() == 1) return Position::BIG_BLIND;
+
+    // First two seats to be filled should be big blind and button respectively
+    if (gamePlayers.size() == 0) return Position::BIG_BLIND;
+    else if (gamePlayers.size() == 1) return Position::BUTTON;
 
     for (int position = static_cast<int>(Position::SMALL_BLIND);
         position < static_cast<int>(Position::BUTTON);
@@ -76,4 +93,14 @@ Position GamePlayers::getEmptySeatPosition() const {
         }
     }
     throw runtime_error("No empty positions available.");
+}
+
+shared_ptr<Player> GamePlayers::getPlayerWithPosition(Position position) {
+    auto it = find_if(gamePlayers.begin(), gamePlayers.end(),
+                    [position](const shared_ptr<Player>& player) {
+                        return player->getPosition() == position;
+                    });
+    
+    if (it != gamePlayers.end()) return (*it);
+    else return nullptr;
 }
