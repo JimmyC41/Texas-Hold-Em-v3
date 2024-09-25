@@ -70,3 +70,28 @@ Position Player::nextPosition(Position curPosition) {
     newPosition = (newPosition + NUM_POSITIONS) % NUM_POSITIONS;
     return static_cast<Position>(newPosition);
 }
+
+string Player::positionToStr(Position position) {
+    switch (position) {
+        case Position::SMALL_BLIND:
+            return "Small";
+        case Position::BIG_BLIND:
+            return "Big";
+        case Position::UTG:
+            return "UTG";
+        case Position::UTG_1:
+            return "UTG + 1";
+        case Position::MIDDLE:
+            return "MP";
+        case Position::LOJACK:
+            return "LJ";
+        case Position::HIJACK:
+            return "HJ";
+        case Position::CUT_OFF:
+            return "CO";
+        case Position::BUTTON:
+            return "Dealer";
+        default:
+            return "Unknown Position";
+    }
+}

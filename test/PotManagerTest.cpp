@@ -37,11 +37,6 @@ TEST(PotManagerTest, PotCalculation2) {
     auto playerC = make_shared<Player>("Player C", Position::UTG, 700);
     auto playerD = make_shared<Player>("Player D", Position::UTG_1, 600);
     auto playerE = make_shared<Player>("Player E", Position::MIDDLE, 500);
-    auto playerE = make_shared<Player>("Player E", Position::LOJACK, 400);
-    auto playerE = make_shared<Player>("Player E", Position::HIJACK, 300);
-    auto playerE = make_shared<Player>("Player E", Position::CUT_OFF, 200);
-    auto playerE = make_shared<Player>("Player E", Position::BUTTON, 100);
-
 
     potManager.addPlayerBet(playerA, 200);  // A bet 200
     potManager.addPlayerBet(playerB, 500);  // B raise 500

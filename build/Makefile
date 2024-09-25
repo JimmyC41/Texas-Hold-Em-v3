@@ -191,6 +191,19 @@ ActionTest/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ActionTest.dir/build.make CMakeFiles/ActionTest.dir/build
 .PHONY : ActionTest/fast
 
+#=============================================================================
+# Target rules for targets named GamePlayersTest
+
+# Build rule for target.
+GamePlayersTest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GamePlayersTest
+.PHONY : GamePlayersTest
+
+# fast build rule for target.
+GamePlayersTest/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GamePlayersTest.dir/build.make CMakeFiles/GamePlayersTest.dir/build
+.PHONY : GamePlayersTest/fast
+
 src/ActionManager.o: src/ActionManager.cpp.o
 .PHONY : src/ActionManager.o
 
@@ -310,6 +323,30 @@ src/Deck.s: src/Deck.cpp.s
 src/Deck.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/Deck.cpp.s
 .PHONY : src/Deck.cpp.s
+
+src/GamePlayers.o: src/GamePlayers.cpp.o
+.PHONY : src/GamePlayers.o
+
+# target to build an object file
+src/GamePlayers.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/GamePlayers.cpp.o
+.PHONY : src/GamePlayers.cpp.o
+
+src/GamePlayers.i: src/GamePlayers.cpp.i
+.PHONY : src/GamePlayers.i
+
+# target to preprocess a source file
+src/GamePlayers.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/GamePlayers.cpp.i
+.PHONY : src/GamePlayers.cpp.i
+
+src/GamePlayers.s: src/GamePlayers.cpp.s
+.PHONY : src/GamePlayers.s
+
+# target to generate assembly for a file
+src/GamePlayers.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/GamePlayers.cpp.s
+.PHONY : src/GamePlayers.cpp.s
 
 src/Player.o: src/Player.cpp.o
 .PHONY : src/Player.o
@@ -431,6 +468,30 @@ test/DealTest.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DealTest.dir/build.make CMakeFiles/DealTest.dir/test/DealTest.cpp.s
 .PHONY : test/DealTest.cpp.s
 
+test/GamePlayersTest.o: test/GamePlayersTest.cpp.o
+.PHONY : test/GamePlayersTest.o
+
+# target to build an object file
+test/GamePlayersTest.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GamePlayersTest.dir/build.make CMakeFiles/GamePlayersTest.dir/test/GamePlayersTest.cpp.o
+.PHONY : test/GamePlayersTest.cpp.o
+
+test/GamePlayersTest.i: test/GamePlayersTest.cpp.i
+.PHONY : test/GamePlayersTest.i
+
+# target to preprocess a source file
+test/GamePlayersTest.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GamePlayersTest.dir/build.make CMakeFiles/GamePlayersTest.dir/test/GamePlayersTest.cpp.i
+.PHONY : test/GamePlayersTest.cpp.i
+
+test/GamePlayersTest.s: test/GamePlayersTest.cpp.s
+.PHONY : test/GamePlayersTest.s
+
+# target to generate assembly for a file
+test/GamePlayersTest.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GamePlayersTest.dir/build.make CMakeFiles/GamePlayersTest.dir/test/GamePlayersTest.cpp.s
+.PHONY : test/GamePlayersTest.cpp.s
+
 test/PotManagerTest.o: test/PotManagerTest.cpp.o
 .PHONY : test/PotManagerTest.o
 
@@ -490,6 +551,7 @@ help:
 	@echo "... test"
 	@echo "... ActionTest"
 	@echo "... DealTest"
+	@echo "... GamePlayersTest"
 	@echo "... PokerLib"
 	@echo "... PotManagerTest"
 	@echo "... TurnManagerTest"
@@ -508,6 +570,9 @@ help:
 	@echo "... src/Deck.o"
 	@echo "... src/Deck.i"
 	@echo "... src/Deck.s"
+	@echo "... src/GamePlayers.o"
+	@echo "... src/GamePlayers.i"
+	@echo "... src/GamePlayers.s"
 	@echo "... src/Player.o"
 	@echo "... src/Player.i"
 	@echo "... src/Player.s"
@@ -523,6 +588,9 @@ help:
 	@echo "... test/DealTest.o"
 	@echo "... test/DealTest.i"
 	@echo "... test/DealTest.s"
+	@echo "... test/GamePlayersTest.o"
+	@echo "... test/GamePlayersTest.i"
+	@echo "... test/GamePlayersTest.s"
 	@echo "... test/PotManagerTest.o"
 	@echo "... test/PotManagerTest.i"
 	@echo "... test/PotManagerTest.s"

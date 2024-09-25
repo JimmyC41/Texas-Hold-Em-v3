@@ -20,7 +20,6 @@ private:
 
     // Helper fuction to return one position clockwise.
     Position getNextPosition(Position curPosition) const;
-
 public:
     TurnManager();
 

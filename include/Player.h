@@ -43,6 +43,7 @@ public:
     string getName() const;
 
     static Position nextPosition(Position curPosition);
+    static string positionToStr(Position position);
 };
 
 #endif // PLAYER_H

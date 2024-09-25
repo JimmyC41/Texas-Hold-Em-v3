@@ -3,6 +3,7 @@
 /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles/PotManagerTest.dir
 /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles/TurnManagerTest.dir
 /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles/ActionTest.dir
+/Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles/GamePlayersTest.dir
 /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles/test.dir
 /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles/edit_cache.dir
 /Users/jimmy/Texas-Hold-Em-v3/build/CMakeFiles/rebuild_cache.dir
