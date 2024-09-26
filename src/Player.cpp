@@ -89,7 +89,7 @@ string Player::positionToStr(Position position) {
             return "HJ";
         case Position::CUT_OFF:
             return "CO";
-        case Position::BUTTON:
+        case Position::DEALER:
             return "Dealer";
         default:
             return "Unknown Position";

@@ -16,7 +16,7 @@ enum class Position {
     LOJACK,
     HIJACK,
     CUT_OFF,
-    BUTTON
+    DEALER
 };
 
 const int NUM_POSITIONS = 9;

@@ -8,11 +8,14 @@ using namespace std;
 class TurnManager {
 private:
     // Contains players in the hand
+    // If heads-up, must exist small and big blind.
+    // If at least 3 players, must exist small blind, big blind and dealer.
     vector<shared_ptr<Player>> playersInHand;
 
     // Contains folded players that can not act
     vector<shared_ptr<Player>> playersFolded;
 
+    shared_ptr<Player> playerWithButton;
     shared_ptr<Player> playerToAct;
 
     // Helper function to return a player with a given position (if the player exists)
@@ -20,6 +23,9 @@ private:
 
     // Helper fuction to return one position clockwise.
     Position getNextPosition(Position curPosition) const;
+
+    // Helper function to sort players in hand and set button
+    void sortPlayersAndSetButton();
 public:
     TurnManager();
 
@@ -36,20 +42,27 @@ public:
     void moveFoldedPlayersToInHand();
 
     // Rotates players positions clockwise.
-    // Called at the start of the pre-flop round, after rotating positions.
+    // Called at the start of the pre-flop round.
     void rotatePositions();
 
     // Returns the big blind to act and updates playerToAct.
     // Called at the start of pre flop street.
     shared_ptr<Player> getBigBlindToAct();
 
+    // Returns the small blind to act and updates playerToAct.
+    // Called at the start of pre flop street IF heads up.
+    shared_ptr<Player> getSmallBlindToAct();
+
     // Returns the EP player to act and udpates playerToAct.
     // Called at the start of flop, turn and river.
     shared_ptr<Player>  getEarlyPositionToAct();
 
-    // Returns the next player to act.
+    // Returns the next player to act and updates playerToAct.
     // Called after each player action is processed.
     shared_ptr<Player> getNextToAct();
+
+    // Returns the player with the button and does NOT update playerToAct.
+    shared_ptr<Player> getPlayerWithButton() const;
 
     // Return the number of players.
     int getNumPlayersInHand() const;
@@ -58,7 +71,13 @@ public:
     int getNumPlayersFolded() const;
 
     // Prints the current player to act
-    void displayPlayerToAct();
+    void displayPlayerToAct() const;
+
+    // Prints the player with the button
+    void displayPlayerWithButton() const;
+
+    // Prints the players in hand
+    void displayPlayersInHand() const;
 };
 
 #endif // TURN_MANAGER_H

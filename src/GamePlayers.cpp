@@ -81,10 +81,10 @@ Position GamePlayers::getEmptySeatPosition() const {
 
     // First two seats to be filled should be big blind and button respectively
     if (gamePlayers.size() == 0) return Position::BIG_BLIND;
-    else if (gamePlayers.size() == 1) return Position::BUTTON;
+    else if (gamePlayers.size() == 1) return Position::DEALER;
 
     for (int position = static_cast<int>(Position::SMALL_BLIND);
-        position < static_cast<int>(Position::BUTTON);
+        position < static_cast<int>(Position::DEALER);
         ++position) {
 
         Position curPosition = static_cast<Position>(position);
