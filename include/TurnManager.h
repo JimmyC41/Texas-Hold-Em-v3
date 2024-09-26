@@ -25,41 +25,58 @@ private:
     Position getNextPosition(Position curPosition) const;
 
     // Helper function to sort players in hand and set button
-    void sortPlayersAndSetButton();
+    void sortPlayersInHand();
+
+    // Helper function to set blinds and button
+    void setBlindsAndButton();
+
+    // Helper function to return the next player to act.
+    shared_ptr<Player> getNextToAct();
 public:
     TurnManager();
 
     // Adds a player to the playersInHand vector.
+    // Sorts players, sets blinds and button.
     // Called for each player before starting a new round.
     void addPlayerInHand(const shared_ptr<Player>& player);
 
     // Moves a player from the playersInHand vector to the playersFolded vector.
+    // Updates the current player to act as the previous player that acted in the in hand vector.
+    // Sorts players in hand, but does not set blinds and button.
     // Called when a player has folded.
     void foldPlayerInHand(const shared_ptr<Player>& foldedPlayer);
 
+    // Removes a player from the playersInHand vector.
+    // Sorts player and sets blinds and button.
+    // Called when a player leaves the game.
+    void removePlayerFromHand(const shared_ptr<Player>& removedPlayer);
+
     // Moves players in folded vector back to the in hand vector.
-    // Called at the start of the pre-flop round.
+    // Called at the END of the round.
     void moveFoldedPlayersToInHand();
 
     // Rotates players positions clockwise.
+    // Called after folded players are moved to in hand.
     // Called at the start of the pre-flop round.
     void rotatePositions();
 
-    // Returns the big blind to act and updates playerToAct.
+    // Sets the big blind as the player to act.
+    // Useful for heads-up.
     // Called at the start of pre flop street.
-    shared_ptr<Player> getBigBlindToAct();
+    void setBigBlindToAct();
 
-    // Returns the small blind to act and updates playerToAct.
+    // Sets the small blind as the player to act.
     // Called at the start of pre flop street IF heads up.
-    shared_ptr<Player> getSmallBlindToAct();
+    void setSmallBlindToAct();
 
-    // Returns the EP player to act and udpates playerToAct.
+    // Sets the earliest position player as the player to act.
     // Called at the start of flop, turn and river.
-    shared_ptr<Player>  getEarlyPositionToAct();
+    void setEarlyPositionToAct();
 
-    // Returns the next player to act and updates playerToAct.
-    // Called after each player action is processed.
-    shared_ptr<Player> getNextToAct();
+    // Returns the current player to act.
+    // Updates current player to next player.
+    // Called before each action is processed.
+    shared_ptr<Player> getPlayerToAct();
 
     // Returns the player with the button and does NOT update playerToAct.
     shared_ptr<Player> getPlayerWithButton() const;

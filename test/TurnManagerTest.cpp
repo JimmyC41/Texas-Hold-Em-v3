@@ -30,229 +30,175 @@ protected:
     void TearDown() override {
         turnManager.moveFoldedPlayersToInHand();
     }
+
+    void addPlayersToHand(std::initializer_list<shared_ptr<Player>> players) {
+        for (const auto& player : players) {
+            turnManager.addPlayerInHand(player);
+        }
+    }
 };
 
-TEST_F(TurnTest, SmallBlindFirstToAct) {
-    turnManager.addPlayerInHand(p1);
-    turnManager.addPlayerInHand(p2);
-    turnManager.addPlayerInHand(p3);
-    ASSERT_EQ(turnManager.getEarlyPositionToAct(), p1);
-    ASSERT_EQ(turnManager.getSmallBlindToAct(), p1);
+TEST_F(TurnTest, BlindsAndButtonSetCorrectly) {
+    addPlayersToHand({p1, p2, p3, p4, p5});
+    ASSERT_EQ(turnManager.getPlayerWithButton(), p5);
+
+    turnManager.setSmallBlindToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
+
+    turnManager.setBigBlindToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p2);
+
+    ASSERT_EQ(turnManager.getPlayerToAct(), p3);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p4);
+    ASSERT_EQ(turnManager.getPlayerToAct(), turnManager.getPlayerWithButton());
 }
 
-TEST_F(TurnTest, FindNextToAct) {
-    turnManager.addPlayerInHand(p1);
-    turnManager.addPlayerInHand(p2);
-    turnManager.addPlayerInHand(p4);
-    turnManager.addPlayerInHand(p6);
-    turnManager.addPlayerInHand(p8);
-    ASSERT_EQ(turnManager.getPlayerWithButton(), p8);
+TEST_F(TurnTest, NextToActAfterFolds) {
+    addPlayersToHand({p1, p2, p3, p4});
 
-    ASSERT_EQ(turnManager.getBigBlindToAct(), p2);
-    turnManager.displayPlayerToAct();
+    turnManager.setSmallBlindToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
+    turnManager.foldPlayerInHand(p1);
 
-    ASSERT_EQ(turnManager.getNextToAct(), p4);
-    turnManager.displayPlayerToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p2);
+    turnManager.foldPlayerInHand(p2);
 
-    ASSERT_EQ(turnManager.getNextToAct(), p6);
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p8); 
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p1);
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p2);
-    turnManager.displayPlayerToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p3);
 }
 
 TEST_F(TurnTest, NextToActHeadsUp) {
-    turnManager.addPlayerInHand(p1);
-    turnManager.addPlayerInHand(p2);
+    addPlayersToHand({p1, p2});
+
+    turnManager.setSmallBlindToAct();
     ASSERT_EQ(turnManager.getPlayerWithButton(), p1);
 
-    ASSERT_EQ(turnManager.getSmallBlindToAct(), p1);
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p2);
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p1);
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p2);
-    turnManager.displayPlayerToAct();
-}
-
-TEST_F(TurnTest, NextToAct) {
-    turnManager.addPlayerInHand(p1);
-    turnManager.addPlayerInHand(p2);
-    turnManager.addPlayerInHand(p4);
-    turnManager.addPlayerInHand(p5);
-    turnManager.addPlayerInHand(p7);
-    turnManager.addPlayerInHand(p9);
-    ASSERT_EQ(turnManager.getPlayerWithButton(), p9);
-
-    ASSERT_EQ(turnManager.getBigBlindToAct(), p2);
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p4);
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p5);
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p7);
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p9);
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p1);
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p2);
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p4);
-    turnManager.displayPlayerToAct();
-
-    ASSERT_EQ(turnManager.getNextToAct(), p5);
-    turnManager.displayPlayerToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p2);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p2);
 }
 
 TEST_F(TurnTest, FoldPlayerToHeadsUp) {
-    turnManager.addPlayerInHand(p1);
-    turnManager.addPlayerInHand(p2);
-    turnManager.addPlayerInHand(p3);
-    turnManager.displayPlayersInHand();
-    ASSERT_EQ(turnManager.getPlayerWithButton(), p3);
+    addPlayersToHand({p1, p2, p3});
 
-    ASSERT_EQ(turnManager.getBigBlindToAct(), p2);
-    ASSERT_EQ(turnManager.getNextToAct(), p3);
-    ASSERT_EQ(turnManager.getNextToAct(), p1);
-    ASSERT_EQ(turnManager.getNextToAct(), p2);
+    turnManager.setBigBlindToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p2);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p3);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
 
-    turnManager.foldPlayerInHand(p3);
-    turnManager.displayPlayersInHand();
-    ASSERT_EQ(turnManager.getNumPlayersInHand(), 2);
-    ASSERT_EQ(turnManager.getNumPlayersFolded(), 1);
-    
-    ASSERT_EQ(turnManager.getNextToAct(), p1);
-    ASSERT_EQ(turnManager.getNextToAct(), p2);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p2);
+    turnManager.foldPlayerInHand(p2);
+
+    ASSERT_EQ(turnManager.getPlayerToAct(), p3);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p3);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
 }
 
 TEST_F(TurnTest, FoldPlayers) {
-    turnManager.addPlayerInHand(p1);
-    turnManager.addPlayerInHand(p2);
-    turnManager.addPlayerInHand(p5);
-    turnManager.addPlayerInHand(p6);
-    turnManager.addPlayerInHand(p9);
-    turnManager.displayPlayersInHand();
-    ASSERT_EQ(turnManager.getPlayerWithButton(), p9);
+    addPlayersToHand({p1, p2, p3, p4, p5});
 
-    ASSERT_EQ(turnManager.getBigBlindToAct(), p2);
-    ASSERT_EQ(turnManager.getNextToAct(), p5);
-    ASSERT_EQ(turnManager.getNextToAct(), p6);
-    ASSERT_EQ(turnManager.getNextToAct(), p9);
-    ASSERT_EQ(turnManager.getNextToAct(), p1);
+    turnManager.setEarlyPositionToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
 
+    ASSERT_EQ(turnManager.getPlayerToAct(), p2);
     turnManager.foldPlayerInHand(p2);
-    turnManager.displayPlayersInHand();
-    ASSERT_EQ(turnManager.getNumPlayersInHand(), 4);
-    ASSERT_EQ(turnManager.getNumPlayersFolded(), 1);
-    
-    ASSERT_EQ(turnManager.getNextToAct(), p5);
-    ASSERT_EQ(turnManager.getNextToAct(), p6);
 
-    turnManager.foldPlayerInHand(p9);
-    turnManager.displayPlayersInHand();
-    ASSERT_EQ(turnManager.getNumPlayersInHand(), 3);
-    ASSERT_EQ(turnManager.getNumPlayersFolded(), 2);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p3);
 
-    ASSERT_EQ(turnManager.getNextToAct(), p1);
-    ASSERT_EQ(turnManager.getNextToAct(), p5);
-    ASSERT_EQ(turnManager.getNextToAct(), p6);
-}
+    ASSERT_EQ(turnManager.getPlayerToAct(), p4);
+    turnManager.foldPlayerInHand(p4);
 
-TEST_F(TurnTest, EarlyPosition) {
-    turnManager.addPlayerInHand(p1);
-    turnManager.addPlayerInHand(p2);
-    turnManager.addPlayerInHand(p3);
-    turnManager.addPlayerInHand(p4);
-    turnManager.addPlayerInHand(p5);
-    turnManager.displayPlayersInHand();
-    ASSERT_EQ(turnManager.getPlayerWithButton(), p5);
-
-    turnManager.foldPlayerInHand(p1);
-    turnManager.foldPlayerInHand(p2);
-    turnManager.foldPlayerInHand(p3);
-    turnManager.displayPlayersInHand();
-    ASSERT_EQ(turnManager.getEarlyPositionToAct(), p4);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p5);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p3);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p5);
 }
 
 TEST_F(TurnTest, ResetFoldedPlayers) {
-    turnManager.addPlayerInHand(p1);
-    turnManager.addPlayerInHand(p2);
-    turnManager.addPlayerInHand(p3);
-    turnManager.addPlayerInHand(p4);
-    turnManager.addPlayerInHand(p5);
-    turnManager.displayPlayersInHand();
-    ASSERT_EQ(turnManager.getPlayerWithButton(), p5);
+    addPlayersToHand({p1, p2, p3, p4, p5});
 
+    turnManager.setEarlyPositionToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
     turnManager.foldPlayerInHand(p1);
+
+    ASSERT_EQ(turnManager.getPlayerToAct(), p2);
     turnManager.foldPlayerInHand(p2);
+
+    ASSERT_EQ(turnManager.getPlayerToAct(), p3);
     turnManager.foldPlayerInHand(p3);
-    turnManager.displayPlayersInHand();
-    ASSERT_EQ(turnManager.getNumPlayersFolded(), 3);
+
+    ASSERT_EQ(turnManager.getPlayerToAct(), p4);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p5);
 
     turnManager.moveFoldedPlayersToInHand();
-    turnManager.displayPlayersInHand();
     ASSERT_EQ(turnManager.getNumPlayersFolded(), 0);
 
-    ASSERT_EQ(turnManager.getEarlyPositionToAct(), p1);
-    ASSERT_EQ(turnManager.getBigBlindToAct(), p2);
+    turnManager.setEarlyPositionToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
 }
 
 TEST_F(TurnTest, TableRotationsHeadsUp) {
-    turnManager.addPlayerInHand(p1);
-    turnManager.addPlayerInHand(p2);
-    turnManager.displayPlayersInHand();
-    ASSERT_EQ(turnManager.getPlayerWithButton(), p1);
-    ASSERT_EQ(turnManager.getSmallBlindToAct(), p1);
-    ASSERT_EQ(turnManager.getNextToAct(), p2);
-   
-   turnManager.rotatePositions();
-   turnManager.displayPlayersInHand();
-   ASSERT_EQ(turnManager.getPlayerWithButton(), p2);
-   ASSERT_EQ(turnManager.getSmallBlindToAct(), p2);
-   ASSERT_EQ(turnManager.getNextToAct(), p1);
+    addPlayersToHand({p1, p2});
+    turnManager.rotatePositions();
+    turnManager.setSmallBlindToAct();
+
+    ASSERT_EQ(turnManager.getPlayerToAct(), turnManager.getPlayerWithButton());
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p2);
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
 }
 
 TEST_F(TurnTest, TableRotations) {
-    turnManager.addPlayerInHand(p1);
-    turnManager.addPlayerInHand(p2);
-    turnManager.addPlayerInHand(p4);
-    turnManager.addPlayerInHand(p6);
-    turnManager.addPlayerInHand(p8);
-    turnManager.displayPlayersInHand();
-    ASSERT_EQ(turnManager.getPlayerWithButton(), p8);
-    ASSERT_EQ(turnManager.getEarlyPositionToAct(), p1);
-    ASSERT_EQ(turnManager.getSmallBlindToAct(), p1);
-    ASSERT_EQ(turnManager.getBigBlindToAct(), p2);
+    addPlayersToHand({p1, p2, p4, p6, p8});
 
     turnManager.rotatePositions();
-    turnManager.displayPlayersInHand();
-    ASSERT_EQ(turnManager.getPlayerWithButton(), p6);
-    ASSERT_EQ(turnManager.getEarlyPositionToAct(), p8);
-    ASSERT_EQ(turnManager.getSmallBlindToAct(), p8);
-    ASSERT_EQ(turnManager.getBigBlindToAct(), p1);
+    turnManager.setEarlyPositionToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p8);
 
     turnManager.rotatePositions();
-    turnManager.displayPlayersInHand();
-    ASSERT_EQ(turnManager.getPlayerWithButton(), p4);
-    ASSERT_EQ(turnManager.getEarlyPositionToAct(), p6);
-    ASSERT_EQ(turnManager.getSmallBlindToAct(), p6);
-    ASSERT_EQ(turnManager.getBigBlindToAct(), p8);
+    turnManager.setEarlyPositionToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p6);
+
+
+    turnManager.rotatePositions();
+    turnManager.setEarlyPositionToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p4);
+}
+
+TEST_F(TurnTest, RemoveSmall) {
+    addPlayersToHand({p1, p2, p3, p4});
+    turnManager.removePlayerFromHand(p1);
+
+    turnManager.setSmallBlindToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p2);
+
+    turnManager.setEarlyPositionToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p2);
+}
+
+TEST_F(TurnTest, RemoveBig) {
+    addPlayersToHand({p1, p2, p3, p4});
+    turnManager.removePlayerFromHand(p2);
+
+    turnManager.setBigBlindToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p3);
+
+    turnManager.setEarlyPositionToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p1);
+}
+
+TEST_F(TurnTest, RemoveBlinds) {
+    addPlayersToHand({p1, p2, p3, p4, p5});
+    turnManager.removePlayerFromHand(p1);
+    turnManager.removePlayerFromHand(p2);
+
+    turnManager.setEarlyPositionToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p3);
+
+    turnManager.setBigBlindToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p4);
+
+    turnManager.setSmallBlindToAct();
+    ASSERT_EQ(turnManager.getPlayerToAct(), p3);
 }

@@ -7,17 +7,23 @@ TurnManager::TurnManager() {}
 
 void TurnManager::addPlayerInHand(const shared_ptr<Player>& player) {
     playersInHand.push_back(player);
-    sortPlayersAndSetButton();
+    sortPlayersInHand();
+    setBlindsAndButton();
 }
 
 void TurnManager::foldPlayerInHand(const shared_ptr<Player>& foldedPlayer) {
+    // Update current player if the player to be folded is the current player to act
+    if (playerToAct == foldedPlayer) {
+        playerToAct = getNextToAct();
+    }
+
     auto it = find(playersInHand.begin(), playersInHand.end(), foldedPlayer);
 
     if (it != playersInHand.end()) {
         playersFolded.push_back(std::move(*it)); // Add the player to the folded players list
         playersInHand.erase(it); // Remove folded player from players in the hand
     }
-    sortPlayersAndSetButton();
+    sortPlayersInHand();
 }
 
 void TurnManager::moveFoldedPlayersToInHand() {
@@ -25,18 +31,34 @@ void TurnManager::moveFoldedPlayersToInHand() {
             playersInHand.push_back(std::move(player));
     }
     playersFolded.clear();
-    sortPlayersAndSetButton();
+    sortPlayersInHand();
+}
+
+void TurnManager::removePlayerFromHand(const shared_ptr<Player>& removedPlayer) {
+    if (playersInHand.size() < 2) {
+        throw runtime_error("Removing a player would result in less than the minimum number of players");
+    }
+
+    auto it = find(playersInHand.begin(), playersInHand.end(), removedPlayer);
+    if (it != playersInHand.end()) {
+        playersInHand.erase(it);
+        sortPlayersInHand();
+        setBlindsAndButton();
+    }
+    else {
+        throw runtime_error("Attempting player removal but could not find player!");
+    }
 }
 
 void TurnManager::rotatePositions() {
     int numPlayers = getNumPlayersInHand();
     if (numPlayers < 2) return;
 
-    // Heads up edge case
+    // Heads up
     if (numPlayers == 2) {
         playersInHand[0]->setPosition(Position::BIG_BLIND);
         playersInHand[1]->setPosition(Position::SMALL_BLIND);
-        sortPlayersAndSetButton();
+        playerWithButton = playersInHand[1];
         return;
     }
 
@@ -48,48 +70,32 @@ void TurnManager::rotatePositions() {
         // If the player has button, they become the small blind regardless of next position
         if (curPlayer == playerWithButton) curPlayer->setPosition(Position::SMALL_BLIND);
     }
-    sortPlayersAndSetButton();
+    sortPlayersInHand();
+    setBlindsAndButton();
 }
 
-shared_ptr<Player> TurnManager::getBigBlindToAct() {
+void TurnManager::setBigBlindToAct() {
     auto player = getPlayerWithPosition(Position::BIG_BLIND);
     if (player == nullptr) cerr << "Error: Could not find a player with the big blind!" << endl;
     playerToAct = player;
-    return playerToAct;
 }
 
-shared_ptr<Player> TurnManager::getSmallBlindToAct() {
+void TurnManager::setSmallBlindToAct() {
     auto player = getPlayerWithPosition(Position::SMALL_BLIND);
     if (player == nullptr) cerr << "Error: Could not find a player with the small blind!" << endl;
     playerToAct = player;
-    return playerToAct;
 }
 
-shared_ptr<Player> TurnManager::getEarlyPositionToAct() {
-    if (playersInHand.size() == 0) {
-        cerr << "Error: Could not find early position player first to act!" << endl;
-        return nullptr;
-    }
-    return playersInHand.front();
+void TurnManager::setEarlyPositionToAct() {
+    auto player = playersInHand.front();
+    playerToAct = player;
 }
 
-shared_ptr<Player> TurnManager::getNextToAct() {
-    auto it = find(playersInHand.begin(), playersInHand.end(), playerToAct);
+shared_ptr<Player> TurnManager::getPlayerToAct() {
+    auto curPlayerToAct = playerToAct;  // Current player to act (return)
+    playerToAct = getNextToAct();       // Next player to act (update)
 
-    if (it != playersInHand.end()) {
-        auto nextIt = it + 1;
-        if (nextIt == playersInHand.end()) {
-            nextIt = playersInHand.begin();
-        }
-
-        if (playerToAct) {
-            playerToAct = (*nextIt);
-            return playerToAct;
-        }
-    }
-
-    cerr << "Error: Could not find next player to act!" << endl;
-    return nullptr;
+    return curPlayerToAct;
 }
 
 shared_ptr<Player> TurnManager::getPlayerWithButton() const {
@@ -109,13 +115,16 @@ void TurnManager::displayPlayersInHand() const {
     for (auto& player : playersInHand) {
         cout << "   Player: " << player->getName() << " | Position: " << Player::positionToStr(player->getPosition()) << endl;
     }
-    cout << "   ----------FINISHED----------" << endl;
+    cout << "---------------FINISHED---------------" << endl;
 }
 
 // Helper Functions
 
 shared_ptr<Player> TurnManager::getPlayerWithPosition(Position position) const {
-    for (auto& player: playersInHand) {
+    for (auto& player : playersInHand) {
+        if (player->getPosition() == position) return player;
+    }
+    for (auto& player : playersFolded) {
         if (player->getPosition() == position) return player;
     }
     return nullptr;
@@ -133,16 +142,39 @@ int TurnManager::getNumPlayersFolded() const {
     return playersFolded.size();
 }
 
-void TurnManager::sortPlayersAndSetButton() {
+void TurnManager::sortPlayersInHand() {
     // Sort players
     sort(playersInHand.begin(), playersInHand.end(),
         [](const shared_ptr<Player>& a, const shared_ptr<Player>& b) {
             return *a < *b;
         });
-    // Set button
-    if (playersInHand.size() == 2) {
-        playerWithButton = playersInHand.front();
-    } else {
-        playerWithButton = playersInHand.back();
+}
+
+void TurnManager::setBlindsAndButton() {
+    if (playersInHand.size() >= 2) {
+        playersInHand[0]->setPosition(Position::SMALL_BLIND);
+        playersInHand[1]->setPosition(Position::BIG_BLIND);
     }
+
+    if (playersInHand.size() == 2) playerWithButton = playersInHand.front();
+    else playerWithButton = playersInHand.back();
+}
+
+shared_ptr<Player> TurnManager::getNextToAct() {
+    auto it = find(playersInHand.begin(), playersInHand.end(), playerToAct);
+
+    if (it != playersInHand.end()) {
+        auto nextIt = it + 1;
+        if (nextIt == playersInHand.end()) {
+            nextIt = playersInHand.begin();
+        }
+
+        if (playerToAct) {
+            playerToAct = (*nextIt);
+            return playerToAct;
+        }
+    }
+
+    cerr << "Error: Could not find next player to act!" << endl;
+    return nullptr;
 }

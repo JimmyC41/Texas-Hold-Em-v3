@@ -7,6 +7,7 @@ shared_ptr<Player> GamePlayers::addPlayerToGame(const string& name, size_t chips
     if (gamePlayers.size() == MAX_NUM_PLAYERS) {
         throw runtime_error("Table is full. Unable to add another player.");
     }
+    
     auto player = make_shared<Player>(name, getEmptySeatPosition(), chips);
     gamePlayers.push_back(player);
 
@@ -78,11 +79,6 @@ bool GamePlayers::isEmptySeatInPosition(Position position) const {
 }
 
 Position GamePlayers::getEmptySeatPosition() const {
-
-    // First two seats to be filled should be big blind and button respectively
-    if (gamePlayers.size() == 0) return Position::BIG_BLIND;
-    else if (gamePlayers.size() == 1) return Position::DEALER;
-
     for (int position = static_cast<int>(Position::SMALL_BLIND);
         position < static_cast<int>(Position::DEALER);
         ++position) {
@@ -92,7 +88,7 @@ Position GamePlayers::getEmptySeatPosition() const {
             return curPosition;
         }
     }
-    throw runtime_error("No empty positions available.");
+    throw runtime_error("No empty positions available!");
 }
 
 shared_ptr<Player> GamePlayers::getPlayerWithPosition(Position position) {
