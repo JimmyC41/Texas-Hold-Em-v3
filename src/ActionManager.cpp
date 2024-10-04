@@ -71,3 +71,21 @@ ActionType ActionManager::getLastAction() const {
     }
     throw runtime_error("No valid action found!");
 }
+
+void ActionManager::displayPossibleActions(vector<PossibleAction>& actions) {
+    for (size_t i = 0; i < actions.size(); ++i) {
+        PossibleAction action = actions[i];
+
+        if (action.type == CHECK) {
+            cout << "   CHECK!" << endl;
+        } else if (action.type == BET) {
+            cout << "   BET! (Bet must exceed the active bet of: " << action.amount << ")" << endl;
+        } else if (action.type == CALL) {
+            cout << "   CALL the active bet of: " << action.amount << ")" << endl;
+        } else if (action.type == RAISE) {
+            cout << "   RAISE! (Raise must exceed the active bet of: " << action.amount << ")" << endl;
+        } else if (action.type == FOLD) {
+            cout << "   FOLD!" << endl;
+        }
+    }
+}

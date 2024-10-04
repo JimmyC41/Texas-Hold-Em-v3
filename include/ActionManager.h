@@ -50,6 +50,9 @@ public:
 
     // Returns the active bet
     size_t getActiveBet() const;
+
+    // Helper function to display a vector of possible actions
+    static void displayPossibleActions(vector<PossibleAction>& actions);
 };
 
 #endif // ACTION_MANAGER_H
