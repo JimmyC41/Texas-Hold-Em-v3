@@ -18,8 +18,14 @@ ClientAction ClientManager::getClientAction(shared_ptr<Player>& playerToAct, vec
     while (true) {
         cout << "Please enter a valid action: " << endl;
         getline(cin, actionStr);
+        cout << "Action received: " << actionStr << endl;
+
         actionType = strToActionType(actionStr);
-        if (isValidAction(possibleActions, actionType)) break;
+        
+        if (isValidAction(possibleActions, actionType)) {
+            cout << "Client option: " << actionStr << endl;
+            break;
+        }
     }
 
     // Fetch the bet size (if needed)
@@ -27,7 +33,7 @@ ClientAction ClientManager::getClientAction(shared_ptr<Player>& playerToAct, vec
         size_t max = playerToAct->getChips();
         betSize = getRelevantBet(possibleActions, actionType);
         if (betSize > max) betSize = max;
-    } else if (actionType == ActionType::BET || RAISE) {
+    } else if (actionType == ActionType::BET || actionType == ActionType::RAISE) {
         size_t min = bigBlind; // By default, minimum bet is big blind
         size_t max = playerToAct->getChips();
 
@@ -37,7 +43,15 @@ ClientAction ClientManager::getClientAction(shared_ptr<Player>& playerToAct, vec
         while (true) {
             cout << "Please enter a bet size of [" << min << ", " << max << "]" << endl;
             cin >> betSize;
-            if (isValidAmount(betSize, min, max)) break;
+
+            if (cin.fail()) {
+                cout << "Invalid input. Please enter a valid number." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+            else {
+                if (isValidAmount(betSize, min, max)) break;
+            }
         }
     }
 
@@ -52,15 +66,20 @@ ClientAction ClientManager::getClientAction(shared_ptr<Player>& playerToAct, vec
 // Helper Functions
 
 ActionType ClientManager::strToActionType(string& str) {
+    transform(str.begin(), str.end(), str.begin(), ::tolower);
+
     if (str == "bet") return ActionType::BET;
-    if (str == "check") return ActionType::BET;
+    if (str == "check") return ActionType::CHECK;
     if (str == "fold") return ActionType::FOLD;
     if (str == "call") return ActionType::CALL;
     if (str == "raise") return ActionType::RAISE;
     if (str == "blind") return ActionType::BLIND;
+    else return ActionType::INVALID_ACTION;
 }
 
 bool ClientManager::isValidAction(vector<PossibleAction>& possibleActions, ActionType chosenAction) {
+    if (chosenAction == INVALID_ACTION) return false;
+
     auto it = find_if(possibleActions.begin(), possibleActions.end(), [chosenAction](const PossibleAction& action) {
                 return action.type == chosenAction;
             });

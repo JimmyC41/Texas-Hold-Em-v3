@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/jimmy/Texas-Hold-Em-v3/src/ActionManager.cpp" "CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o" "gcc" "CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o.d"
   "/Users/jimmy/Texas-Hold-Em-v3/src/Board.cpp" "CMakeFiles/PokerLib.dir/src/Board.cpp.o" "gcc" "CMakeFiles/PokerLib.dir/src/Board.cpp.o.d"
   "/Users/jimmy/Texas-Hold-Em-v3/src/Card.cpp" "CMakeFiles/PokerLib.dir/src/Card.cpp.o" "gcc" "CMakeFiles/PokerLib.dir/src/Card.cpp.o.d"
+  "/Users/jimmy/Texas-Hold-Em-v3/src/ClientManager.cpp" "CMakeFiles/PokerLib.dir/src/ClientManager.cpp.o" "gcc" "CMakeFiles/PokerLib.dir/src/ClientManager.cpp.o.d"
   "/Users/jimmy/Texas-Hold-Em-v3/src/Dealer.cpp" "CMakeFiles/PokerLib.dir/src/Dealer.cpp.o" "gcc" "CMakeFiles/PokerLib.dir/src/Dealer.cpp.o.d"
   "/Users/jimmy/Texas-Hold-Em-v3/src/Deck.cpp" "CMakeFiles/PokerLib.dir/src/Deck.cpp.o" "gcc" "CMakeFiles/PokerLib.dir/src/Deck.cpp.o.d"
   "/Users/jimmy/Texas-Hold-Em-v3/src/GamePlayers.cpp" "CMakeFiles/PokerLib.dir/src/GamePlayers.cpp.o" "gcc" "CMakeFiles/PokerLib.dir/src/GamePlayers.cpp.o.d"

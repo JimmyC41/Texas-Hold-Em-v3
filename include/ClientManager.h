@@ -15,6 +15,11 @@ typedef struct ClientAction {
 } ClientAction;
 
 class ClientManager {
+public:
+    ClientManager(size_t bigBlind);
+
+    // Queries the client for a valid client action object to be processed by the action manager
+    ClientAction getClientAction(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions);
 private:
     size_t bigBlind;
 
@@ -30,14 +35,6 @@ private:
 
     // Checks if the client bet size chosen is valid
     bool isValidAmount(size_t amount, size_t min, size_t max);
-public:
-    ClientManager(size_t bigBlind);
-
-    // Queries the client for a valid client action object to be processed by the action manager
-    ClientAction getClientAction(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions);
-
-    // Displays a client action (debugging)
-    void displayClientAction() const;
 };
 
 #endif // CLIENT_H

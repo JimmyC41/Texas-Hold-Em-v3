@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/PokerLib.dir/src/Board.cpp.o.d"
   "CMakeFiles/PokerLib.dir/src/Card.cpp.o"
   "CMakeFiles/PokerLib.dir/src/Card.cpp.o.d"
+  "CMakeFiles/PokerLib.dir/src/ClientManager.cpp.o"
+  "CMakeFiles/PokerLib.dir/src/ClientManager.cpp.o.d"
   "CMakeFiles/PokerLib.dir/src/Dealer.cpp.o"
   "CMakeFiles/PokerLib.dir/src/Dealer.cpp.o.d"
   "CMakeFiles/PokerLib.dir/src/Deck.cpp.o"

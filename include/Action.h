@@ -11,7 +11,8 @@ enum ActionType {
     CALL,
     RAISE,
     FOLD,
-    BLIND
+    BLIND,
+    INVALID_ACTION
 };
 
 class Action {

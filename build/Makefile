@@ -204,6 +204,19 @@ GamePlayersTest/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/GamePlayersTest.dir/build.make CMakeFiles/GamePlayersTest.dir/build
 .PHONY : GamePlayersTest/fast
 
+#=============================================================================
+# Target rules for targets named ClientManagerTest
+
+# Build rule for target.
+ClientManagerTest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ClientManagerTest
+.PHONY : ClientManagerTest
+
+# fast build rule for target.
+ClientManagerTest/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientManagerTest.dir/build.make CMakeFiles/ClientManagerTest.dir/build
+.PHONY : ClientManagerTest/fast
+
 src/ActionManager.o: src/ActionManager.cpp.o
 .PHONY : src/ActionManager.o
 
@@ -275,6 +288,30 @@ src/Card.s: src/Card.cpp.s
 src/Card.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/Card.cpp.s
 .PHONY : src/Card.cpp.s
+
+src/ClientManager.o: src/ClientManager.cpp.o
+.PHONY : src/ClientManager.o
+
+# target to build an object file
+src/ClientManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/ClientManager.cpp.o
+.PHONY : src/ClientManager.cpp.o
+
+src/ClientManager.i: src/ClientManager.cpp.i
+.PHONY : src/ClientManager.i
+
+# target to preprocess a source file
+src/ClientManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/ClientManager.cpp.i
+.PHONY : src/ClientManager.cpp.i
+
+src/ClientManager.s: src/ClientManager.cpp.s
+.PHONY : src/ClientManager.s
+
+# target to generate assembly for a file
+src/ClientManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PokerLib.dir/build.make CMakeFiles/PokerLib.dir/src/ClientManager.cpp.s
+.PHONY : src/ClientManager.cpp.s
 
 src/Dealer.o: src/Dealer.cpp.o
 .PHONY : src/Dealer.o
@@ -444,6 +481,30 @@ test/ActionTest.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ActionTest.dir/build.make CMakeFiles/ActionTest.dir/test/ActionTest.cpp.s
 .PHONY : test/ActionTest.cpp.s
 
+test/ClientManagerTest.o: test/ClientManagerTest.cpp.o
+.PHONY : test/ClientManagerTest.o
+
+# target to build an object file
+test/ClientManagerTest.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientManagerTest.dir/build.make CMakeFiles/ClientManagerTest.dir/test/ClientManagerTest.cpp.o
+.PHONY : test/ClientManagerTest.cpp.o
+
+test/ClientManagerTest.i: test/ClientManagerTest.cpp.i
+.PHONY : test/ClientManagerTest.i
+
+# target to preprocess a source file
+test/ClientManagerTest.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientManagerTest.dir/build.make CMakeFiles/ClientManagerTest.dir/test/ClientManagerTest.cpp.i
+.PHONY : test/ClientManagerTest.cpp.i
+
+test/ClientManagerTest.s: test/ClientManagerTest.cpp.s
+.PHONY : test/ClientManagerTest.s
+
+# target to generate assembly for a file
+test/ClientManagerTest.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientManagerTest.dir/build.make CMakeFiles/ClientManagerTest.dir/test/ClientManagerTest.cpp.s
+.PHONY : test/ClientManagerTest.cpp.s
+
 test/DealTest.o: test/DealTest.cpp.o
 .PHONY : test/DealTest.o
 
@@ -550,6 +611,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... ActionTest"
+	@echo "... ClientManagerTest"
 	@echo "... DealTest"
 	@echo "... GamePlayersTest"
 	@echo "... PokerLib"
@@ -564,6 +626,9 @@ help:
 	@echo "... src/Card.o"
 	@echo "... src/Card.i"
 	@echo "... src/Card.s"
+	@echo "... src/ClientManager.o"
+	@echo "... src/ClientManager.i"
+	@echo "... src/ClientManager.s"
 	@echo "... src/Dealer.o"
 	@echo "... src/Dealer.i"
 	@echo "... src/Dealer.s"
@@ -585,6 +650,9 @@ help:
 	@echo "... test/ActionTest.o"
 	@echo "... test/ActionTest.i"
 	@echo "... test/ActionTest.s"
+	@echo "... test/ClientManagerTest.o"
+	@echo "... test/ClientManagerTest.i"
+	@echo "... test/ClientManagerTest.s"
 	@echo "... test/DealTest.o"
 	@echo "... test/DealTest.i"
 	@echo "... test/DealTest.s"
