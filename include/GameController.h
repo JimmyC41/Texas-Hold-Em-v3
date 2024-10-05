@@ -1,15 +1,10 @@
 #ifndef GAME_CONTROLLER_H
 #define GAME_CONTROLLER_H
 
-#include "Action.h"
 #include "ActionManager.h"
-#include "Board.h"
-#include "Card.h"
 #include "Dealer.h"
 #include "ClientManager.h"
-#include "Deck.h"
 #include "GamePlayers.h"
-#include "Player.h"
 #include "PotManager.h"
 #include "TurnManager.h"
 
@@ -28,10 +23,37 @@ private:
     shared_ptr<TurnManager> turnManager;
 public:
     GameController();
-    
-    void startNewRound();
-    void advanceStreet();
-    void showdown();
+
+    // Methods
+
+    // runGameLoop: Manages overall game flow
+
+    // startNewRound: Starts a new round of poker and resets game state
+
+    // dealPlayers: Deals cards to players
+
+    // dealCommunity: Deals community cards
+
+    // getPlayerToAct: Fetches the current player to act
+
+    // requestClientAction: Fetches action for the current player
+
+    // processAction: Add action to action timeline
+
+    // updatePotManager: Update the pot after each player action
+
+    // updateTurnManager: Update active / folded players after each player action
+
+    // advanceToNextStreet: In a given round, advances to the next street
+
+    // showdown: Evaluates the winner and distributes the pot
+
+    // rotatePositions: Update player position after round completion
+
+    // isStreetOver: Checks if the current betting street is complete
+
+    // isGameOver: Checks if the game is over (e.g. less than 2 players)
+
     // To add methods.
 };
 
