@@ -43,7 +43,7 @@ public:
             case BLIND:
                 return "Blind";
             default:
-                return "Unknown Action";
+                return "Invalid Action";
         }
     }
 };

@@ -9,7 +9,7 @@
 using namespace std;
 
 typedef struct ClientAction {
-    shared_ptr<Player>& player;
+    shared_ptr<Player> player;
     ActionType type;
     size_t amount;
 } ClientAction;
@@ -22,6 +22,19 @@ public:
     ClientAction getClientAction(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions);
 private:
     size_t bigBlind;
+
+    // Print possible actions for the player to act
+    void displayPossibleActions(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions);
+
+    // Print a given client action object
+    void displayClientAction(const ClientAction& clientAction);
+
+    // Fetch the action type from the client (stdin)
+    ActionType getClientActionType(vector<PossibleAction>& possibleActions);
+
+    // Fetch the bet amount from the client (stdin)
+    size_t getClientBetAmount(shared_ptr<Player>& playerToAct, ActionType clientAction, 
+                                vector<PossibleAction>& possibleActions, size_t bigBlind);
 
     // Convert string (client input) into an ActionType
     ActionType strToActionType(string& string);
