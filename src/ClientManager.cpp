@@ -71,7 +71,7 @@ size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, Action
         if (minBet >= maxBet) return maxBet;
     }
 
-    // Fetch client bet aount from stdin
+    // Fetch client bet amount from stdin
     size_t amount;
     while (true) {
         cout << "Please enter a bet size of [" << minBet << ", " << maxBet << "]: ";

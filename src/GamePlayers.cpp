@@ -18,21 +18,18 @@ shared_ptr<Player> GamePlayers::addPlayerToGame(const string& name, size_t chips
     return player;
 }
 
-void GamePlayers::removePlayerFromGame(const string& playerName) {
+shared_ptr<Player> GamePlayers::removePlayerFromGame(const string& playerName) {
     if (gamePlayers.size() <= MIN_NUM_PLAYERS) {
         throw runtime_error("Removing this player would result in fewer than the minimum required number of players.");
     }
 
-    auto it = remove_if(gamePlayers.begin(), gamePlayers.end(),
-                        [playerName](const shared_ptr<Player>& player) {
-                            return player->getName() == playerName;
-                        });
-    
-    if (it != gamePlayers.end()) {
-        gamePlayers.erase(it, gamePlayers.end());
-        cout << "Player " << playerName << " removed from the game!" << endl;
+    auto playerToRemove = getPlayerWithName(playerName);
+    if (playerToRemove != nullptr) {
+        removePlayer(playerToRemove);
+        return playerToRemove;
     } else {
         cout << "Player " << playerName << " could not be found for removal!" << endl;
+        return nullptr;
     }
 }
 
@@ -99,4 +96,23 @@ shared_ptr<Player> GamePlayers::getPlayerWithPosition(Position position) {
     
     if (it != gamePlayers.end()) return (*it);
     else return nullptr;
+}
+
+shared_ptr<Player> GamePlayers::getPlayerWithName(const string& name) {
+    auto it = find_if(gamePlayers.begin(), gamePlayers.end(),
+                    [name](const shared_ptr<Player>& player) {
+                        return player->getName() == name;
+                    });
+    
+    if (it != gamePlayers.end()) return (*it);
+    else return nullptr;
+}
+
+void GamePlayers::removePlayer(shared_ptr<Player> playerToRemove) {
+    auto it = std::remove_if(gamePlayers.begin(), gamePlayers.end(),
+                            [&playerToRemove](const shared_ptr<Player>& player) {
+                                return player == playerToRemove;
+                            });
+    gamePlayers.erase(it, gamePlayers.end());
+    cout << "Player " << playerToRemove->getName() << " removed from the game!" << endl;
 }

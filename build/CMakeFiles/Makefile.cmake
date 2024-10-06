@@ -63,4 +63,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/ActionTest.dir/DependInfo.cmake"
   "CMakeFiles/GamePlayersTest.dir/DependInfo.cmake"
   "CMakeFiles/ClientManagerTest.dir/DependInfo.cmake"
+  "CMakeFiles/GameControllerTest.dir/DependInfo.cmake"
   )

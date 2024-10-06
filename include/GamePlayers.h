@@ -28,6 +28,12 @@ private:
 
     // Helper function to get a player with a given position
     shared_ptr<Player> getPlayerWithPosition(Position position);
+
+    // Helper function to get a player with a given name
+    shared_ptr<Player> getPlayerWithName(const string& name);
+
+    // Helper function to remove a player
+    void removePlayer(shared_ptr<Player> playerToRemove);
 public:
     GamePlayers();
 
@@ -39,7 +45,7 @@ public:
     // Removes a player from the game
     // Must be at least 3 players
     // Called BEFORE rotating positions in turn manager
-    void removePlayerFromGame(const string& playerName);
+    shared_ptr<Player> removePlayerFromGame(const string& playerName);
 
     // Removes all players from the game
     // Set last player to act after player removal added as the button

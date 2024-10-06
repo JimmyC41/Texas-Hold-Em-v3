@@ -6,7 +6,6 @@
 
 void PotManager::newPot() {
     pots.emplace_back();
-    cout << "New pot created!" << endl;
 }
 
 Pot& PotManager::getCurPot() {

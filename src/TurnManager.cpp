@@ -102,6 +102,10 @@ shared_ptr<Player> TurnManager::getPlayerWithButton() const {
     return playerWithButton;
 }
 
+vector<shared_ptr<Player>>& TurnManager::getPlayersInHand() {
+    return playersInHand;
+}
+
 void TurnManager::displayPlayerToAct() const {
     cout << "Player to act is: " << playerToAct->getName() << endl;
 }

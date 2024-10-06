@@ -95,6 +95,9 @@ public:
 
     // Prints the players in hand
     void displayPlayersInHand() const;
+
+    // Fetches the vector of players in the hand
+    vector<shared_ptr<Player>>& getPlayersInHand();
 };
 
 #endif // TURN_MANAGER_H
