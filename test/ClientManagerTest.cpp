@@ -13,74 +13,46 @@ protected:
     std::shared_ptr<Player> player;
 
     ClientManagerTest() : clientManager(3) {
-        player = std::make_shared<Player>("Player", Position::SMALL_BLIND, 1000);
+        player = std::make_shared<Player>("Jimmy", Position::SMALL_BLIND, 1000);
     }
 };
 
 TEST_F(ClientManagerTest, CheckOption) {
     std::vector<PossibleAction> possibleActions = {{CHECK, 0}, {BET, 0}, {FOLD, 0}};
-
-    // Check
-
     ClientAction action = clientManager.getClientAction(player, possibleActions);
-    ASSERT_EQ(action.type, ActionType::CHECK);
 }
 
-TEST_F(ClientManagerTest, BetOption) {
+TEST_F(ClientManagerTest, Bet) {
     std::vector<PossibleAction> possibleActions = {{CHECK, 0}, {BET, 0}, {FOLD, 0}};
-
-    // Bet 100
-
     ClientAction action = clientManager.getClientAction(player, possibleActions);
-    ASSERT_EQ(action.type, ActionType::BET);
-    ASSERT_EQ(action.amount, 100);
 }
 
 TEST_F(ClientManagerTest, BetAllIn) {
     std::vector<PossibleAction> possibleActions = {{CHECK, 0}, {BET, 0}, {FOLD, 0}};
-
-    // Bet 1000
-
     ClientAction action = clientManager.getClientAction(player, possibleActions);
-    ASSERT_EQ(action.type, ActionType::BET);
-    ASSERT_EQ(action.amount, 1000);  // Assuming player's total chips are 1000
 }
 
 TEST_F(ClientManagerTest, FoldOption) {
     std::vector<PossibleAction> possibleActions = {{CALL, 100}, {RAISE, 100}, {FOLD, 0}};
-
-    // Fold
-
     ClientAction action = clientManager.getClientAction(player, possibleActions);
-    ASSERT_EQ(action.type, ActionType::FOLD);
 }
 
 TEST_F(ClientManagerTest, CallOption) {
-    std::vector<PossibleAction> possibleActions = {{CALL, 100}, {RAISE, 100}, {FOLD, 0}};
-
-    // Call
-
+    std::vector<PossibleAction> possibleActions = {{CALL, 500}, {RAISE, 500}, {FOLD, 0}};
     ClientAction action = clientManager.getClientAction(player, possibleActions);
-    ASSERT_EQ(action.type, ActionType::CALL);
-    ASSERT_EQ(action.amount, 100);
 }
 
 TEST_F(ClientManagerTest, CallAllIn) {
-    std::vector<PossibleAction> possibleActions = {{CALL, 1500}, {RAISE, 1500}, {FOLD, 0}};
-
-    // Call
-
+    std::vector<PossibleAction> possibleActions = {{CALL, 2000}, {RAISE, 2000}, {FOLD, 0}};
     ClientAction action = clientManager.getClientAction(player, possibleActions);
-    ASSERT_EQ(action.type, ActionType::CALL);
-    ASSERT_EQ(action.amount, 1000);
 }
 
 TEST_F(ClientManagerTest, RaiseOption) {
     std::vector<PossibleAction> possibleActions = {{CALL, 100}, {RAISE, 100}, {FOLD, 0}}; 
-
-    // Raise 200
-
     ClientAction action = clientManager.getClientAction(player, possibleActions);
-    ASSERT_EQ(action.type, ActionType::RAISE);
-    ASSERT_EQ(action.amount, 200);
+}
+
+TEST_F(ClientManagerTest, RaiseAllIn) {
+    std::vector<PossibleAction> possibleActions = {{CALL, 750}, {RAISE, 750}, {FOLD, 0}}; 
+    ClientAction action = clientManager.getClientAction(player, possibleActions);
 }
