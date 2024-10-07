@@ -204,3 +204,71 @@ TEST_F(ActionTest, CallAllIn) {
     vector<PossibleAction> expected = {{CALL, 1000}, {RAISE, 1000}, {FOLD, 0}};
     ASSERT_EQ(actual, expected);
 }
+
+TEST_F(ActionTest, AllPlayersChecked) {
+    auto check_1 = make_shared<CheckAction>(player1);
+    auto check_2 = make_shared<CheckAction>(player2);
+    auto check_3 = make_shared<CheckAction>(player3);
+    auto check_4 = make_shared<CheckAction>(player4);
+
+    actionManager.addActionToTimeline(check_1);
+    actionManager.addActionToTimeline(check_2);
+    actionManager.addActionToTimeline(check_3);
+    actionManager.addActionToTimeline(check_4);
+
+    ASSERT_EQ(actionManager.isActionsFinished(4), true);
+}
+
+TEST_F(ActionTest, BetCalledTrue) {
+    auto blind_1 = make_shared<BlindAction>(player1, 2);
+    auto blind_2 = make_shared<BlindAction>(player2, 3);
+    auto raise_3 = make_shared<RaiseAction>(player3, 10);
+    auto call_4 = make_shared<CallAction>(player4, 10);
+    auto call_1 = make_shared<CallAction>(player1, 10);
+    auto call_2 = make_shared<CallAction>(player2, 10);
+
+    actionManager.addActionToTimeline(blind_1);
+    actionManager.addActionToTimeline(blind_2);
+    actionManager.addActionToTimeline(raise_3);
+    actionManager.addActionToTimeline(call_4);
+    actionManager.addActionToTimeline(call_1);
+    actionManager.addActionToTimeline(call_2);
+
+    ASSERT_EQ(actionManager.isActionsFinished(4), true);
+}
+
+TEST_F(ActionTest, BetCalledFalse) {
+    auto blind_1 = make_shared<BlindAction>(player1, 2);
+    auto blind_2 = make_shared<BlindAction>(player2, 3);
+    auto call_3 = make_shared<CallAction>(player3, 3);
+    auto raise_4 = make_shared<RaiseAction>(player4, 10);
+    auto call_1 = make_shared<CallAction>(player1, 10);
+    auto call_2 = make_shared<CallAction>(player2, 10);
+
+    actionManager.addActionToTimeline(blind_1);
+    actionManager.addActionToTimeline(blind_2);
+    actionManager.addActionToTimeline(call_3);
+    actionManager.addActionToTimeline(raise_4);
+    actionManager.addActionToTimeline(call_1);
+    actionManager.addActionToTimeline(call_2);
+
+    ASSERT_EQ(actionManager.isActionsFinished(4), false);
+}
+
+TEST_F(ActionTest, BetFoldedTo) {
+    auto bet_1 = make_shared<BetAction>(player1, 100);
+    auto call_2 = make_shared<CallAction>(player2, 100);
+    auto fold_3 = make_shared<FoldAction>(player3);
+    auto raise_4 = make_shared<RaiseAction>(player4, 200);
+    auto fold_1 = make_shared<FoldAction>(player1);
+    auto fold_2 = make_shared<FoldAction>(player2);
+
+    actionManager.addActionToTimeline(bet_1);
+    actionManager.addActionToTimeline(call_2);
+    actionManager.addActionToTimeline(fold_3);
+    actionManager.addActionToTimeline(raise_4);
+    actionManager.addActionToTimeline(fold_1);
+    actionManager.addActionToTimeline(fold_2);
+
+    ASSERT_EQ(actionManager.isActionsFinished(4), true);
+}

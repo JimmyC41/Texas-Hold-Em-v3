@@ -42,6 +42,9 @@ public:
     // Retrieves possible action types given the betting action. Called when player is prompted for their action.
     vector<PossibleAction> getAllowedActionTypes();
 
+    // Iterates through the action timeline and checks if betting action is complete
+    bool isActionsFinished(int numPlayers) const;
+
     // Displays the action types in the action timeline.
     void displayActionTimeline();
 
