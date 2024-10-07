@@ -117,15 +117,15 @@ void ActionManager::displayPossibleActions(vector<PossibleAction>& actions) {
         PossibleAction action = actions[i];
 
         if (action.type == CHECK) {
-            cout << "   CHECK!" << endl;
+            cout << "   Option: Check" << endl;
         } else if (action.type == BET) {
-            cout << "   BET! (Bet must exceed the active bet of: " << action.amount << ")" << endl;
+            cout << "   Option: Bet" << endl;
         } else if (action.type == CALL) {
-            cout << "   CALL the active bet of: " << action.amount << ")" << endl;
+            cout << "   Option: Call (amount: " << action.amount << ")" << endl;
         } else if (action.type == RAISE) {
-            cout << "   RAISE! (Raise must exceed the active bet of: " << action.amount << ")" << endl;
+            cout << "   Option: Raise (amount must exceed the current bet of: " << action.amount << ")" << endl;
         } else if (action.type == FOLD) {
-            cout << "   FOLD!" << endl;
+            cout << "   Option: Fold" << endl;
         }
     }
 }

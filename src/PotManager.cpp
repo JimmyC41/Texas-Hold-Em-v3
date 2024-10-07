@@ -95,8 +95,7 @@ void PotManager::calculatePots() {
 
     while (!allPotsCreated()) {
         size_t minBet = findMinBet();
-        cout << "Current minBet is: " << minBet << endl;
-        
+                
         Pot& curPot = getCurPot();
 
         // Add each player's contribution to the current pot

@@ -2,6 +2,13 @@
 #define GAME_CONTROLLER_H
 
 #include "ActionManager.h"
+#include "Action.h"
+#include "Actions/BetAction.h"
+#include "Actions/BlindAction.h"
+#include "Actions/CallAction.h"
+#include "Actions/CheckAction.h"
+#include "Actions/FoldAction.h"
+#include "Actions/RaiseAction.h"
 #include "Dealer.h"
 #include "ClientManager.h"
 #include "GamePlayers.h"
@@ -60,30 +67,20 @@ public:
     // Deals community cards to board
     void dealBoard(int numCards);
 
-    // STREET SPECIFIC METHOD
+    // STREET SPECIFIC METHODS
+
+    // Creates an action object from a client object
+    shared_ptr<Action> createAction(const ClientAction& clientAction);
     
     // Check if all players have acted in a given round
-    // TODO
     bool isStreetOver();
+
+    // Sets the first player to act, handles blinds and deals players / board
+    // Called at the beginning of each street
+    void setupStreet(Street newStreet);
 
     // Start a new betting street
     void startStreet(Street newStreet);
-
-    // Update game state for new street
-    // Reset actions and calculate pots
-    void updateStreetState();
-
-    // Set first player to act
-    // Gets the current player to act
-    // Get possible actions for the player to act
-    // Request client action given possible actions
-    // Add action to action timeline
-    // Update the pot manager after each player action
-    // Update active / folded players after each player action
-    
-    // END OF STREET
-    // ActionManager: Clear action timeline
-    // PotManager: Calculate pots and reset bets
 
     // ROUND METHODS
 

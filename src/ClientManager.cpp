@@ -14,8 +14,9 @@ ClientAction ClientManager::getClientAction(shared_ptr<Player>& playerToAct, vec
     size_t amount = getClientBetAmount(playerToAct, clientActionType, possibleActions, bigBlind);
 
     ClientAction clientAction = ClientAction{playerToAct, clientActionType, amount};
-    displayClientAction(clientAction);
+    // displayClientAction(clientAction);
 
+    cout << "\n" << endl;
     return clientAction;
 }
 
@@ -31,11 +32,9 @@ ActionType ClientManager::getClientActionType(vector<PossibleAction>& possibleAc
 
         actionType = strToActionType(actionStr);
         if (isValidAction(possibleActions, actionType)) {
-            cout << "   Client option: " << actionStr << endl;;
             break;
         }
     }
-
     return actionType;
 }
 
@@ -62,8 +61,6 @@ size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, Action
     if (clientAction == ActionType::RAISE) {
         size_t prevBetAmount = getRelevantBet(possibleActions, clientAction);
 
-        cout << "Previous bet amount is: " << prevBetAmount << endl;
-
         // Assume that minimum raise is the previous bet
         minBet = 2 * prevBetAmount;
 
@@ -82,7 +79,10 @@ size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, Action
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         } else {
-            if (isValidAmount(amount, minBet, maxBet)) return amount;
+            if (isValidAmount(amount, minBet, maxBet)) {
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                return amount;
+            }
         }
     }
 }
@@ -90,7 +90,7 @@ size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, Action
 // Helper Functions
 
 void ClientManager::displayPossibleActions(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions) {
-    cout << "Displaying possible actions for" << playerToAct->getName() << ":" << endl;
+    cout << "Displaying possible actions for " << playerToAct->getName() << ":" << endl;
     ActionManager::displayPossibleActions(possibleActions);
 }
 
