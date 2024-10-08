@@ -15,6 +15,7 @@ typedef struct Pot {
     void addChips(size_t amount);
     size_t getChips() const;
     const vector<shared_ptr<Player>>& getEligiblePlayers() const;
+    bool isPlayerInPot(const shared_ptr<Player>& player);
 } Pot;
 
 class PotManager {
@@ -46,6 +47,9 @@ public:
 
     // Updates the playerBets map after a bet/raises. Called after each player action.
     void addPlayerBet(const shared_ptr<Player>& player, size_t bet);
+
+    // Gets a player's contribution to the pot in a given round
+    size_t getRecentBet(const shared_ptr<Player>& player);
 
     // Increments dead money and sets folded player's recent bet to 0.
     void foldPlayerBet(const shared_ptr<Player>& player);

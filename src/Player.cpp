@@ -20,7 +20,6 @@ void Player::reduceChips(size_t amount) {
         throw runtime_error("Attempting to reduce player chips by more than their current chip count");
     }
     chips -= amount;
-    cout << name << " chip count decreased by " << amount << " to " << chips << endl;
 }
 
 void Player::addChips(size_t amount) {

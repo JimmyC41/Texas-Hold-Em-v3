@@ -14,9 +14,6 @@ GameController::GameController(size_t smallBlind, size_t bigBlind) :
     potManager() {}
 
 // GAME STATE INFORMATION METHODS
-int GameController::getNumPlayersInGame() const {
-    return gamePlayers.getNumPlayersInGame();
-}
 
 void GameController::displayPlayersInGame() const {
     gamePlayers.displayPlayersInGame();
@@ -33,26 +30,6 @@ void GameController::removePlayer(const string& name) {
     shared_ptr<Player> oldPlayer = gamePlayers.removePlayerFromGame(name);
     if (oldPlayer != nullptr) turnManager.removePlayerFromHand(oldPlayer);
 }
-
-// DEALER SPECIFIC METHODS
-
-void GameController::dealPlayers() {
-    cout << "--------Dealing cards to players!-------" << endl;
-    for (int i = 0; i < 2; i++) {
-        for (const auto& player : turnManager.getPlayersInHand()) {
-            dealer.dealPlayer(player);
-        }
-    }
-    cout << "----------------------------------------\n" << endl;
-}
-
-void GameController::dealBoard(int numCards) {
-    cout << "----------------------------------------" << endl;
-    cout << "Dealing " << numCards << " community card(s) to the board!" << endl;
-    dealer.dealBoard(numCards, 1);
-    cout << "----------------------------------------\n" << endl;
-}
-
 // STREET SPECIFIC METHODS
 
 shared_ptr<Action> GameController::createAction(const ClientAction& action) {
@@ -108,17 +85,18 @@ void GameController::setupStreet(Street newStreet) {
     }
 }
 
-bool GameController::isFoldedThrough() {
-    return (turnManager.getNumPlayersInHand() == 1);
-}
-
 void GameController::startStreet(Street newStreet) {
-    cout << "\nStarting " << streetToStr(newStreet) << " Street\n" << endl;
-
     if (isFoldedThrough()) {
         cout << "Players folded through. Skipping " << streetToStr(newStreet) << endl;
         return;
     }
+
+    if (isPlayersInHandAllIn()) {
+        cout << "Players in the hand are all in. Skipping " << streetToStr(newStreet) << endl;
+        return;
+    }
+
+    cout << "\nStarting " << streetToStr(newStreet) << " Street\n" << endl;
 
     setupStreet(newStreet);
     int initialPlayersInHand = turnManager.getNumPlayersInHand();
@@ -131,7 +109,8 @@ void GameController::startStreet(Street newStreet) {
         vector<PossibleAction> possibleActions = actionManager.getAllowedActionTypes();
 
         // Request client action given possible actions
-        ClientAction clientAction = clientManager.getClientAction(curPlayer, possibleActions);
+        size_t initialChips = curPlayer->getChips() + potManager.getRecentBet(curPlayer); // Represents the number of chips the player started the street with!
+        ClientAction clientAction = clientManager.getClientAction(curPlayer, possibleActions, initialChips);
 
         // Add action to the action timeline
         shared_ptr<Action> playerAction = createAction(clientAction);
@@ -200,4 +179,36 @@ string GameController::streetToStr(Street street) {
         default:
             return "Unknown Street";
     }
+}
+
+void GameController::dealPlayers() {
+    cout << "--------Dealing cards to players!-------" << endl;
+    for (int i = 0; i < 2; i++) {
+        for (const auto& player : turnManager.getPlayersInHand()) {
+            dealer.dealPlayer(player);
+        }
+    }
+    cout << "----------------------------------------\n" << endl;
+}
+
+void GameController::dealBoard(int numCards) {
+    cout << "----------------------------------------" << endl;
+    cout << "Dealing " << numCards << " community card(s) to the board!" << endl;
+    dealer.dealBoard(numCards, 1);
+    cout << "----------------------------------------\n" << endl;
+}
+
+bool GameController::isPlayersInHandAllIn() {
+    for (auto const& player : turnManager.getPlayersInHand()) {
+        if (player->getChips() != 0) return false;
+    }
+    return true;
+}
+
+bool GameController::isFoldedThrough() {
+    return (turnManager.getNumPlayersInHand() == 1);
+}
+
+bool GameController::isEnoughPlayersInGame() {
+    return (gamePlayers.getNumPlayersInGame() > 1);
 }

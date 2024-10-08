@@ -44,33 +44,39 @@ private:
     ClientManager clientManager;
     PotManager potManager;
 
-    // Helper
+    // Helper function to convert Street to string
     string streetToStr(Street street);
+
+    // Helper function to deal hole cards to players
+    void dealPlayers();
+
+    // Helper function to deals community cards to board
+    void dealBoard(int numCards);
+
+    // Street helper function to check if players in the hand are all in
+    bool isPlayersInHandAllIn();
+
+    // Street helper function to check if there is only one player left (i.e. folded through)
+    bool isFoldedThrough();
+
+    // Game helper function if there are at least two players in the game
+    bool isEnoughPlayersInGame();
+
+    // TODO Game helper function to check if all players have enough chips to play
+
 public:
     GameController(size_t smallBlind, size_t bigBlind);
 
-    // GAME STATE INFORMATION METHODS
+    // TODO: Addition and removal of players needs to be abstracted to stdin/stdout
 
-    int getNumPlayersInGame() const;
+    // Helper function to add a new player to game players and turn manager
+    void addNewPlayer(const string& name, size_t chips);
+
+    // Helper function to remove an existing player from the game players and turn manager
+    void removePlayer(const string& name);
 
     // Displays names and chips for players in the game
     void displayPlayersInGame() const;
-
-    // PLAYER SPECIFIC METHODS
-    
-    // Adds a new player to game players and turn manager
-    void addNewPlayer(const string& name, size_t chips);
-
-    // Removes an existing player from the game players and turn manager
-    void removePlayer(const string& name);
-
-    // DEALING SPECIFIC METHODS
-
-    // Deals hole cards to players
-    void dealPlayers();
-
-    // Deals community cards to board
-    void dealBoard(int numCards);
 
     // STREET SPECIFIC METHODS
 
@@ -80,14 +86,11 @@ public:
     // Check if all players have acted in a given round
     bool isStreetOver(int initialPlayersInhand);
 
-    // Check if there is only one player left (i.e. folded through)
-    bool isFoldedThrough();
-
     // Sets the first player to act, handles blinds and deals players / board
     // Called at the beginning of each street
     void setupStreet(Street newStreet);
 
-    // Start a new betting street
+    // Iniates a new betting street
     void startStreet(Street newStreet);
 
     // ROUND SPECIFIC METHODS
@@ -99,18 +102,11 @@ public:
     // PotManager: Reset recent bets and dead money
     void setupNewRound();
 
+    // Iniates a new round of poker
     void startRound();
 
     // OVERALL GAME METHODS
-
-    // END OF RD
-    // TurnManager: Move folded players, rotate positions
-
-    // runGameLoop: Manages overall game flow
-    // advanceToNextStreet: In a given round, advances to the next street
-    // showdown: Evaluates the winner and distributes the pot
-    // isGameOver: Checks if the game is over (e.g. less than 2 players)
-    // To add methods.
+    void runGameLoop();
 };
 
 #endif // GAME_CONTROLLER

@@ -48,7 +48,7 @@ void PotManager::displayPots() {
         if (pot.getEligiblePlayers().empty()) {
             cout << "No players in this pot!" << endl;
         } else {
-            cout << "The following players contributed to Pot " << i + 1 << endl;
+            cout << "The following players are eligible to Pot " << i + 1 << endl;
             for (const auto& player : pot.getEligiblePlayers()) {
                 cout << "Player: " << player->getName() << endl;
             }
@@ -69,11 +69,23 @@ void PotManager::addPlayerBet(const shared_ptr<Player>& player, size_t bet) {
     // Add player and their bet if they don't exist
     if (it == playerBets.end()) {
         playerBets[player] = bet;
+        player->reduceChips(bet);
     }
     // If player already exists, simply update their recent bet
     else {
+        size_t amountToMatch = bet - it->second ;
+
         it->second = bet;
+        player->reduceChips(amountToMatch);
     }
+}
+
+size_t PotManager::getRecentBet(const shared_ptr<Player>& player) {
+    auto it = playerBets.find(player);
+    if (it != playerBets.end()) {
+        return it->second;
+    }
+    return 0;
 }
 
 void PotManager::foldPlayerBet(const shared_ptr<Player>& player) {
@@ -101,9 +113,10 @@ void PotManager::calculatePots() {
         // Add each player's contribution to the current pot
         for (auto& [player, recentBet] : playerBets) {
             if (recentBet == 0) continue;
+            if (!curPot.isPlayerInPot(player)) curPot.addPlayer(player);
+            
             playerBets[player] -= minBet;
             curPot.addChips(minBet);
-            curPot.addPlayer(player);
         }
 
         // Add dead money to the current pot
@@ -135,6 +148,7 @@ int PotManager::getNumPots() const {
     return pots.size();
 }
 
+
 // Pot Structure
 
 Pot::Pot() : chips(0) {}
@@ -155,3 +169,6 @@ const vector<shared_ptr<Player>>& Pot::getEligiblePlayers() const {
     return eligiblePlayers;
 }
 
+bool Pot::isPlayerInPot(const shared_ptr<Player>& player) {
+    return find(eligiblePlayers.begin(), eligiblePlayers.end(), player) != eligiblePlayers.end();
+}

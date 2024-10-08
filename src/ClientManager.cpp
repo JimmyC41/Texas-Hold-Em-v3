@@ -4,14 +4,14 @@
 
 ClientManager::ClientManager(size_t bigBlind) : bigBlind(bigBlind) {}
 
-ClientAction ClientManager::getClientAction(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions) {
+ClientAction ClientManager::getClientAction(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions, size_t initialChips) {
     displayPossibleActions(playerToAct, possibleActions);
 
     // Fetch action type from client
     ActionType clientActionType = getClientActionType(possibleActions);
 
     // Fetch bet amount from client
-    size_t amount = getClientBetAmount(playerToAct, clientActionType, possibleActions, bigBlind);
+    size_t amount = getClientBetAmount(playerToAct, clientActionType, possibleActions, bigBlind, initialChips);
 
     ClientAction clientAction = ClientAction{playerToAct, clientActionType, amount};
     // displayClientAction(clientAction);
@@ -38,13 +38,13 @@ ActionType ClientManager::getClientActionType(vector<PossibleAction>& possibleAc
     return actionType;
 }
 
-size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, ActionType clientAction, vector<PossibleAction>& possibleActions, size_t bigBlind) {
+size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, ActionType clientAction, vector<PossibleAction>& possibleActions, size_t bigBlind, size_t initialChips) {
     // Case 1: Check or Fold (Bet Amount is 0)
     if (clientAction == ActionType::CHECK || clientAction == ActionType::FOLD) {
         return 0;
     }
 
-    size_t maxBet = playerToAct->getChips();
+    size_t maxBet = initialChips;
 
     // Case 2: Call (Call amount is previous bet amount)
     if (clientAction == ActionType::CALL) {
