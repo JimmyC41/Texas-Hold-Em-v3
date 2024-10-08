@@ -17,6 +17,7 @@
 #include "Deck.h"
 #include "Board.h"
 
+#include <string>
 #include <memory.h>
 using namespace std;
 
@@ -32,6 +33,7 @@ class GameController {
 private:
     size_t smallBlind;
     size_t bigBlind;
+    int roundNum;
 
     Deck deck;
     Board board;
@@ -41,6 +43,9 @@ private:
     TurnManager turnManager;
     ClientManager clientManager;
     PotManager potManager;
+
+    // Helper
+    string streetToStr(Street street);
 public:
     GameController(size_t smallBlind, size_t bigBlind);
 
@@ -73,7 +78,10 @@ public:
     shared_ptr<Action> createAction(const ClientAction& clientAction);
     
     // Check if all players have acted in a given round
-    bool isStreetOver();
+    bool isStreetOver(int initialPlayersInhand);
+
+    // Check if there is only one player left (i.e. folded through)
+    bool isFoldedThrough();
 
     // Sets the first player to act, handles blinds and deals players / board
     // Called at the beginning of each street
@@ -82,7 +90,16 @@ public:
     // Start a new betting street
     void startStreet(Street newStreet);
 
-    // ROUND METHODS
+    // ROUND SPECIFIC METHODS
+
+    // Resets the game state before a new round
+    // Called at the end of each round
+    // TurnManager: Resets folded players and rotates posiitions
+    // ActionManager: Clear the action timeline
+    // PotManager: Reset recent bets and dead money
+    void setupNewRound();
+
+    void startRound();
 
     // OVERALL GAME METHODS
 

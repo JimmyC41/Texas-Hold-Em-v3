@@ -48,7 +48,7 @@ void PotManager::displayPots() {
         if (pot.getEligiblePlayers().empty()) {
             cout << "No players in this pot!" << endl;
         } else {
-            cout << "The following players are eligible for Pot " << i + 1 << endl;
+            cout << "The following players contributed to Pot " << i + 1 << endl;
             for (const auto& player : pot.getEligiblePlayers()) {
                 cout << "Player: " << player->getName() << endl;
             }
@@ -95,7 +95,7 @@ void PotManager::calculatePots() {
 
     while (!allPotsCreated()) {
         size_t minBet = findMinBet();
-                
+
         Pot& curPot = getCurPot();
 
         // Add each player's contribution to the current pot

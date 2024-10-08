@@ -47,6 +47,8 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
     // If there are n players and a player initiates a bet/raise, n-1 players must call/fold
     int numCallsRequired = numPlayers - 1;
     int numCalls = 0;
+
+    int numChecksRequired = numPlayers;
     int numChecks = 0;
 
     // Iterate through the action timeline
@@ -65,6 +67,7 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
 
         // If a player folds, decrement number of calls required
         else if (actionType == FOLD) {
+            numChecksRequired--;
             numCallsRequired--;
         }
 
@@ -75,7 +78,7 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
 
         // Betting is over when all players have called or folded to the active bet
         // or when all players have checked
-        if (numCalls == numCallsRequired || numChecks == numPlayers) {
+        if (numCalls == numCallsRequired || numChecks == numChecksRequired) {
             return true;
         }
     }

@@ -57,7 +57,7 @@ public:
 
     // Rotates players positions clockwise.
     // Called after folded players are moved to in hand.
-    // Called at the start of the pre-flop round.
+    // Called at the END of the round
     void rotatePositions();
 
     // Sets the big blind as the player to act.

@@ -3,6 +3,7 @@
 GameController::GameController(size_t smallBlind, size_t bigBlind) :
     smallBlind(smallBlind),
     bigBlind(bigBlind),
+    roundNum(0),
     deck(),
     board(),
     dealer(Dealer::createDealer(deck, board)),
@@ -70,12 +71,12 @@ shared_ptr<Action> GameController::createAction(const ClientAction& action) {
             return make_shared<RaiseAction>(action.player, action.amount);
         default:
             runtime_error("Error trying to create an action object from client input!");
+            return nullptr;
     }
 }
 
-bool GameController::isStreetOver() {
-    int numPlayers = gamePlayers.getNumPlayersInGame();
-    return actionManager.isActionsFinished(numPlayers);
+bool GameController::isStreetOver(int initialPlayersInHand) {
+    return actionManager.isActionsFinished(initialPlayersInHand);
 }
 
 void GameController::setupStreet(Street newStreet) {
@@ -107,12 +108,22 @@ void GameController::setupStreet(Street newStreet) {
     }
 }
 
+bool GameController::isFoldedThrough() {
+    return (turnManager.getNumPlayersInHand() == 1);
+}
+
 void GameController::startStreet(Street newStreet) {
-    cout << "\nSTARTING NEW STREET\n" << endl;
+    cout << "\nStarting " << streetToStr(newStreet) << " Street\n" << endl;
+
+    if (isFoldedThrough()) {
+        cout << "Players folded through. Skipping " << streetToStr(newStreet) << endl;
+        return;
+    }
 
     setupStreet(newStreet);
+    int initialPlayersInHand = turnManager.getNumPlayersInHand();
 
-    while (!isStreetOver()) {
+    while (!isStreetOver(initialPlayersInHand)) {
         // Get player to act
         shared_ptr<Player> curPlayer = turnManager.getPlayerToAct();
 
@@ -131,12 +142,62 @@ void GameController::startStreet(Street newStreet) {
         if (playerActionType == BET || playerActionType == RAISE || playerActionType == CALL || playerActionType == BLIND) {
             potManager.addPlayerBet(curPlayer, playerAction->getAmount());
         } else if (playerActionType == FOLD) {
+            potManager.foldPlayerBet(curPlayer);
             turnManager.foldPlayerInHand(curPlayer);
         }
     }
 
     // Clear action timeline
     actionManager.clearActionTimeline();
+
+    // Calculate pots
     potManager.calculatePots();
     potManager.displayPots();
+
+    // Reset recent bets and dead money
+    potManager.resetPlayerBets();
+}
+
+// ROUND SPECIFIC METHODS
+
+void GameController::setupNewRound() {
+    // Reset folded players
+    turnManager.moveFoldedPlayersToInHand();
+
+    // Rotate positions
+    turnManager.rotatePositions();
+
+    // Clear action timeline
+    actionManager.clearActionTimeline();
+
+    // Reset player bets and dead money
+    potManager.resetPlayerBets();
+}
+
+void GameController::startRound() {
+    cout << "Beginning new round of Texas Hold'Em!\n" << endl;
+    startStreet(PRE_FLOP);
+    startStreet(FLOP);
+    startStreet(TURN);
+    startStreet(RIVER);
+    cout << "Round Finished!\n" << endl;
+}
+
+// HELPER
+
+string GameController::streetToStr(Street street) {
+    switch(street) {
+        case PRE_FLOP:
+            return "Pre-Flop";
+        case FLOP:
+            return "Flop";
+        case TURN:
+            return "Turn";
+        case RIVER:
+            return "River";
+        case SHOWDOWN:
+            return "Showdown";
+        default:
+            return "Unknown Street";
+    }
 }
