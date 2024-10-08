@@ -32,59 +32,6 @@ void GameController::removePlayer(const string& name) {
 }
 // STREET SPECIFIC METHODS
 
-shared_ptr<Action> GameController::createAction(const ClientAction& action) {
-    switch (action.type) {
-        case BET:
-            return make_shared<BetAction>(action.player, action.amount);
-        case BLIND:
-            return make_shared<BlindAction>(action.player, action.amount);
-        case CALL:
-            return make_shared<CallAction>(action.player, action.amount);
-        case CHECK:
-            return make_shared<CheckAction>(action.player);
-        case FOLD:
-            return make_shared<FoldAction>(action.player);
-        case RAISE:
-            return make_shared<RaiseAction>(action.player, action.amount);
-        default:
-            runtime_error("Error trying to create an action object from client input!");
-            return nullptr;
-    }
-}
-
-bool GameController::isStreetOver(int initialPlayersInHand) {
-    return actionManager.isActionsFinished(initialPlayersInHand);
-}
-
-void GameController::setupStreet(Street newStreet) {
-    if (newStreet == PRE_FLOP) {
-        // Deal players hole cards
-        dealPlayers();
-
-        // Small blind
-        turnManager.setSmallBlindToAct();
-        auto smallBlindPlayer= turnManager.getPlayerToAct();
-        auto postSmallBlind = make_shared<BlindAction>(smallBlindPlayer, smallBlind);
-        
-        actionManager.addActionToTimeline(postSmallBlind);
-        potManager.addPlayerBet(smallBlindPlayer, smallBlind);
-
-        // Big blind
-        auto bigBlindPlayer = turnManager.getPlayerToAct();
-        auto postBigBlind = make_shared<BlindAction>(bigBlindPlayer, bigBlind);
-
-        actionManager.addActionToTimeline(postBigBlind);
-        potManager.addPlayerBet(bigBlindPlayer, bigBlind);
-
-    } else if (newStreet == FLOP) {
-        dealBoard(3);
-        turnManager.setEarlyPositionToAct();
-    } else if (newStreet == TURN || newStreet == RIVER) {
-        dealBoard(1);
-        turnManager.setEarlyPositionToAct();
-    }
-}
-
 void GameController::startStreet(Street newStreet) {
     if (isFoldedThrough()) {
         cout << "Players folded through. Skipping " << streetToStr(newStreet) << endl;
@@ -131,7 +78,6 @@ void GameController::startStreet(Street newStreet) {
 
     // Calculate pots
     potManager.calculatePots();
-    potManager.displayPots();
 
     // Reset recent bets and dead money
     potManager.resetPlayerBets();
@@ -139,30 +85,26 @@ void GameController::startStreet(Street newStreet) {
 
 // ROUND SPECIFIC METHODS
 
-void GameController::setupNewRound() {
-    // Reset folded players
-    turnManager.moveFoldedPlayersToInHand();
-
-    // Rotate positions
-    turnManager.rotatePositions();
-
-    // Clear action timeline
-    actionManager.clearActionTimeline();
-
-    // Reset player bets and dead money
-    potManager.resetPlayerBets();
-}
-
 void GameController::startRound() {
     cout << "Beginning new round of Texas Hold'Em!\n" << endl;
     startStreet(PRE_FLOP);
     startStreet(FLOP);
     startStreet(TURN);
     startStreet(RIVER);
+
+    potManager.displayPots();
     cout << "Round Finished!\n" << endl;
 }
 
-// HELPER
+void GameController::main() {
+
+    // Before each round: Add / Remove players (Y/N)
+    // For players with less chips than BB, ask players to add chips or remove from game
+    // Check if there are enough players to start the game
+    // startRound
+}
+
+// HELPER FUNCTIONS
 
 string GameController::streetToStr(Street street) {
     switch(street) {
@@ -198,6 +140,59 @@ void GameController::dealBoard(int numCards) {
     cout << "----------------------------------------\n" << endl;
 }
 
+void GameController::setupStreet(Street newStreet) {
+    if (newStreet == PRE_FLOP) {
+        // Deal players hole cards
+        dealPlayers();
+
+        // Small blind
+        turnManager.setSmallBlindToAct();
+        auto smallBlindPlayer= turnManager.getPlayerToAct();
+        auto postSmallBlind = make_shared<BlindAction>(smallBlindPlayer, smallBlind);
+        
+        actionManager.addActionToTimeline(postSmallBlind);
+        potManager.addPlayerBet(smallBlindPlayer, smallBlind);
+
+        // Big blind
+        auto bigBlindPlayer = turnManager.getPlayerToAct();
+        auto postBigBlind = make_shared<BlindAction>(bigBlindPlayer, bigBlind);
+
+        actionManager.addActionToTimeline(postBigBlind);
+        potManager.addPlayerBet(bigBlindPlayer, bigBlind);
+
+    } else if (newStreet == FLOP) {
+        dealBoard(3);
+        turnManager.setEarlyPositionToAct();
+    } else if (newStreet == TURN || newStreet == RIVER) {
+        dealBoard(1);
+        turnManager.setEarlyPositionToAct();
+    }
+}
+
+shared_ptr<Action> GameController::createAction(const ClientAction& action) {
+    switch (action.type) {
+        case BET:
+            return make_shared<BetAction>(action.player, action.amount);
+        case BLIND:
+            return make_shared<BlindAction>(action.player, action.amount);
+        case CALL:
+            return make_shared<CallAction>(action.player, action.amount);
+        case CHECK:
+            return make_shared<CheckAction>(action.player);
+        case FOLD:
+            return make_shared<FoldAction>(action.player);
+        case RAISE:
+            return make_shared<RaiseAction>(action.player, action.amount);
+        default:
+            runtime_error("Error trying to create an action object from client input!");
+            return nullptr;
+    }
+}
+
+bool GameController::isStreetOver(int initialPlayersInHand) {
+    return actionManager.isActionsFinished(initialPlayersInHand);
+}
+
 bool GameController::isPlayersInHandAllIn() {
     for (auto const& player : turnManager.getPlayersInHand()) {
         if (player->getChips() != 0) return false;
@@ -207,6 +202,20 @@ bool GameController::isPlayersInHandAllIn() {
 
 bool GameController::isFoldedThrough() {
     return (turnManager.getNumPlayersInHand() == 1);
+}
+
+void GameController::setupNewRound() {
+    // Reset folded players
+    turnManager.moveFoldedPlayersToInHand();
+
+    // Rotate positions
+    turnManager.rotatePositions();
+
+    // Clear action timeline
+    actionManager.clearActionTimeline();
+
+    // Reset player bets and dead money
+    potManager.resetPlayerBets();
 }
 
 bool GameController::isEnoughPlayersInGame() {
