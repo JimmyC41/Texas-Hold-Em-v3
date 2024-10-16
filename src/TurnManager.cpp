@@ -178,18 +178,10 @@ shared_ptr<Player> TurnManager::getNextToAct() {
     auto it = find(playersInHand.begin(), playersInHand.end(), playerToAct);
 
     if (it != playersInHand.end()) {
-        auto nextIt = it;
-
-         do {
-            nextIt++;
-            if (nextIt == playersInHand.end()) nextIt = playersInHand.begin();
-
-            if ((*nextIt)->getChips() > 0) {
-                playerToAct = *nextIt;
-                return playerToAct;
-            }
-
-        } while (nextIt != it);
+        auto nextIt = it + 1;
+        if (nextIt == playersInHand.end()) nextIt = playersInHand.begin();
+        playerToAct = *nextIt;
+        return playerToAct;
     }
 
     cerr << "Error: Could not find next player to act!" << endl;
