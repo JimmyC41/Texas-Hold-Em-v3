@@ -70,6 +70,9 @@ void GameController::validateChipCounts() {
             player->addChips(chipsToAdd);
             cout << "Player " << player->getName() << " now has " << player->getChips() << " chips." << endl;
         }
+        else {
+            cout << "Player " << player->getName() << "has sufficient chips to continue." << endl;
+        }
     }
 }
 

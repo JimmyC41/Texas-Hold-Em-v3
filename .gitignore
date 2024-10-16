@@ -1,1 +1,5 @@
 build/libPokerLib.a
+build/CMakeFiles/PokerLib.dir/src/GameController.cpp.o
+build/GameControllerTest
+build/libPokerLib.a
+build/CMakeFiles/PokerLib.dir/src/GameController.cpp.o
