@@ -37,6 +37,18 @@ private:
 public:
     GamePlayers();
 
+    // Returns the vector of game players
+    const vector<shared_ptr<Player>>& getGamePlayers() const;
+
+    // Queries the client to enter player details for addition
+    shared_ptr<Player> queryNewPlayer();
+
+    // Queries the client if they wish to exit the game
+    shared_ptr<Player> queryRemovePlayer();
+
+    // Validate chip counts and query client for action (exit or add chips)
+    void validateChipCounts(size_t minChipCount);
+
     // Adds a player to the game and returns a pointer for other classes to use
     // Sets last player added as the button
     // Called BEFORE rotating positions in turn manager

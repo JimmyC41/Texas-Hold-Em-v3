@@ -77,24 +77,35 @@ private:
     // PotManager: Reset recent bets and dead money
     void setupNewRound();
 
-    // TODO Game helper function to check if all players have enough chips to play
-
     // Game helper function if there are at least two players in the game
-    bool isEnoughPlayersInGame();
+    bool verifyNumPlayers();
 
+    // Game helper function to handle player addition and removal
+    // and removal of chip verification before the start of each round
+    bool verifyGamePlayers();
+
+    // Helper function to validate player name input
+    string queryPlayerName();
+
+    // Helper function to validate player chips input
+    size_t queryPlayerChips();
+
+    // Helper function to query the number of chips to add
+    size_t queryChipsToAdd(size_t minChips, size_t currentChips) const;
 public:
     GameController(size_t smallBlind, size_t bigBlind);
 
     // Displays names and chips for players in the game
     void displayPlayersInGame() const;
 
-    // TODO: Addition and removal of players needs to be abstracted to stdin/stdout
+    // Query client if they want to add a new player
+    void queryNewPlayer();
 
-    // Helper function to add a new player to game players and turn manager
-    void addNewPlayer(const string& name, size_t chips);
+    // Query client if they want to remove a player
+    void queryRemovePlayer();
 
-    // Helper function to remove an existing player from the game players and turn manager
-    void removePlayer(const string& name);
+    // Validate chip counts of players
+    void validateChipCounts();
 
     // Iniates a new betting street
     void startStreet(Street newStreet);

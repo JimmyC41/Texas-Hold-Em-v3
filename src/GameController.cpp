@@ -21,15 +21,58 @@ void GameController::displayPlayersInGame() const {
 
 // PLAYER SPECIFIC METHODS
 
-void GameController::addNewPlayer(const string& name, size_t chips) {
-    shared_ptr<Player> newPlayer = gamePlayers.addPlayerToGame(name, chips);
-    if (newPlayer != nullptr) turnManager.addPlayerInHand(newPlayer);
+void GameController::queryNewPlayer() {
+    while (true) {
+        cout << "Would you like to add a new player? (y/n): ";
+        string input;
+        cin >> input;
+
+        transform(input.begin(), input.end(), input.begin(), ::tolower);
+
+        if (input != "y") {
+            cout << "No more players will be added!" << endl;
+            break;
+        }
+
+        string name = queryPlayerName();
+        size_t chips = queryPlayerChips();
+
+        shared_ptr<Player> newPlayer = gamePlayers.addPlayerToGame(name, chips);
+        if (newPlayer != nullptr) turnManager.addPlayerInHand(newPlayer);
+    }
 }
 
-void GameController::removePlayer(const string& name) {
-    shared_ptr<Player> oldPlayer = gamePlayers.removePlayerFromGame(name);
-    if (oldPlayer != nullptr) turnManager.removePlayerFromHand(oldPlayer);
+void GameController::queryRemovePlayer() {
+    while (true) {
+        cout << "Would you like to remove an existing player? (y/n: ";
+        string input;
+        cin >> input;
+
+        transform(input.begin(), input.end(), input.begin(), ::tolower);
+
+        if (input != "y") {
+            cout << "No more players will be removed.\n" << endl;
+            break;
+        }
+
+        string playerName = queryPlayerName();
+
+        shared_ptr<Player> oldPlayer = gamePlayers.removePlayerFromGame(playerName);
+        if (oldPlayer != nullptr) turnManager.removePlayerFromHand(oldPlayer);
+    }
 }
+
+void GameController::validateChipCounts() {
+    for (auto& player : gamePlayers.getGamePlayers()) {
+        if (player->getChips() < bigBlind) {
+            cout << "Player " << player->getName() << " has less than the minimum required chips (" << bigBlind << "). Current chips: " << player->getChips() << endl;
+            size_t chipsToAdd = queryChipsToAdd(bigBlind, player->getChips());
+            player->addChips(chipsToAdd);
+            cout << "Player " << player->getName() << " now has " << player->getChips() << " chips." << endl;
+        }
+    }
+}
+
 // STREET SPECIFIC METHODS
 
 void GameController::startStreet(Street newStreet) {
@@ -46,7 +89,7 @@ void GameController::startStreet(Street newStreet) {
     cout << "\nStarting " << streetToStr(newStreet) << " Street\n" << endl;
 
     setupStreet(newStreet);
-    int initialPlayersInHand = turnManager.getNumPlayersInHand();
+    int initialPlayersInHand = turnManager.getNumPlayersToAct();
 
     while (!isStreetOver(initialPlayersInHand)) {
         // Get player to act
@@ -79,29 +122,33 @@ void GameController::startStreet(Street newStreet) {
     // Calculate pots
     potManager.calculatePots();
 
-    // Reset recent bets and dead money
+    // Reset player bets in pots
     potManager.resetPlayerBets();
 }
 
 // ROUND SPECIFIC METHODS
 
 void GameController::startRound() {
-    cout << "Beginning new round of Texas Hold'Em!\n" << endl;
     startStreet(PRE_FLOP);
     startStreet(FLOP);
     startStreet(TURN);
     startStreet(RIVER);
 
     potManager.displayPots();
-    cout << "Round Finished!\n" << endl;
+
+    cout << "Round completed!\n" << endl;
 }
 
-void GameController::main() {
+// GAME SPECIFIC METHODS
 
-    // Before each round: Add / Remove players (Y/N)
-    // For players with less chips than BB, ask players to add chips or remove from game
-    // Check if there are enough players to start the game
-    // startRound
+void GameController::main() {
+    int roundNum = 0;
+    while (verifyGamePlayers()) {
+        cout << "Beginning round #" << roundNum++ << " of Texas Hold'Em!\n" << endl;
+        startRound();
+        setupNewRound();
+    }
+    cout << "Ending the application! Game Over!\n" << endl;
 }
 
 // HELPER FUNCTIONS
@@ -215,9 +262,76 @@ void GameController::setupNewRound() {
     actionManager.clearActionTimeline();
 
     // Reset player bets and dead money
+    // Reset pots
     potManager.resetPlayerBets();
+    potManager.resetPots();
+
+    // New deck and clear board
+    dealer.resetDeck();
+    dealer.resetBoard();
 }
 
-bool GameController::isEnoughPlayersInGame() {
-    return (gamePlayers.getNumPlayersInGame() > 1);
+bool GameController::verifyNumPlayers() {
+    if (gamePlayers.getNumPlayersInGame() < 2) {
+        cout << "Not enough players to start the game." << endl;
+        return false;
+    }
+    return true;
+}
+
+bool GameController::verifyGamePlayers() {
+    queryNewPlayer();
+    queryRemovePlayer();
+    validateChipCounts();
+    return verifyNumPlayers();
+}
+
+string GameController::queryPlayerName() {
+    string name;
+    do {
+        cout << "Enter player's name: ";
+        cin >> name;
+        transform(name.begin(), name.end(), name.begin(), ::tolower);
+        if (name.empty()) {
+            cout << "Invalid input. Please enter a valid name." << endl;
+        }
+    } while (name.empty()); // Repeat until a non-empty name is provided
+    return name;
+}
+
+size_t GameController::queryPlayerChips() {
+    size_t chips;
+    while (true) {
+        cout << "Enter player's chips: ";
+        cin >> chips;
+        
+        // Check if the input is valid and a positive number
+        if (cin.fail() || chips <= 0) {
+            cout << "Invalid input. Please enter a valid number of chips." << endl;
+            cin.clear(); // Clear the error flag on cin
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+        } else {
+            break; // Valid input received
+        }
+    }
+    return chips;
+}
+
+// Helper function to query the number of chips to add
+size_t GameController::queryChipsToAdd(size_t minChips, size_t currentChips) const {
+    size_t chipsToAdd;
+    while (true) {
+        cout << "Enter the number of chips to add (must be at least "
+             << (minChips - currentChips) << "): ";
+        cin >> chipsToAdd;
+
+        if (cin.fail() || chipsToAdd <= 0 || (currentChips + chipsToAdd) < minChips) {
+            cout << "Invalid input. Please enter a valid number of chips." << endl;
+            cin.clear(); // Clear the error flag on cin
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+        } else {
+            break; // Valid input received
+        }
+    }
+    return chipsToAdd;
 }

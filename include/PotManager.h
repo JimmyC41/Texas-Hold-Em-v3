@@ -45,6 +45,9 @@ public:
     // Initalises a single pot.
     PotManager();
 
+    // Clears all pots for a new game. Caleld at the end of each round.
+    void resetPots();
+
     // Updates the playerBets map after a bet/raises. Called after each player action.
     void addPlayerBet(const shared_ptr<Player>& player, size_t bet);
 
@@ -54,10 +57,10 @@ public:
     // Increments dead money and sets folded player's recent bet to 0.
     void foldPlayerBet(const shared_ptr<Player>& player);
 
-    // Calculates pots after betting action in a street is finished. Called after each street
+    // Calculates pots after betting action in a street is finished. Called at the end of each round.
     void calculatePots();
 
-    // Resets recent bets and dead money to 0. Called after each street.
+    // Resets recent bets and dead money to 0. Called at the end of each round.
     void resetPlayerBets();
 
     void displayPlayerBets();

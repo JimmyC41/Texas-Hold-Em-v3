@@ -35,10 +35,6 @@ void TurnManager::moveFoldedPlayersToInHand() {
 }
 
 void TurnManager::removePlayerFromHand(const shared_ptr<Player>& removedPlayer) {
-    if (playersInHand.size() < 2) {
-        throw runtime_error("Removing a player would result in less than the minimum number of players");
-    }
-
     auto it = find(playersInHand.begin(), playersInHand.end(), removedPlayer);
     if (it != playersInHand.end()) {
         playersInHand.erase(it);
@@ -87,8 +83,12 @@ void TurnManager::setSmallBlindToAct() {
 }
 
 void TurnManager::setEarlyPositionToAct() {
-    auto player = playersInHand.front();
-    playerToAct = player;
+    for (auto& player : playersInHand) {
+        if (player->getChips() > 0) {
+            playerToAct = player;
+            return;
+        }
+    }
 }
 
 shared_ptr<Player> TurnManager::getPlayerToAct() {
@@ -142,6 +142,16 @@ int TurnManager::getNumPlayersInHand() const {
     return playersInHand.size();
 }
 
+int TurnManager::getNumPlayersToAct() const {
+    int num = 0;
+    for (auto& player : playersInHand) {
+        if (player->getChips() > 0) {
+            num++;
+        }
+    }
+    return num;
+}
+
 int TurnManager::getNumPlayersFolded() const {
     return playersFolded.size();
 }
@@ -168,15 +178,18 @@ shared_ptr<Player> TurnManager::getNextToAct() {
     auto it = find(playersInHand.begin(), playersInHand.end(), playerToAct);
 
     if (it != playersInHand.end()) {
-        auto nextIt = it + 1;
-        if (nextIt == playersInHand.end()) {
-            nextIt = playersInHand.begin();
-        }
+        auto nextIt = it;
 
-        if (playerToAct) {
-            playerToAct = (*nextIt);
-            return playerToAct;
-        }
+         do {
+            nextIt++;
+            if (nextIt == playersInHand.end()) nextIt = playersInHand.begin();
+
+            if ((*nextIt)->getChips() > 0) {
+                playerToAct = *nextIt;
+                return playerToAct;
+            }
+
+        } while (nextIt != it);
     }
 
     cerr << "Error: Could not find next player to act!" << endl;

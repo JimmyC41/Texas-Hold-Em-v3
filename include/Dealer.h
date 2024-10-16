@@ -20,6 +20,7 @@ public:
     void dealPlayer(shared_ptr<Player> player);
     void dealBoard(int numCards, bool burnCard = true);
     void resetDeck();
+    void resetBoard();
 
     // Utility Methods for Testing
     size_t getDealtCardCount() const;

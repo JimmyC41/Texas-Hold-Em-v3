@@ -1,7 +1,13 @@
 #include "../include/GamePlayers.h"
 #include "../include/Player.h"
 
+using namespace std;
+
 GamePlayers::GamePlayers() {}
+
+const vector<shared_ptr<Player>>& GamePlayers::getGamePlayers() const {
+    return gamePlayers;
+}
 
 shared_ptr<Player> GamePlayers::addPlayerToGame(const string& name, size_t chips) {
     if (gamePlayers.size() == MAX_NUM_PLAYERS) {
@@ -14,15 +20,11 @@ shared_ptr<Player> GamePlayers::addPlayerToGame(const string& name, size_t chips
     // Sort players by their position
     sortGamePlayers();
 
-    cout << "Player " << name << " added to the game!" << endl;
+    cout << "Player " << name << " added to the game!" << "(Chip Count: " << player->getChips() << ")" << endl;
     return player;
 }
 
 shared_ptr<Player> GamePlayers::removePlayerFromGame(const string& playerName) {
-    if (gamePlayers.size() <= MIN_NUM_PLAYERS) {
-        throw runtime_error("Removing this player would result in fewer than the minimum required number of players.");
-    }
-
     auto playerToRemove = getPlayerWithName(playerName);
     if (playerToRemove != nullptr) {
         removePlayer(playerToRemove);

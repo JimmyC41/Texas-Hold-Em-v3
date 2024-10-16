@@ -17,6 +17,10 @@ void Dealer::resetDeck() {
     deck.resetDeck();
 }
 
+void Dealer::resetBoard() {
+    board.resetBoard();
+}
+
 void Dealer::dealBoard(int numCards, bool burnCard) {
     if (burnCard) {
         deck.burnCard();

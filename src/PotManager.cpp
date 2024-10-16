@@ -59,6 +59,12 @@ void PotManager::displayPots() {
 
 // Pot Manager
 
+void PotManager::resetPots() {
+    pots.clear();
+    deadChips = 0;
+    newPot();
+}
+
 PotManager::PotManager() : deadChips(0) {
     newPot();
 }
@@ -107,7 +113,6 @@ void PotManager::calculatePots() {
 
     while (!allPotsCreated()) {
         size_t minBet = findMinBet();
-
         Pot& curPot = getCurPot();
 
         // Add each player's contribution to the current pot

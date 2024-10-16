@@ -84,6 +84,9 @@ public:
     // Return the number of players.
     int getNumPlayersInHand() const;
 
+    // Return the number of players to act (excludes players all in)
+    int getNumPlayersToAct() const;
+
     // Return the number of folded players.
     int getNumPlayersFolded() const;
 
