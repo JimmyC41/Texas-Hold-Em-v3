@@ -28,7 +28,7 @@ protected:
     }
 
     void TearDown() override {
-        turnManager.moveFoldedPlayersToInHand();
+        turnManager.moveAllPlayersToInHand();
     }
 
     void addPlayersToHand(std::initializer_list<shared_ptr<Player>> players) {
@@ -58,10 +58,10 @@ TEST_F(TurnTest, NextToActAfterFolds) {
 
     turnManager.setSmallBlindToAct();
     ASSERT_EQ(turnManager.getPlayerToAct(), p1);
-    turnManager.foldPlayerInHand(p1);
+    turnManager.addPlayerNotInHand(p1);
 
     ASSERT_EQ(turnManager.getPlayerToAct(), p2);
-    turnManager.foldPlayerInHand(p2);
+    turnManager.addPlayerNotInHand(p2);
 
     ASSERT_EQ(turnManager.getPlayerToAct(), p3);
 }
@@ -87,7 +87,7 @@ TEST_F(TurnTest, FoldPlayerToHeadsUp) {
     ASSERT_EQ(turnManager.getPlayerToAct(), p1);
 
     ASSERT_EQ(turnManager.getPlayerToAct(), p2);
-    turnManager.foldPlayerInHand(p2);
+    turnManager.addPlayerNotInHand(p2);
 
     ASSERT_EQ(turnManager.getPlayerToAct(), p3);
     ASSERT_EQ(turnManager.getPlayerToAct(), p1);
@@ -102,12 +102,12 @@ TEST_F(TurnTest, FoldPlayers) {
     ASSERT_EQ(turnManager.getPlayerToAct(), p1);
 
     ASSERT_EQ(turnManager.getPlayerToAct(), p2);
-    turnManager.foldPlayerInHand(p2);
+    turnManager.addPlayerNotInHand(p2);
 
     ASSERT_EQ(turnManager.getPlayerToAct(), p3);
 
     ASSERT_EQ(turnManager.getPlayerToAct(), p4);
-    turnManager.foldPlayerInHand(p4);
+    turnManager.addPlayerNotInHand(p4);
 
     ASSERT_EQ(turnManager.getPlayerToAct(), p5);
     ASSERT_EQ(turnManager.getPlayerToAct(), p1);
@@ -120,18 +120,18 @@ TEST_F(TurnTest, ResetFoldedPlayers) {
 
     turnManager.setEarlyPositionToAct();
     ASSERT_EQ(turnManager.getPlayerToAct(), p1);
-    turnManager.foldPlayerInHand(p1);
+    turnManager.addPlayerNotInHand(p1);
 
     ASSERT_EQ(turnManager.getPlayerToAct(), p2);
-    turnManager.foldPlayerInHand(p2);
+    turnManager.addPlayerNotInHand(p2);
 
     ASSERT_EQ(turnManager.getPlayerToAct(), p3);
-    turnManager.foldPlayerInHand(p3);
+    turnManager.addPlayerNotInHand(p3);
 
     ASSERT_EQ(turnManager.getPlayerToAct(), p4);
     ASSERT_EQ(turnManager.getPlayerToAct(), p5);
 
-    turnManager.moveFoldedPlayersToInHand();
+    turnManager.moveAllPlayersToInHand();
     ASSERT_EQ(turnManager.getNumPlayersFolded(), 0);
 
     turnManager.setEarlyPositionToAct();

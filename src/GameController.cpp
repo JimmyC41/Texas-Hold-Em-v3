@@ -92,7 +92,7 @@ void GameController::startStreet(Street newStreet) {
     cout << "\nStarting " << streetToStr(newStreet) << " Street\n" << endl;
 
     setupStreet(newStreet);
-    int initialPlayersInHand = turnManager.getNumPlayersToAct();
+    int initialPlayersInHand = turnManager.getNumPlayersInHand();
 
     while (!isStreetOver(initialPlayersInHand)) {
         // Get player to act
@@ -115,7 +115,7 @@ void GameController::startStreet(Street newStreet) {
             potManager.addPlayerBet(curPlayer, playerAction->getAmount());
         } else if (playerActionType == FOLD) {
             potManager.foldPlayerBet(curPlayer);
-            turnManager.foldPlayerInHand(curPlayer);
+            turnManager.addPlayerNotInHand(curPlayer);
         }
     }
 
@@ -256,7 +256,7 @@ bool GameController::isFoldedThrough() {
 
 void GameController::setupNewRound() {
     // Reset folded players
-    turnManager.moveFoldedPlayersToInHand();
+    turnManager.moveAllPlayersToInHand();
 
     // Rotate positions
     turnManager.rotatePositions();
