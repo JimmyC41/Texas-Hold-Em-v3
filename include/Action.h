@@ -12,6 +12,8 @@ enum ActionType {
     RAISE,
     FOLD,
     BLIND,
+    ALL_IN_BET,
+    ALL_IN_CALL,
     INVALID_ACTION
 };
 

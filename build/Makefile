@@ -192,6 +192,19 @@ ActionTest/fast:
 .PHONY : ActionTest/fast
 
 #=============================================================================
+# Target rules for targets named AllInActionTest
+
+# Build rule for target.
+AllInActionTest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 AllInActionTest
+.PHONY : AllInActionTest
+
+# fast build rule for target.
+AllInActionTest/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AllInActionTest.dir/build.make CMakeFiles/AllInActionTest.dir/build
+.PHONY : AllInActionTest/fast
+
+#=============================================================================
 # Target rules for targets named GamePlayersTest
 
 # Build rule for target.
@@ -518,6 +531,30 @@ test/ActionTest.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ActionTest.dir/build.make CMakeFiles/ActionTest.dir/test/ActionTest.cpp.s
 .PHONY : test/ActionTest.cpp.s
 
+test/AllInActionTest.o: test/AllInActionTest.cpp.o
+.PHONY : test/AllInActionTest.o
+
+# target to build an object file
+test/AllInActionTest.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AllInActionTest.dir/build.make CMakeFiles/AllInActionTest.dir/test/AllInActionTest.cpp.o
+.PHONY : test/AllInActionTest.cpp.o
+
+test/AllInActionTest.i: test/AllInActionTest.cpp.i
+.PHONY : test/AllInActionTest.i
+
+# target to preprocess a source file
+test/AllInActionTest.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AllInActionTest.dir/build.make CMakeFiles/AllInActionTest.dir/test/AllInActionTest.cpp.i
+.PHONY : test/AllInActionTest.cpp.i
+
+test/AllInActionTest.s: test/AllInActionTest.cpp.s
+.PHONY : test/AllInActionTest.s
+
+# target to generate assembly for a file
+test/AllInActionTest.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AllInActionTest.dir/build.make CMakeFiles/AllInActionTest.dir/test/AllInActionTest.cpp.s
+.PHONY : test/AllInActionTest.cpp.s
+
 test/ClientManagerTest.o: test/ClientManagerTest.cpp.o
 .PHONY : test/ClientManagerTest.o
 
@@ -672,6 +709,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... ActionTest"
+	@echo "... AllInActionTest"
 	@echo "... ClientManagerTest"
 	@echo "... DealTest"
 	@echo "... GameControllerTest"
@@ -715,6 +753,9 @@ help:
 	@echo "... test/ActionTest.o"
 	@echo "... test/ActionTest.i"
 	@echo "... test/ActionTest.s"
+	@echo "... test/AllInActionTest.o"
+	@echo "... test/AllInActionTest.i"
+	@echo "... test/AllInActionTest.s"
 	@echo "... test/ClientManagerTest.o"
 	@echo "... test/ClientManagerTest.i"
 	@echo "... test/ClientManagerTest.s"

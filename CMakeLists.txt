@@ -40,6 +40,9 @@ target_link_libraries(TurnManagerTest PRIVATE PokerLib GTest::GTest GTest::Main 
 add_executable(ActionTest test/ActionTest.cpp)
 target_link_libraries(ActionTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
 
+add_executable(AllInActionTest test/AllInActionTest.cpp)
+target_link_libraries(AllInActionTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
+
 add_executable(GamePlayersTest test/GamePlayersTest.cpp)
 target_link_libraries(GamePlayersTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
 

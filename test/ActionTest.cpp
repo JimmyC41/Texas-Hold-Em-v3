@@ -18,14 +18,10 @@ protected:
     shared_ptr<Player> player4;
 
     ActionTest() {
-        player1 = make_shared<Player>("P1", Position::SMALL_BLIND, 1000);
-        player2 = make_shared<Player>("P2", Position::BIG_BLIND, 500);
-        player3 = make_shared<Player>("P3", Position::UTG, 500);
-        player4 = make_shared<Player>("P4", Position::UTG_1, 500);
-        
-        // Post blinds
-        auto postSmall_1 = make_shared<BlindAction>(player1, 1);
-        auto postBig_2 = make_shared<BlindAction>(player2, 2);
+        player1 = make_shared<Player>("P1", Position::SMALL_BLIND, 2000);
+        player2 = make_shared<Player>("P2", Position::BIG_BLIND, 10000);
+        player3 = make_shared<Player>("P3", Position::UTG, 1500);
+        player4 = make_shared<Player>("P4", Position::UTG_1, 6000);
     }
 
     void TearDown() override {
