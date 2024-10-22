@@ -46,25 +46,23 @@ vector<PossibleAction> ActionManager::getAllowedActionTypes() {
 bool ActionManager::isActionsFinished(int numPlayers) const {
 
     // If there are n players and a player initiates a bet/raise, n-1 players must call/fold
+    int activeBet = 0;
     int numCalls = 0;
     int numChecks = 0;
     int numAllInCall = 0;
     int numAllInBet = 0;
+    int numPlayersNotInHand = 0;
 
     // Iterate through the action timeline
     for (const auto& actionPtr : actionTimeline) {
         ActionType actionType = actionPtr->getActionType();
 
         // If we encounter a 'new' active bet, reset the number of calls
-        if (actionType == BLIND || actionType == BET || actionType == RAISE) {
-            numCalls = 0;
-        }
-
-        else if (actionType == ALL_IN_BET) {
-            numAllInBet++;
+        if (actionType == BLIND || actionType == BET || actionType == RAISE || actionType == ALL_IN_BET) {
             numCalls = 0;
 
-            if (numAllInBet > 1) numAllInCall++;
+            if (numAllInBet > 0) numPlayersNotInHand = numAllInBet;
+            if (actionType == ALL_IN_BET) numAllInBet++;
         }
 
         // If a player calls an active bet, increment the number of calls
@@ -75,6 +73,7 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
         // If a player calls all in, increment number of bets
         else if (actionType == ALL_IN_CALL) {
             numAllInCall++;
+            numPlayersNotInHand += numAllInCall;
         }
 
         // If a player folds, decrement number of active players
@@ -87,9 +86,10 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
             numChecks++;
         }
 
+        cout << numCalls << numPlayersNotInHand << endl;
         // Betting is over when all players have called, folded, or are all in to the current bet
         // or when all players have checked
-        if (numCalls == (numPlayers - 1 - numAllInCall) || numChecks == numPlayers) {
+        if (numCalls == (numPlayers - 1 - numPlayersNotInHand) || numChecks == numPlayers) {
             return true;
         }
     }
