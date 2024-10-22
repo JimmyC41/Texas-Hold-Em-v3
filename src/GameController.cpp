@@ -79,8 +79,8 @@ void GameController::validateChipCounts() {
 // STREET SPECIFIC METHODS
 
 void GameController::startStreet(Street newStreet) {
-    if (isFoldedThrough()) {
-        cout << "Players folded through. Skipping " << streetToStr(newStreet) << endl;
+    if (isNoMoreAction()) {
+        cout << "No more players to act. Skipping " << streetToStr(newStreet) << endl;
         return;
     }
 
@@ -106,7 +106,7 @@ void GameController::startStreet(Street newStreet) {
         ClientAction clientAction = clientManager.getClientAction(curPlayer, possibleActions, initialChips);
 
         // Add action to the action timeline
-        shared_ptr<Action> playerAction = createAction(clientAction);
+        shared_ptr<Action> playerAction = createAction(clientAction, initialChips);
         actionManager.addActionToTimeline(playerAction);
 
         // Update the pot manager after action
@@ -117,7 +117,7 @@ void GameController::startStreet(Street newStreet) {
             potManager.foldPlayerBet(curPlayer);
             turnManager.addPlayerNotInHand(curPlayer);
         } else if (playerActionType == ALL_IN_BET || playerActionType == ALL_IN_CALL) {
-            // potManager.addAllInBet(curPlayer, playerAction->getAmount());
+            potManager.addPlayerBet(curPlayer, playerAction->getAmount());
             turnManager.addPlayerNotInHand(curPlayer);
         }
     }
@@ -222,19 +222,28 @@ void GameController::setupStreet(Street newStreet) {
     }
 }
 
-shared_ptr<Action> GameController::createAction(const ClientAction& action) {
+shared_ptr<Action> GameController::createAction(const ClientAction& action, size_t initialChips) {
     switch (action.type) {
         case BET:
+            if (action.amount == initialChips) {
+                return make_shared<AllInBetAction>(action.player, action.amount);
+            }
             return make_shared<BetAction>(action.player, action.amount);
         case BLIND:
             return make_shared<BlindAction>(action.player, action.amount);
         case CALL:
+            if (action.amount == initialChips) {
+                return make_shared<AllInCallAction>(action.player, action.amount);
+            }
             return make_shared<CallAction>(action.player, action.amount);
         case CHECK:
             return make_shared<CheckAction>(action.player);
         case FOLD:
             return make_shared<FoldAction>(action.player);
         case RAISE:
+            if (action.amount == initialChips) {
+                return make_shared<AllInBetAction>(action.player, action.amount);
+            }
             return make_shared<RaiseAction>(action.player, action.amount);
         default:
             runtime_error("Error trying to create an action object from client input!");
@@ -253,7 +262,7 @@ bool GameController::isPlayersInHandAllIn() {
     return true;
 }
 
-bool GameController::isFoldedThrough() {
+bool GameController::isNoMoreAction() {
     return (turnManager.getNumPlayersInHand() == 1);
 }
 

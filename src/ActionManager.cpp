@@ -34,7 +34,7 @@ vector<PossibleAction> ActionManager::getAllowedActionTypes() {
     if (lastAction == CHECK) {
         return {{CHECK, 0}, {BET, activeBet}, {FOLD, 0}};
     }
-    else if (lastAction == BLIND || lastAction == BET || lastAction == RAISE) {
+    else if (lastAction == BLIND || lastAction == BET || lastAction == RAISE || lastAction == ALL_IN_BET || lastAction == ALL_IN_CALL) {
         return {{CALL, activeBet}, {RAISE, activeBet}, {FOLD, 0}};
     }
     else {
@@ -48,10 +48,8 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
     // If there are n players and a player initiates a bet/raise, n-1 players must call/fold
     int numCalls = 0;
     int numChecks = 0;
-
-    // numBets is subtracted from num of players to see how many calls are reqiured for betting to be complete
-    // Incremented when there is a new active bet, or when a player goes all in
-    int numBets = 0;
+    int numAllInCall = 0;
+    int numAllInBet = 0;
 
     // Iterate through the action timeline
     for (const auto& actionPtr : actionTimeline) {
@@ -60,13 +58,13 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
         // If we encounter a 'new' active bet, reset the number of calls
         if (actionType == BLIND || actionType == BET || actionType == RAISE) {
             numCalls = 0;
-            numBets = 1;
         }
 
-        // If we encounter all in bet, reset the number of calls and increment number of bets
         else if (actionType == ALL_IN_BET) {
+            numAllInBet++;
             numCalls = 0;
-            numBets++;
+
+            if (numAllInBet > 1) numAllInCall++;
         }
 
         // If a player calls an active bet, increment the number of calls
@@ -76,7 +74,7 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
 
         // If a player calls all in, increment number of bets
         else if (actionType == ALL_IN_CALL) {
-            numBets++;
+            numAllInCall++;
         }
 
         // If a player folds, decrement number of active players
@@ -89,9 +87,11 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
             numChecks++;
         }
 
+        cout << "calls, players, all in calls: " << numCalls << numPlayers << numAllInCall << endl;
+
         // Betting is over when all players have called, folded, or are all in to the current bet
         // or when all players have checked
-        if (numCalls == (numPlayers - numBets) || numChecks == numPlayers) {
+        if (numCalls == (numPlayers - 1 - numAllInCall) || numChecks == numPlayers) {
             return true;
         }
     }

@@ -74,11 +74,11 @@ TEST_F(AllInTest, AC) {
 
 TEST_F(AllInTest, AB_AR) {
     auto a_bet_1 = make_shared<AllInBetAction>(player1, 1000);
-    auto a_bet_2 = make_shared<AllInBetAction>(player2, 2000);
+    auto a_raise_2 = make_shared<AllInBetAction>(player2, 2000);
     auto call_3 = make_shared<CallAction>(player3, 2000);
 
     actionManager.addActionToTimeline(a_bet_1);
-    actionManager.addActionToTimeline(a_bet_2);
+    actionManager.addActionToTimeline(a_raise_2);
     actionManager.addActionToTimeline(call_3);
 
     ASSERT_EQ(actionManager.getActiveBet(), 2000);

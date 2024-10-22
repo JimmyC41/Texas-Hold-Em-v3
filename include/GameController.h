@@ -3,6 +3,8 @@
 
 #include "ActionManager.h"
 #include "Action.h"
+#include "Actions/AllInBetAction.h"
+#include "Actions/AllInCallAction.h"
 #include "Actions/BetAction.h"
 #include "Actions/BlindAction.h"
 #include "Actions/CallAction.h"
@@ -59,13 +61,13 @@ private:
     void setupStreet(Street newStreet);
 
     // Street helper function to create an action object from a client object
-    shared_ptr<Action> createAction(const ClientAction& clientAction);
+    shared_ptr<Action> createAction(const ClientAction& clientAction, size_t initialChips);
 
     // Street helper function to check if players in the hand are all in
     bool isPlayersInHandAllIn();
 
     // Street helper function to check if there is only one player left (i.e. folded through)
-    bool isFoldedThrough();
+    bool isNoMoreAction();
 
     // Street helper function to check if all players have acted in a given round
     bool isStreetOver(int initialPlayersInhand);
