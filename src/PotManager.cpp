@@ -14,17 +14,17 @@ Pot& PotManager::getCurPot() {
 }
 
 bool PotManager::allPotsCreated() const {
-    for (auto& [player, recentBet] : playerBets) {
-        if (recentBet != 0) return false;
+    for (auto& [player, betInfo] : playerBets) {
+        if (betInfo.betSize != 0) return false;
     }
     return true;
 }
 
 size_t PotManager::findMinBet() const { 
     size_t minBet = numeric_limits<size_t>::max();
-    for (auto& [player, recentBet] : playerBets) {
-        if (recentBet == 0) continue; // minBet cannot be 0
-        if (recentBet < minBet)  minBet = recentBet;
+    for (auto& [player, betInfo] : playerBets) {
+        if (betInfo.betSize == 0) continue; // minBet cannot be 0
+        if (betInfo.betSize < minBet)  minBet = betInfo.betSize;
     }
     return minBet;
 }
@@ -35,8 +35,8 @@ void PotManager::displayPlayerBets() {
         return;
     }
     
-    for (const auto& [player, bet] : playerBets) {
-        cout << "Player: " << player->getName() << " | Bet: " << bet << endl;
+    for (const auto& [player, betInfo] : playerBets) {
+        cout << "Player: " << player->getName() << " | Bet: " << betInfo.betSize << endl;
     }
 }
 
@@ -69,19 +69,22 @@ PotManager::PotManager() : deadChips(0) {
     newPot();
 }
 
-void PotManager::addPlayerBet(const shared_ptr<Player>& player, size_t bet) {
+void PotManager::addPlayerBet(const shared_ptr<Player>& player, size_t bet, bool isAllIn) {
     auto it = playerBets.find(player);
 
     // Add player and their bet if they don't exist
     if (it == playerBets.end()) {
-        playerBets[player] = bet;
+        playerBets[player] = {bet, isAllIn};
         player->reduceChips(bet);
     }
     // If player already exists, simply update their recent bet
-    else {
-        size_t amountToMatch = bet - it->second ;
+    else { 
+        size_t previousBet = it->second.betSize;
+        size_t amountToMatch = bet - previousBet;
 
-        it->second = bet;
+        it->second.betSize = bet;
+        it->second.isAllIn = isAllIn;
+
         player->reduceChips(amountToMatch);
     }
 }
@@ -89,7 +92,7 @@ void PotManager::addPlayerBet(const shared_ptr<Player>& player, size_t bet) {
 size_t PotManager::getRecentBet(const shared_ptr<Player>& player) {
     auto it = playerBets.find(player);
     if (it != playerBets.end()) {
-        return it->second;
+        return it->second.betSize;
     }
     return 0;
 }
@@ -102,10 +105,10 @@ void PotManager::foldPlayerBet(const shared_ptr<Player>& player) {
     if (it == playerBets.end()) return;
     
     // Increment dead money in pot
-    deadChips += playerBets[player];
+    deadChips += playerBets[player].betSize;
 
     // Update folded player's recent bet to 0
-    playerBets[player] = 0;
+    playerBets[player].betSize = 0;
 }
 
 void PotManager::calculatePots() {
@@ -116,11 +119,11 @@ void PotManager::calculatePots() {
         Pot& curPot = getCurPot();
 
         // Add each player's contribution to the current pot
-        for (auto& [player, recentBet] : playerBets) {
-            if (recentBet == 0) continue;
+        for (auto& [player, betInfo] : playerBets) {
+            if (betInfo.betSize == 0) continue;
             if (!curPot.isPlayerInPot(player)) curPot.addPlayer(player);
             
-            playerBets[player] -= minBet;
+            playerBets[player].betSize -= minBet;
             curPot.addChips(minBet);
         }
 
@@ -139,8 +142,8 @@ void PotManager::calculatePots() {
 }
 
 void PotManager::resetPlayerBets() {
-    for (auto& [player, recentBet] : playerBets) {
-        playerBets[player] = 0;
+    for (auto& [player, betInfo] : playerBets) {
+        playerBets[player].betSize = 0;
     }
 }
 

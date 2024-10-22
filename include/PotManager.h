@@ -6,6 +6,11 @@
 #include <map>
 using namespace std;
 
+struct BetInfo {
+    size_t betSize;
+    bool isAllIn;
+};
+
 typedef struct Pot {
     size_t chips;
     vector<shared_ptr<Player>> eligiblePlayers;
@@ -24,7 +29,7 @@ private:
     vector<Pot> pots;
 
     // Maps players to their most recent bets in a betting street
-    map<shared_ptr<Player>, size_t> playerBets;
+    map<shared_ptr<Player>, BetInfo> playerBets;
 
     // Amount of dead chips from folded players.
     size_t deadChips;
@@ -49,7 +54,7 @@ public:
     void resetPots();
 
     // Updates the playerBets map after a bet/raises. Called after each player action.
-    void addPlayerBet(const shared_ptr<Player>& player, size_t bet);
+    void addPlayerBet(const shared_ptr<Player>& player, size_t bet, bool isAllIn);
 
     // Gets a player's contribution to the pot in a given round
     size_t getRecentBet(const shared_ptr<Player>& player);
