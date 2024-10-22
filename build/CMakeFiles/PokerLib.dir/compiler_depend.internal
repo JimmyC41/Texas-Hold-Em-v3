@@ -5526,6 +5526,8 @@ CMakeFiles/PokerLib.dir/src/GameController.cpp.o
  /Users/jimmy/Texas-Hold-Em-v3/include/Action.h
  /Users/jimmy/Texas-Hold-Em-v3/include/ActionManager.h
  /Users/jimmy/Texas-Hold-Em-v3/include/Action.h
+ /Users/jimmy/Texas-Hold-Em-v3/include/Actions/AllInBetAction.h
+ /Users/jimmy/Texas-Hold-Em-v3/include/Actions/AllInCallAction.h
  /Users/jimmy/Texas-Hold-Em-v3/include/Actions/BetAction.h
  /Users/jimmy/Texas-Hold-Em-v3/include/Actions/BlindAction.h
  /Users/jimmy/Texas-Hold-Em-v3/include/Actions/CallAction.h

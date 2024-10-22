@@ -847,8 +847,10 @@ CMakeFiles/GameControllerTest.dir/test/GameControllerTest.cpp.o: \
   /Users/jimmy/Texas-Hold-Em-v3/include/Action.h \
   /Users/jimmy/Texas-Hold-Em-v3/include/Player.h \
   /Users/jimmy/Texas-Hold-Em-v3/include/Card.h \
-  /Users/jimmy/Texas-Hold-Em-v3/include/Actions/BetAction.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Actions/AllInBetAction.h \
   /Users/jimmy/Texas-Hold-Em-v3/include/Actions/../Action.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Actions/AllInCallAction.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Actions/BetAction.h \
   /Users/jimmy/Texas-Hold-Em-v3/include/Actions/BlindAction.h \
   /Users/jimmy/Texas-Hold-Em-v3/include/Actions/CallAction.h \
   /Users/jimmy/Texas-Hold-Em-v3/include/Actions/CheckAction.h \

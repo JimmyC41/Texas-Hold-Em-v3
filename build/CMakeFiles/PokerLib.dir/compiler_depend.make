@@ -5519,6 +5519,8 @@ CMakeFiles/PokerLib.dir/src/GameController.cpp.o: /Users/jimmy/Texas-Hold-Em-v3/
   /Users/jimmy/Texas-Hold-Em-v3/include/Action.h \
   /Users/jimmy/Texas-Hold-Em-v3/include/ActionManager.h \
   /Users/jimmy/Texas-Hold-Em-v3/include/Action.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Actions/AllInBetAction.h \
+  /Users/jimmy/Texas-Hold-Em-v3/include/Actions/AllInCallAction.h \
   /Users/jimmy/Texas-Hold-Em-v3/include/Actions/BetAction.h \
   /Users/jimmy/Texas-Hold-Em-v3/include/Actions/BlindAction.h \
   /Users/jimmy/Texas-Hold-Em-v3/include/Actions/CallAction.h \
@@ -8744,6 +8746,8 @@ CMakeFiles/PokerLib.dir/src/TurnManager.cpp.o: /Users/jimmy/Texas-Hold-Em-v3/src
 
 /Users/jimmy/Texas-Hold-Em-v3/include/Actions/BetAction.h:
 
+/Users/jimmy/Texas-Hold-Em-v3/include/Actions/AllInBetAction.h:
+
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/memory.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/random:
@@ -9213,6 +9217,8 @@ CMakeFiles/PokerLib.dir/src/TurnManager.cpp.o: /Users/jimmy/Texas-Hold-Em-v3/src
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__type_traits/is_reference_wrapper.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__utility/swap.h:
+
+/Users/jimmy/Texas-Hold-Em-v3/include/Actions/AllInCallAction.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__algorithm/ranges_is_partitioned.h:
 

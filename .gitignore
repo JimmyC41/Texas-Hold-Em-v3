@@ -48,3 +48,14 @@ build/CMakeFiles/Progress/19
 build/CMakeFiles/Progress/count.txt
 build/CMakeFiles/TurnManagerTest.dir/compiler_depend.internal
 build/CMakeFiles/TurnManagerTest.dir/compiler_depend.make
+build/ActionTest
+build/AllInActionTest
+build/ClientManagerTest
+build/GameControllerTest
+build/libPokerLib.a
+build/CMakeFiles/GameControllerTest.dir/compiler_depend.make
+build/CMakeFiles/GameControllerTest.dir/test/GameControllerTest.cpp.o.d
+build/CMakeFiles/PokerLib.dir/compiler_depend.internal
+build/CMakeFiles/PokerLib.dir/compiler_depend.make
+build/CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o
+build/CMakeFiles/PokerLib.dir/src/GameController.cpp.o.d
