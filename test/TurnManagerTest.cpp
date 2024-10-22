@@ -132,7 +132,7 @@ TEST_F(TurnTest, ResetFoldedPlayers) {
     ASSERT_EQ(turnManager.getPlayerToAct(), p5);
 
     turnManager.moveAllPlayersToInHand();
-    ASSERT_EQ(turnManager.getNumPlayersFolded(), 0);
+    ASSERT_EQ(turnManager.getNumPlayersNotInHand(), 0);
 
     turnManager.setEarlyPositionToAct();
     ASSERT_EQ(turnManager.getPlayerToAct(), p1);
