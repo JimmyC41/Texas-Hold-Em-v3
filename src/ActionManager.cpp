@@ -87,8 +87,6 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
             numChecks++;
         }
 
-        cout << "calls, players, all in calls: " << numCalls << numPlayers << numAllInCall << endl;
-
         // Betting is over when all players have called, folded, or are all in to the current bet
         // or when all players have checked
         if (numCalls == (numPlayers - 1 - numAllInCall) || numChecks == numPlayers) {

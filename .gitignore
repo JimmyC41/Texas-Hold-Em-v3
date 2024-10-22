@@ -59,3 +59,9 @@ build/CMakeFiles/PokerLib.dir/compiler_depend.internal
 build/CMakeFiles/PokerLib.dir/compiler_depend.make
 build/CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o
 build/CMakeFiles/PokerLib.dir/src/GameController.cpp.o.d
+build/ActionTest
+build/AllInActionTest
+build/ClientManagerTest
+build/GameControllerTest
+build/libPokerLib.a
+build/CMakeFiles/PokerLib.dir/src/ActionManager.cpp.o
