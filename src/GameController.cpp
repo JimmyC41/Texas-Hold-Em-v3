@@ -116,6 +116,9 @@ void GameController::startStreet(Street newStreet) {
         } else if (playerActionType == FOLD) {
             potManager.foldPlayerBet(curPlayer);
             turnManager.addPlayerNotInHand(curPlayer);
+        } else if (playerActionType == ALL_IN_BET || playerActionType == ALL_IN_CALL) {
+            // potManager.addAllInBet(curPlayer, playerAction->getAmount());
+            turnManager.addPlayerNotInHand(curPlayer);
         }
     }
 
