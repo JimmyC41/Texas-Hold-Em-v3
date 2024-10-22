@@ -11,26 +11,26 @@ void TurnManager::addPlayerInHand(const shared_ptr<Player>& player) {
     setBlindsAndButton();
 }
 
-void TurnManager::foldPlayerInHand(const shared_ptr<Player>& foldedPlayer) {
-    // Update current player if the player to be folded is the current player to act
-    if (playerToAct == foldedPlayer) {
+void TurnManager::addPlayerNotInHand(const shared_ptr<Player>& targetPlayer) {
+    // Update current player to the next player to act if the current player is the folded/all-in player
+    if (playerToAct == targetPlayer) {
         playerToAct = getNextToAct();
     }
 
-    auto it = find(playersInHand.begin(), playersInHand.end(), foldedPlayer);
+    auto it = find(playersInHand.begin(), playersInHand.end(), targetPlayer);
 
     if (it != playersInHand.end()) {
-        playersFolded.push_back(std::move(*it)); // Add the player to the folded players list
-        playersInHand.erase(it); // Remove folded player from players in the hand
+        playersNotInHand.push_back(std::move(*it)); // Add player to players not in hand
+        playersInHand.erase(it); // Remove player from players in the hand
     }
     sortPlayersInHand();
 }
 
-void TurnManager::moveFoldedPlayersToInHand() {
-    for (auto& player : playersFolded) {
-            playersInHand.push_back(std::move(player));
+void TurnManager::moveAllPlayersToInHand() {
+    for (auto& player : playersNotInHand) {
+        playersInHand.push_back(std::move(player));
     }
-    playersFolded.clear();
+    playersNotInHand.clear();
     sortPlayersInHand();
 }
 
@@ -128,7 +128,7 @@ shared_ptr<Player> TurnManager::getPlayerWithPosition(Position position) const {
     for (auto& player : playersInHand) {
         if (player->getPosition() == position) return player;
     }
-    for (auto& player : playersFolded) {
+    for (auto& player : playersNotInHand) {
         if (player->getPosition() == position) return player;
     }
     return nullptr;
@@ -142,18 +142,8 @@ int TurnManager::getNumPlayersInHand() const {
     return playersInHand.size();
 }
 
-int TurnManager::getNumPlayersToAct() const {
-    int num = 0;
-    for (auto& player : playersInHand) {
-        if (player->getChips() > 0) {
-            num++;
-        }
-    }
-    return num;
-}
-
-int TurnManager::getNumPlayersFolded() const {
-    return playersFolded.size();
+int TurnManager::getNumPlayersNotInHand() const {
+    return playersNotInHand.size();
 }
 
 void TurnManager::sortPlayersInHand() {

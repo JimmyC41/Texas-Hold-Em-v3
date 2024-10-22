@@ -12,8 +12,8 @@ private:
     // If at least 3 players, must exist small blind, big blind and dealer.
     vector<shared_ptr<Player>> playersInHand;
 
-    // Contains folded players that can not act
-    vector<shared_ptr<Player>> playersFolded;
+    // Contains players that have folded or are all-in and can NOT act
+    vector<shared_ptr<Player>> playersNotInHand;
 
     shared_ptr<Player> playerWithButton;
     shared_ptr<Player> playerToAct;
@@ -41,19 +41,19 @@ public:
     void addPlayerInHand(const shared_ptr<Player>& player);
 
     // Moves a player from the playersInHand vector to the playersFolded vector.
-    // Updates the current player to act as the previous player that acted in the in hand vector.
+    // Updates the current player to act as the previous player that acted in the hand vector.
     // Sorts players in hand, but does not set blinds and button.
     // Called when a player has folded.
-    void foldPlayerInHand(const shared_ptr<Player>& foldedPlayer);
+    void addPlayerNotInHand(const shared_ptr<Player>& targetPlayer);
 
     // Removes a player from the playersInHand vector.
     // Sorts player and sets blinds and button.
     // Called when a player leaves the game.
     void removePlayerFromHand(const shared_ptr<Player>& removedPlayer);
 
-    // Moves players in folded vector back to the in hand vector.
+    // Moves players in the not in hand vector back to the in hand vector.
     // Called at the END of the round.
-    void moveFoldedPlayersToInHand();
+    void moveAllPlayersToInHand();
 
     // Rotates players positions clockwise.
     // Called after folded players are moved to in hand.
@@ -81,14 +81,11 @@ public:
     // Returns the player with the button and does NOT update playerToAct.
     shared_ptr<Player> getPlayerWithButton() const;
 
-    // Return the number of players.
+    // Return the number of players that are still in the hand
     int getNumPlayersInHand() const;
 
-    // Return the number of players to act (excludes players all in)
-    int getNumPlayersToAct() const;
-
-    // Return the number of folded players.
-    int getNumPlayersFolded() const;
+    // Return the number of players that have folded or are all in.
+    int getNumPlayersNotInHand() const;
 
     // Prints the current player to act
     void displayPlayerToAct() const;
