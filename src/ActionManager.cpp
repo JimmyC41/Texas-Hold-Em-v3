@@ -1,4 +1,5 @@
 #include "../include/ActionManager.h"
+#include "../TurnManager.h"
 #include "../include/Action.h"
 #include <iostream>
 using namespace std;
@@ -44,7 +45,6 @@ vector<PossibleAction> ActionManager::getAllowedActionTypes() {
 }
 
 bool ActionManager::isActionsFinished(int numPlayers) const {
-
     // If there are n players and a player initiates a bet/raise, n-1 players must call/fold
     int activeBet = 0;
     int numCalls = 0;
@@ -86,7 +86,8 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
             numChecks++;
         }
 
-        cout << numCalls << numPlayersNotInHand << endl;
+        // cout << "numCalls: " << numCalls << " | numPlayersNotInHand: " << numPlayersNotInHand << endl;
+
         // Betting is over when all players have called, folded, or are all in to the current bet
         // or when all players have checked
         if (numCalls == (numPlayers - 1 - numPlayersNotInHand) || numChecks == numPlayers) {
