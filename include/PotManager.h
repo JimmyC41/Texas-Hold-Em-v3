@@ -63,6 +63,13 @@ public:
     // Resets recent bets and dead money to 0. Called at the end of each round.
     void resetPlayerBets();
 
+    // Gets the initial stack of specified player at the beginning of the round.
+    size_t getInitialChips(const shared_ptr<Player>& player);
+
+    // Gets the biggest stack of players in hand other than the specified player.
+    // Used to calculate the maximum amount can bet (you can't bet more than someone can call!).
+    size_t getBigStackAmongOthers(const shared_ptr<Player>& avoidPlayer, const vector<shared_ptr<Player>>& playersInHand);
+
     void displayPlayerBets();
     void displayPots();
     const Pot& getPot(int index) const;

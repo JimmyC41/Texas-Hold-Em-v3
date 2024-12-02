@@ -40,13 +40,14 @@ ActionType ClientManager::getClientActionType(vector<PossibleAction>& possibleAc
     return actionType;
 }
 
-size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, ActionType clientAction, vector<PossibleAction>& possibleActions, size_t bigBlind, size_t initialChips, size_t bigStackChips) {
+size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, ActionType clientAction, vector<PossibleAction>& possibleActions, size_t bigBlind, size_t initialChips, size_t bigStackAmongOthers) {
     // Case 1: Check or Fold (Bet Amount is 0)
     if (clientAction == ActionType::CHECK || clientAction == ActionType::FOLD) {
         return 0;
     }
 
-    size_t maxBet = min(initialChips, bigStackChips);
+    size_t maxBet = min(initialChips, bigStackAmongOthers);
+    cout << "initial, bigStackOthers, maxBet is: " << initialChips << bigStackAmongOthers << maxBet << endl;
 
     // Case 2: Call (Call amount is previous bet amount)
     if (clientAction == ActionType::CALL) {
@@ -61,12 +62,10 @@ size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, Action
     // Set minimum bet if the client wishes to raise
     if (clientAction == ActionType::RAISE) {
         size_t prevBetAmount = getRelevantBet(possibleActions, clientAction);
+        size_t standardRaiseSize = 2 * prevBetAmount;
 
-        // Assume that minimum raise is the previous bet
-        minBet = 2 * prevBetAmount;
-
-        // Edge case where player is all in to raise (player does not have a choice)
-        if (minBet >= maxBet) return maxBet;
+        // Edge case where a player is all in to raise (no choice)
+        if (standardRaiseSize >= maxBet) return maxBet;
     }
 
     // Fetch client bet amount from stdin
