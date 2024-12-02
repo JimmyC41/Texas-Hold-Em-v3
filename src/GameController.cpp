@@ -97,13 +97,25 @@ void GameController::startStreet(Street newStreet) {
     while (!isStreetOver(initialPlayersInHand)) {
         // Get player to act
         shared_ptr<Player> curPlayer = turnManager.getPlayerToAct();
+        
+        size_t activeBet = actionManager.getActiveBet();
+        size_t initialChips = curPlayer->getChips() + potManager.getRecentBet(curPlayer); // Chips the player to act started with
+        size_t bigStackChips = turnManager.getBigStackChipCount(); // Chips of the big stack in the hand respectively
+        size_t bigStackAmongOthers = turnManager.getBigStackAmongOthers(curPlayer); // Chips of the biggest stack among other active players
+
+        cout << "activeBet: " << activeBet << "| bigStackAmongOthers: " << bigStackAmongOthers << endl;
+
+        bool playerCanRaise = true;
+        if (activeBet >= bigStackAmongOthers || initialChips < activeBet) {
+            playerCanRaise = false;
+            cout << "Player can NOT raise!" << endl;
+        }
 
         // Get possible actions for player
-        vector<PossibleAction> possibleActions = actionManager.getAllowedActionTypes();
+        vector<PossibleAction> possibleActions = actionManager.getAllowedActionTypes(playerCanRaise);
 
         // Request client action given possible actions
-        size_t initialChips = curPlayer->getChips() + potManager.getRecentBet(curPlayer); // Represents the number of chips the player started the street with!
-        ClientAction clientAction = clientManager.getClientAction(curPlayer, possibleActions, initialChips);
+        ClientAction clientAction = clientManager.getClientAction(curPlayer, possibleActions, initialChips, bigStackChips);
 
         // Add action to the action timeline
         shared_ptr<Action> playerAction = createAction(clientAction, initialChips);

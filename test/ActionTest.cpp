@@ -53,7 +53,7 @@ TEST_F(ActionTest, AddingActionsToTimeline) {
 
 TEST_F(ActionTest, AllowedActionsToNoAction) {
     ASSERT_EQ(actionManager.getActiveBet(), 0);
-    vector<PossibleAction> actual = actionManager.getAllowedActionTypes();
+    vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
     vector<PossibleAction> expected = {{CHECK, 0}, {BET, 0}, {FOLD, 0}};
     ASSERT_EQ(actual, expected);
 }
@@ -63,7 +63,7 @@ TEST_F(ActionTest, AllowedActionsToCheck) {
     actionManager.addActionToTimeline(check_1);
     ASSERT_EQ(actionManager.getActiveBet(), 0);
 
-    vector<PossibleAction> actual = actionManager.getAllowedActionTypes();
+    vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
     vector<PossibleAction> expected = {{CHECK, 0}, {BET, 0}, {FOLD, 0}};
     ASSERT_EQ(actual, expected);
 }
@@ -75,7 +75,7 @@ TEST_F(ActionTest, AllowedActionsToBigBlind) {
     actionManager.addActionToTimeline(postSmall_1);
     actionManager.addActionToTimeline(postBig_2);
 
-    vector<PossibleAction> actual = actionManager.getAllowedActionTypes();
+    vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
     vector<PossibleAction> expected = {{CALL, 2}, {RAISE, 2}, {FOLD, 0}};
     ASSERT_EQ(actual, expected);
 }
@@ -89,7 +89,7 @@ TEST_F(ActionTest, AllowedActionsToBet) {
     actionManager.addActionToTimeline(bet_2);
     ASSERT_EQ(actionManager.getActiveBet(), 10);
 
-    vector<PossibleAction> actual = actionManager.getAllowedActionTypes();
+    vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
     vector<PossibleAction> expected = {{CALL, 10}, {RAISE, 10}, {FOLD, 0}};
     ASSERT_EQ(actual, expected);
 }
@@ -109,7 +109,7 @@ TEST_F(ActionTest, AllowedActionsToRaise) {
     actionManager.addActionToTimeline(raise_4);
     ASSERT_EQ(actionManager.getActiveBet(), 40);
 
-    vector<PossibleAction> actual = actionManager.getAllowedActionTypes();
+    vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
     vector<PossibleAction> expected = {{CALL, 40}, {RAISE, 40}, {FOLD, 0}};
     ASSERT_EQ(actual, expected);
 }
@@ -129,7 +129,7 @@ TEST_F(ActionTest, AllowedActionsToCall) {
     actionManager.addActionToTimeline(call_4);
     ASSERT_EQ(actionManager.getActiveBet(), 10);
 
-    vector<PossibleAction> actual = actionManager.getAllowedActionTypes();
+    vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
     vector<PossibleAction> expected = {{CALL, 10}, {RAISE, 10}, {FOLD, 0}};
     ASSERT_EQ(actual, expected);
 }
@@ -143,7 +143,7 @@ TEST_F(ActionTest, AllowedActionsToFold_1) {
     actionManager.addActionToTimeline(fold_2);
     ASSERT_EQ(actionManager.getActiveBet(), 0);
 
-    vector<PossibleAction> actual = actionManager.getAllowedActionTypes();
+    vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
     vector<PossibleAction> expected = {{CHECK, 0} , {BET, 0}, {FOLD, 0}};
     ASSERT_EQ(actual, expected);
 }
@@ -166,7 +166,7 @@ TEST_F(ActionTest, AllowedActionsToFold_2) {
     actionManager.addActionToTimeline(fold_1);
     ASSERT_EQ(actionManager.getActiveBet(), 40);
 
-    vector<PossibleAction> actual = actionManager.getAllowedActionTypes();
+    vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
     vector<PossibleAction> expected = {{CALL, 40}, {RAISE, 40}, {FOLD, 0}};
     ASSERT_EQ(actual, expected);
 }
@@ -182,7 +182,7 @@ TEST_F(ActionTest, BetAllIn) {
     actionManager.addActionToTimeline(raise_3);
     ASSERT_EQ(actionManager.getActiveBet(), 500);
 
-    vector<PossibleAction> actual = actionManager.getAllowedActionTypes();
+    vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
     vector<PossibleAction> expected = {{CALL, 500}, {RAISE, 500}, {FOLD, 0}};
     ASSERT_EQ(actual, expected);
 }
@@ -196,7 +196,7 @@ TEST_F(ActionTest, CallAllIn) {
     actionManager.addActionToTimeline(call_2);
     ASSERT_EQ(actionManager.getActiveBet(), 1000);
 
-    vector<PossibleAction> actual = actionManager.getAllowedActionTypes();
+    vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
     vector<PossibleAction> expected = {{CALL, 1000}, {RAISE, 1000}, {FOLD, 0}};
     ASSERT_EQ(actual, expected);
 }

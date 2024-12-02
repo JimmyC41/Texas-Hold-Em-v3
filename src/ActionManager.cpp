@@ -1,5 +1,4 @@
 #include "../include/ActionManager.h"
-#include "../include/TurnManager.h"
 #include "../include/Action.h"
 #include <iostream>
 using namespace std;
@@ -13,11 +12,9 @@ void ActionManager::clearActionTimeline() {
 
 void ActionManager::addActionToTimeline(shared_ptr<Action> action) {
     actionTimeline.push_back(action);
-
     ActionType actiontype = action->getActionType();
 
     if (actiontype == BLIND || actiontype == BET || actiontype == RAISE || actiontype == ALL_IN_BET) {
-
         // Update the active bet if the bet/raise is greater than the current bet to be matched
         if (action->getAmount() > activeBet) {
             activeBet = action->getAmount();
@@ -25,7 +22,7 @@ void ActionManager::addActionToTimeline(shared_ptr<Action> action) {
     }
 }
 
-vector<PossibleAction> ActionManager::getAllowedActionTypes() {
+vector<PossibleAction> ActionManager::getAllowedActionTypes(bool playerCanRaise) {
     // No player has acted. Player to act can check or bet.
     if (actionTimeline.empty()) return {{CHECK, 0}, {BET, activeBet}, {FOLD, 0}};
 
@@ -34,11 +31,13 @@ vector<PossibleAction> ActionManager::getAllowedActionTypes() {
 
     if (lastAction == CHECK) {
         return {{CHECK, 0}, {BET, activeBet}, {FOLD, 0}};
-    }
-    else if (lastAction == BLIND || lastAction == BET || lastAction == RAISE || lastAction == ALL_IN_BET || lastAction == ALL_IN_CALL) {
-        return {{CALL, activeBet}, {RAISE, activeBet}, {FOLD, 0}};
-    }
-    else {
+    } else if (lastAction == BLIND || lastAction == BET || lastAction == RAISE || lastAction == ALL_IN_BET || lastAction == ALL_IN_CALL) {
+        if (playerCanRaise) {
+            return {{CALL, activeBet}, {RAISE, activeBet}, {FOLD, 0}};
+        } else {
+            return {{CALL, activeBet}, {FOLD, 0}};
+        }
+    } else {
         // All players before have voluntarily folded.
         return {{CHECK, 0}, {BET, activeBet}, {FOLD, 0}};
     }

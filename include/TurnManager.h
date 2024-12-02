@@ -104,6 +104,9 @@ public:
 
     // Returns the chip count of the big stack that is in the hand
     size_t getBigStackChipCount();
+
+    // Returns the chip count of the biggest stack other than the specified player
+    size_t getBigStackAmongOthers(const shared_ptr<Player>& player);
 };
 
 #endif // TURN_MANAGER_H

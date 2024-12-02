@@ -188,3 +188,14 @@ size_t TurnManager::getBigStackChipCount() {
 
     return (*it)->getChips();
 }
+
+size_t TurnManager::getBigStackAmongOthers(const shared_ptr<Player>& player) {
+    size_t maxChips = 0;
+    for (const auto& activePlayer : playersInHand) {
+        if (activePlayer == player) {
+            continue;
+        }
+        if (activePlayer->getChips() > maxChips) maxChips = activePlayer->getChips();
+    }
+    return maxChips;
+}

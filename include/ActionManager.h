@@ -40,8 +40,8 @@ public:
     void addActionToTimeline(shared_ptr<Action> action);
 
     // Retrieves possible action types given the betting action.
-    //Called when player is prompted for their action.
-    vector<PossibleAction> getAllowedActionTypes();
+    // Called when player is prompted for their action.
+    vector<PossibleAction> getAllowedActionTypes(bool playerCanRaise);
 
     // Iterates through the action timeline and checks if betting action is complete
     bool isActionsFinished(int numPlayers) const;

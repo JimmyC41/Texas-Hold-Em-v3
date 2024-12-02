@@ -3,9 +3,11 @@
 
 #include "Action.h"
 #include "ActionManager.h"
+#include "TurnManager.h"
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <algorithm>
 using namespace std;
 
 typedef struct ClientAction {
@@ -19,7 +21,7 @@ public:
     ClientManager(size_t bigBlind);
 
     // Queries the client for a valid client action object to be processed by the action manager
-    ClientAction getClientAction(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions, size_t initialChips);
+    ClientAction getClientAction(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions, size_t initialChips, size_t bigStackChips);
 private:
     size_t bigBlind;
 
@@ -34,7 +36,7 @@ private:
 
     // Fetch the bet amount from the client (stdin)
     size_t getClientBetAmount(shared_ptr<Player>& playerToAct, ActionType clientAction, 
-                                vector<PossibleAction>& possibleActions, size_t bigBlind, size_t initialChips);
+                                vector<PossibleAction>& possibleActions, size_t bigBlind, size_t initialChips, size_t bigStackChips);
 
     // Convert string (client input) into an ActionType
     ActionType strToActionType(string& string);
