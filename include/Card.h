@@ -5,6 +5,8 @@
 #include <string>
 using namespace std;
 
+const int NUM_SUIT = 4;
+
 enum class Suit {
     HEARTS = 0,
     DIAMONDS = 1,
@@ -38,6 +40,7 @@ public:
     explicit Card(Suit suit, Value value);
     Suit getSuit() const;
     Value getValue() const;
+    uint64_t getBitMask() const;
     bool operator==(const Card& other) const;
     bool operator<(const Card& other) const;
     string toString() const;

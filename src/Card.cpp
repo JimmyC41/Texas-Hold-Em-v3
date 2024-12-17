@@ -17,6 +17,12 @@ Value Card::getValue() const {
     return value;
 }
 
+// Accessor method for the bitmask representation of card
+uint64_t Card::getBitMask() const {
+    int cardNum = (static_cast<int>(suit) * NUM_SUIT) + (static_cast<int>(value) - 2);
+    return (1ULL << cardNum);
+}
+
 // Validates suits and values
 void Card::validate() const {
     if (static_cast<int>(suit) < 0 || static_cast<int>(suit) > 3) {
