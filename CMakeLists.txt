@@ -52,6 +52,9 @@ target_link_libraries(ClientManagerTest PRIVATE PokerLib GTest::GTest GTest::Mai
 add_executable(GameControllerTest test/GameControllerTest.cpp)
 target_link_libraries(GameControllerTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
 
+add_executable(AwardPotTest test/AwardPotTest.cpp)
+target_link_libraries(AwardPotTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
+
 add_test(NAME DealTest COMMAND DealTest)
 add_test(NAME PotManagerTest COMMAND PotManagerTest)
 add_test(NAME TurnManagerTest COMMAND TurnManagerTest)

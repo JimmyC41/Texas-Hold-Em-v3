@@ -50,7 +50,7 @@ public:
     // Initalises a single pot.
     PotManager();
 
-    // Clears all pots for a new game. Caleld at the end of each round.
+    // Clears all pots for a new game. Called at the end of each round.
     void resetPots();
 
     // Updates the playerBets map after a bet/raises. Called after each player action.
@@ -64,6 +64,10 @@ public:
 
     // Calculates pots after betting action in a street is finished. Called at the end of each round.
     void calculatePots();
+
+    // Awards all pots to players according to a vector of players sorted by the strength of their hand.
+    // Called AFTER calcualte pots but BEFORE resetting player bets at the end of each round.
+    void awardPots(vector<shared_ptr<Player>>& sortedPlayers);
 
     // Resets recent bets and dead money to 0. Called at the end of each round.
     void resetPlayerBets();

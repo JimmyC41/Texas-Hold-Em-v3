@@ -126,12 +126,12 @@ void GameController::startStreet(Street newStreet) {
         // Update the pot manager after action
         ActionType playerActionType = playerAction->getActionType();
         if (playerActionType == BET || playerActionType == RAISE || playerActionType == CALL || playerActionType == BLIND) {
-            potManager.addPlayerBet(curPlayer, playerAction->getAmount());
+            potManager.addPlayerBet(curPlayer, playerAction->getAmount(), false);
         } else if (playerActionType == FOLD) {
             potManager.foldPlayerBet(curPlayer);
             turnManager.addPlayerNotInHand(curPlayer);
         } else if (playerActionType == ALL_IN_BET || playerActionType == ALL_IN_CALL) {
-            potManager.addPlayerBet(curPlayer, playerAction->getAmount());
+            potManager.addPlayerBet(curPlayer, playerAction->getAmount(), true);
             turnManager.addPlayerNotInHand(curPlayer);
         }
 
@@ -222,14 +222,14 @@ void GameController::setupStreet(Street newStreet) {
         auto postSmallBlind = make_shared<BlindAction>(smallBlindPlayer, smallBlind);
         
         actionManager.addActionToTimeline(postSmallBlind);
-        potManager.addPlayerBet(smallBlindPlayer, smallBlind);
+        potManager.addPlayerBet(smallBlindPlayer, smallBlind, false);
 
         // Big blind
         auto bigBlindPlayer = turnManager.getPlayerToAct();
         auto postBigBlind = make_shared<BlindAction>(bigBlindPlayer, bigBlind);
 
         actionManager.addActionToTimeline(postBigBlind);
-        potManager.addPlayerBet(bigBlindPlayer, bigBlind);
+        potManager.addPlayerBet(bigBlindPlayer, bigBlind, false);
 
     } else if (newStreet == FLOP) {
         dealBoard(3);

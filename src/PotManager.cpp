@@ -143,6 +143,22 @@ void PotManager::calculatePots() {
     }
 }
 
+void PotManager::awardPots(vector<shared_ptr<Player>>& sortedPlayers) {
+    for (const Pot& curPot: pots) {
+        // Get all players eligible for the current pot
+        const auto& eligiblePlayers = curPot.getEligiblePlayers();
+
+        // Find the highest-ranking eligible player and increment chip count
+        for (const auto& player : sortedPlayers) {
+            if (find(eligiblePlayers.begin(), eligiblePlayers.end(), player) != eligiblePlayers.end()) {
+                player->addChips(curPot.getChips());
+                cout << "$$$: Added " << curPot.getChips() << " to " << player->getName() << " chip count!" << endl;
+                break;
+            }
+        }
+    }
+}
+
 void PotManager::resetPlayerBets() {
     for (auto& [player, betInfo] : playerBets) {
         playerBets[player].betSize = 0;
