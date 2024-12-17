@@ -51,19 +51,27 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
     int numAllInCall = 0;
     int numAllInBet = 0;
     int numPlayersNotInHand = 0;
-    bool preFlop = false;
+    bool isBlind = false;
 
     // Iterate through the action timeline
     for (const auto& actionPtr : actionTimeline) {
         ActionType actionType = actionPtr->getActionType();
 
         // If we encounter a 'new' active bet, reset the number of calls
-        if (actionType == BLIND || actionType == BET || actionType == RAISE || actionType == ALL_IN_BET) {
+        if (actionType == BET || actionType == RAISE || actionType == ALL_IN_BET) {
             numCalls = 0;
+            isBlind = false;
 
             if (numAllInBet > 0) numPlayersNotInHand = numAllInBet;
             if (actionType == ALL_IN_BET) numAllInBet++;
-            if (actionType == BLIND) preFlop = true;
+        }
+
+        // A blind functions like a bet, except we need an additional 'call' (a check) from the blind
+        else if (actionType == BLIND) {
+            numCalls = 0;
+            isBlind = true;
+
+            if (numAllInBet > 0) numPlayersNotInHand = numAllInBet;
         }
 
         // If a player calls an active bet, increment the number of calls
@@ -93,7 +101,7 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
         if (numChecks == numPlayers) return true;
 
         // Preflop, n players need to 'call' the active bet for a street to be complete (the BB check functions as a 'call')
-        if (preFlop == true) {
+        if (isBlind == true) {
             if (numCalls == (numPlayers - numPlayersNotInHand)) return true;
         } else {
             if (numCalls == (numPlayers - numPlayersNotInHand - 1)) return true;

@@ -21,12 +21,12 @@ public:
     ClientManager(size_t bigBlind);
 
     // Queries the client for a valid client action object to be processed by the action manager
-    ClientAction getClientAction(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions, size_t initialChips, size_t bigStackAmongOthers);
+    ClientAction getClientAction(bool isPreFlop, shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions, size_t initialChips, size_t bigStackAmongOthers);
 private:
     size_t bigBlind;
 
     // Print possible actions for the player to act
-    void displayPossibleActions(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions);
+    void displayPossibleActions(shared_ptr<Player>& playerToAct, bool isBigBlind, vector<PossibleAction>& possibleActions);
 
     // Print a given client action object
     void displayClientAction(const ClientAction& clientAction);

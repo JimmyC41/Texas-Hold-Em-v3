@@ -6,12 +6,15 @@
 
 ClientManager::ClientManager(size_t bigBlind) : bigBlind(bigBlind) {}
 
-ClientAction ClientManager::getClientAction(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions, size_t initialChips, size_t bigStackChips) {
-    displayPossibleActions(playerToAct, possibleActions);
+ClientAction ClientManager::getClientAction(bool isPreFlop, shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions, size_t initialChips, size_t bigStackChips) {
+    // If betting street is preflop and the player to act is big blind, the 'check' is a call of the active bet.
+    // This mustbe reflected when displaying possible actions, and also fetching of the action type.
+    bool isBigBlind = false;
+    if (playerToAct->getPosition() == Position::BIG_BLIND && isPreFlop) isBigBlind = true;
+    
+    displayPossibleActions(playerToAct, isBigBlind, possibleActions);
 
     // Fetch action type from client
-    bool isBigBlind = false;
-    if (playerToAct->getPosition() == Position::BIG_BLIND) isBigBlind = true;
     ActionType clientActionType = getClientActionType(possibleActions, isBigBlind);
 
     // Fetch bet amount from client
@@ -94,10 +97,8 @@ size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, Action
 
 // Helper Functions
 
-void ClientManager::displayPossibleActions(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions) {
+void ClientManager::displayPossibleActions(shared_ptr<Player>& playerToAct, bool isBigBlind, vector<PossibleAction>& possibleActions) {
     cout << "Displaying possible actions for " << playerToAct->getName() << ":" << endl;
-    bool isBigBlind = false;
-    if (playerToAct->getPosition() == Position::BIG_BLIND) isBigBlind = true;
     ActionManager::displayPossibleActions(possibleActions, isBigBlind);
 }
 
@@ -112,8 +113,8 @@ ActionType ClientManager::strToActionType(string& str, bool isBigBlind) {
     transform(str.begin(), str.end(), str.begin(), ::tolower);
 
     if (str == "bet") return ActionType::BET;
-    else if (str == "check" && !isBigBlind) return ActionType::CHECK;
     else if (str == "check" && isBigBlind) return ActionType::CALL;
+    else if (str == "check" && !isBigBlind) return ActionType::CHECK;
     else if (str == "fold") return ActionType::FOLD;
     else if (str == "call") return ActionType::CALL;
     else if (str == "raise") return ActionType::RAISE;

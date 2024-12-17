@@ -115,7 +115,9 @@ void GameController::startStreet(Street newStreet) {
         vector<PossibleAction> possibleActions = actionManager.getAllowedActionTypes(playerCanRaise);
 
         // Request client action given possible actions
-        ClientAction clientAction = clientManager.getClientAction(curPlayer, possibleActions, initialChips, bigStackAmongOthers);
+        bool isPreFlop = false;
+        if (newStreet == Street::PRE_FLOP) isPreFlop = true;
+        ClientAction clientAction = clientManager.getClientAction(isPreFlop, curPlayer, possibleActions, initialChips, bigStackAmongOthers);
 
         // Add action to the action timeline
         shared_ptr<Action> playerAction = createAction(clientAction, initialChips);
