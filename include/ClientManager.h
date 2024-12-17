@@ -32,14 +32,14 @@ private:
     void displayClientAction(const ClientAction& clientAction);
 
     // Fetch the action type from the client (stdin)
-    ActionType getClientActionType(vector<PossibleAction>& possibleActions);
+    ActionType getClientActionType(vector<PossibleAction>& possibleActions, bool isBigBlind);
 
     // Fetch the bet amount from the client (stdin)
     size_t getClientBetAmount(shared_ptr<Player>& playerToAct, ActionType clientAction, 
                                 vector<PossibleAction>& possibleActions, size_t bigBlind, size_t initialChips, size_t bigStackAmongOthers);
 
     // Convert string (client input) into an ActionType
-    ActionType strToActionType(string& string);
+    ActionType strToActionType(string& string, bool isBigBlind);
 
     // Checks if the client chosen action is valid given a possible actions array
     bool isValidAction(vector<PossibleAction>& possibleActions, ActionType chosenAction);

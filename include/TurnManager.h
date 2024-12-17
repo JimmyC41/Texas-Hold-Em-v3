@@ -100,6 +100,9 @@ public:
     // Prints the players in hand
     void displayPlayersInHand() const;
 
+    // Prints the chip count of each player after each round
+    void displayPlayerChipCount() const;
+
     // Fetches the vector of players in the hand
     vector<shared_ptr<Player>>& getPlayersInHand();
 

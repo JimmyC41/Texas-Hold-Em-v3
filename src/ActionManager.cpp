@@ -51,6 +51,7 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
     int numAllInCall = 0;
     int numAllInBet = 0;
     int numPlayersNotInHand = 0;
+    bool preFlop = false;
 
     // Iterate through the action timeline
     for (const auto& actionPtr : actionTimeline) {
@@ -62,6 +63,7 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
 
             if (numAllInBet > 0) numPlayersNotInHand = numAllInBet;
             if (actionType == ALL_IN_BET) numAllInBet++;
+            if (actionType == BLIND) preFlop = true;
         }
 
         // If a player calls an active bet, increment the number of calls
@@ -87,10 +89,14 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
 
         // cout << "numCalls: " << numCalls << " | numPlayersNotInHand: " << numPlayersNotInHand << endl;
 
-        // Betting is over when all players have called, folded, or are all in to the current bet
-        // or when all players have checked
-        if (numCalls == (numPlayers - 1 - numPlayersNotInHand) || numChecks == numPlayers) {
-            return true;
+        // If all players have checked, betting street is complete
+        if (numChecks == numPlayers) return true;
+
+        // Preflop, n players need to 'call' the active bet for a street to be complete (the BB check functions as a 'call')
+        if (preFlop == true) {
+            if (numCalls == (numPlayers - numPlayersNotInHand)) return true;
+        } else {
+            if (numCalls == (numPlayers - numPlayersNotInHand - 1)) return true;
         }
     }
 
@@ -126,7 +132,7 @@ ActionType ActionManager::getLastAction() const {
     throw runtime_error("No valid action found!");
 }
 
-void ActionManager::displayPossibleActions(vector<PossibleAction>& actions) {
+void ActionManager::displayPossibleActions(vector<PossibleAction>& actions, bool isBigBlind) {
     for (size_t i = 0; i < actions.size(); ++i) {
         PossibleAction action = actions[i];
 
@@ -135,7 +141,11 @@ void ActionManager::displayPossibleActions(vector<PossibleAction>& actions) {
         } else if (action.type == BET) {
             cout << "   Option: Bet" << endl;
         } else if (action.type == CALL) {
-            cout << "   Option: Call (amount: " << action.amount << ")" << endl;
+            if (isBigBlind) {
+                cout << "   Option: Check (amount: " << action.amount << ")" << endl;
+            } else {
+                cout << "   Option: Call (amount: " << action.amount << ")" << endl;
+            }
         } else if (action.type == RAISE) {
             cout << "   Option: Raise (amount must exceed the current bet of: " << action.amount << ")" << endl;
         } else if (action.type == FOLD) {

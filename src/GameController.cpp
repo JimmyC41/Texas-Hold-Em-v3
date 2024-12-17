@@ -134,7 +134,8 @@ void GameController::startStreet(Street newStreet) {
         }
 
         // cout << curPlayer->getName() << " chip count: " << curPlayer->getChips() << endl;
-        potManager.displayPlayerBets();
+        // potManager.displayPlayerBets();
+        turnManager.displayPlayerChipCount();
     }
 
     // Clear action timeline

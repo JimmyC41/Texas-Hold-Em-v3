@@ -10,7 +10,9 @@ ClientAction ClientManager::getClientAction(shared_ptr<Player>& playerToAct, vec
     displayPossibleActions(playerToAct, possibleActions);
 
     // Fetch action type from client
-    ActionType clientActionType = getClientActionType(possibleActions);
+    bool isBigBlind = false;
+    if (playerToAct->getPosition() == Position::BIG_BLIND) isBigBlind = true;
+    ActionType clientActionType = getClientActionType(possibleActions, isBigBlind);
 
     // Fetch bet amount from client
     size_t amount = getClientBetAmount(playerToAct, clientActionType, possibleActions, bigBlind, initialChips, bigStackChips);
@@ -24,7 +26,7 @@ ClientAction ClientManager::getClientAction(shared_ptr<Player>& playerToAct, vec
 
 // Client Helper Function
 
-ActionType ClientManager::getClientActionType(vector<PossibleAction>& possibleActions) {
+ActionType ClientManager::getClientActionType(vector<PossibleAction>& possibleActions, bool isBigBlind) {
     string actionStr;
     ActionType actionType;
 
@@ -32,7 +34,7 @@ ActionType ClientManager::getClientActionType(vector<PossibleAction>& possibleAc
         cout << "Please enter a valid action: ";
         getline(cin, actionStr);
 
-        actionType = strToActionType(actionStr);
+        actionType = strToActionType(actionStr, isBigBlind);
         if (isValidAction(possibleActions, actionType)) {
             break;
         }
@@ -47,7 +49,7 @@ size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, Action
     }
 
     size_t maxBet = min(initialChips, bigStackAmongOthers);
-    cout << "initial, bigStackOthers, maxBet is: " << initialChips << bigStackAmongOthers << maxBet << endl;
+    // cout << "initial, bigStackOthers, maxBet is: " << initialChips << bigStackAmongOthers << maxBet << endl;
 
     // Case 2: Call (Call amount is previous bet amount)
     if (clientAction == ActionType::CALL) {
@@ -66,6 +68,9 @@ size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, Action
 
         // Edge case where a player is all in to raise (no choice)
         if (standardRaiseSize >= maxBet) return maxBet;
+        else {
+            minBet = standardRaiseSize;
+        }
     }
 
     // Fetch client bet amount from stdin
@@ -91,7 +96,9 @@ size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, Action
 
 void ClientManager::displayPossibleActions(shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions) {
     cout << "Displaying possible actions for " << playerToAct->getName() << ":" << endl;
-    ActionManager::displayPossibleActions(possibleActions);
+    bool isBigBlind = false;
+    if (playerToAct->getPosition() == Position::BIG_BLIND) isBigBlind = true;
+    ActionManager::displayPossibleActions(possibleActions, isBigBlind);
 }
 
 void ClientManager::displayClientAction(const ClientAction& clientAction) {
@@ -101,15 +108,16 @@ void ClientManager::displayClientAction(const ClientAction& clientAction) {
     cout << "   Amount: " << clientAction.amount << endl;
 }
 
-ActionType ClientManager::strToActionType(string& str) {
+ActionType ClientManager::strToActionType(string& str, bool isBigBlind) {
     transform(str.begin(), str.end(), str.begin(), ::tolower);
 
     if (str == "bet") return ActionType::BET;
-    if (str == "check") return ActionType::CHECK;
-    if (str == "fold") return ActionType::FOLD;
-    if (str == "call") return ActionType::CALL;
-    if (str == "raise") return ActionType::RAISE;
-    if (str == "blind") return ActionType::BLIND;
+    else if (str == "check" && !isBigBlind) return ActionType::CHECK;
+    else if (str == "check" && isBigBlind) return ActionType::CALL;
+    else if (str == "fold") return ActionType::FOLD;
+    else if (str == "call") return ActionType::CALL;
+    else if (str == "raise") return ActionType::RAISE;
+    else if (str == "blind") return ActionType::BLIND;
     else return ActionType::INVALID_ACTION;
 }
 

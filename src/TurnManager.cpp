@@ -122,6 +122,18 @@ void TurnManager::displayPlayersInHand() const {
     cout << "---------------FINISHED---------------" << endl;
 }
 
+void TurnManager::displayPlayerChipCount() const {
+    cout << "Players not in hand:" << endl;
+    for (auto& player : playersNotInHand) {
+        cout << "   " << player->getName() << " has " << player->getChips() << "chips" << endl;
+    }
+
+    cout << "Players in the hand:" << endl;
+    for (auto& player : playersInHand) {
+        cout << "   " << player->getName() << "has " << player->getChips() << "chips" << endl;
+    }
+}
+
 // Helper Functions
 
 shared_ptr<Player> TurnManager::getPlayerWithPosition(Position position) const {
