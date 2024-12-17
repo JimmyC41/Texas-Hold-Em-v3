@@ -19,40 +19,40 @@ protected:
 
 TEST_F(ClientManagerTest, CheckOption) {
     std::vector<PossibleAction> possibleActions = {{CHECK, 0}, {BET, 0}, {FOLD, 0}};
-    ClientAction action = clientManager.getClientAction(player, possibleActions, 1000);
+    ClientAction action = clientManager.getClientAction(true, player, possibleActions, 1000, 1000);
 }
 
 TEST_F(ClientManagerTest, Bet) {
     std::vector<PossibleAction> possibleActions = {{CHECK, 0}, {BET, 0}, {FOLD, 0}};
-    ClientAction action = clientManager.getClientAction(player, possibleActions, 1000);
+    ClientAction action = clientManager.getClientAction(true, player, possibleActions, 1000, 1000);
 }
 
 TEST_F(ClientManagerTest, BetAllIn) {
     std::vector<PossibleAction> possibleActions = {{CHECK, 0}, {BET, 0}, {FOLD, 0}};
-    ClientAction action = clientManager.getClientAction(player, possibleActions, 1000);
+    ClientAction action = clientManager.getClientAction(true, player, possibleActions, 1000, 1000);
 }
 
 TEST_F(ClientManagerTest, FoldOption) {
     std::vector<PossibleAction> possibleActions = {{CALL, 100}, {RAISE, 100}, {FOLD, 0}};
-    ClientAction action = clientManager.getClientAction(player, possibleActions, 1000);
+    ClientAction action = clientManager.getClientAction(true, player, possibleActions, 1000, 1000);
 }
 
 TEST_F(ClientManagerTest, CallOption) {
     std::vector<PossibleAction> possibleActions = {{CALL, 500}, {RAISE, 500}, {FOLD, 0}};
-    ClientAction action = clientManager.getClientAction(player, possibleActions, 1000);
+    ClientAction action = clientManager.getClientAction(true, player, possibleActions, 1000, 1000);
 }
 
 TEST_F(ClientManagerTest, CallAllIn) {
     std::vector<PossibleAction> possibleActions = {{CALL, 2000}, {RAISE, 2000}, {FOLD, 0}};
-    ClientAction action = clientManager.getClientAction(player, possibleActions, 1000);
+    ClientAction action = clientManager.getClientAction(true, player, possibleActions, 1000, 1000);
 }
 
 TEST_F(ClientManagerTest, RaiseOption) {
     std::vector<PossibleAction> possibleActions = {{CALL, 100}, {RAISE, 100}, {FOLD, 0}}; 
-    ClientAction action = clientManager.getClientAction(player, possibleActions, 1000);
+    ClientAction action = clientManager.getClientAction(true, player, possibleActions, 1000, 1000);
 }
 
 TEST_F(ClientManagerTest, RaiseAllIn) {
     std::vector<PossibleAction> possibleActions = {{CALL, 750}, {RAISE, 750}, {FOLD, 0}}; 
-    ClientAction action = clientManager.getClientAction(player, possibleActions, 1000);
+    ClientAction action = clientManager.getClientAction(true, player, possibleActions, 1000, 1000);
 }

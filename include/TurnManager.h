@@ -2,6 +2,7 @@
 #define TURN_MANAGER_H
 
 #include "Player.h"
+#include "PotManager.h"
 #include <vector>
 using namespace std;
 
@@ -17,6 +18,9 @@ private:
 
     shared_ptr<Player> playerWithButton;
     shared_ptr<Player> playerToAct;
+
+    // Chip count of biggest stack of players that are in the hand
+    size_t bigStackChipCount;
 
     // Helper function to return a player with a given position (if the player exists)
     shared_ptr<Player> getPlayerWithPosition(Position position) const;
@@ -96,8 +100,14 @@ public:
     // Prints the players in hand
     void displayPlayersInHand() const;
 
+    // Prints the chip count of each player after each round
+    void displayPlayerChipCount() const;
+
     // Fetches the vector of players in the hand
     vector<shared_ptr<Player>>& getPlayersInHand();
+
+    // Returns the chip count of the big stack that is in the hand
+    size_t getBigStackChipCount();
 };
 
 #endif // TURN_MANAGER_H

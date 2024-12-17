@@ -72,6 +72,8 @@ PotManager::PotManager() : deadChips(0) {
 void PotManager::addPlayerBet(const shared_ptr<Player>& player, size_t bet, bool isAllIn) {
     auto it = playerBets.find(player);
 
+    // cout << "Adding a player bet of " << bet << " for " << player->getName() << endl;
+
     // Add player and their bet if they don't exist
     if (it == playerBets.end()) {
         playerBets[player] = {bet, isAllIn};
@@ -154,6 +156,22 @@ const Pot& PotManager::getPot(int index) const {
 
 int PotManager::getNumPots() const {
     return pots.size();
+}
+
+size_t PotManager::getBigStackAmongOthers(const shared_ptr<Player>& avoidPlayer, const vector<shared_ptr<Player>>& playersInHand) {
+    size_t maxStack = 0;
+    
+    for (auto& player : playersInHand) {
+        if (player == avoidPlayer) continue;
+        size_t playerStack = getRecentBet(player) + player->getChips();
+        if (playerStack > maxStack) maxStack = playerStack;
+    }
+
+    return maxStack;
+}
+
+size_t PotManager::getInitialChips(const shared_ptr<Player>& player) {
+    return player->getChips() + getRecentBet(player);
 }
 
 

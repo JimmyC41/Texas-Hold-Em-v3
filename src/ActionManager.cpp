@@ -12,11 +12,9 @@ void ActionManager::clearActionTimeline() {
 
 void ActionManager::addActionToTimeline(shared_ptr<Action> action) {
     actionTimeline.push_back(action);
-
     ActionType actiontype = action->getActionType();
 
     if (actiontype == BLIND || actiontype == BET || actiontype == RAISE || actiontype == ALL_IN_BET) {
-
         // Update the active bet if the bet/raise is greater than the current bet to be matched
         if (action->getAmount() > activeBet) {
             activeBet = action->getAmount();
@@ -24,7 +22,7 @@ void ActionManager::addActionToTimeline(shared_ptr<Action> action) {
     }
 }
 
-vector<PossibleAction> ActionManager::getAllowedActionTypes() {
+vector<PossibleAction> ActionManager::getAllowedActionTypes(bool playerCanRaise) {
     // No player has acted. Player to act can check or bet.
     if (actionTimeline.empty()) return {{CHECK, 0}, {BET, activeBet}, {FOLD, 0}};
 
@@ -33,40 +31,47 @@ vector<PossibleAction> ActionManager::getAllowedActionTypes() {
 
     if (lastAction == CHECK) {
         return {{CHECK, 0}, {BET, activeBet}, {FOLD, 0}};
-    }
-    else if (lastAction == BLIND || lastAction == BET || lastAction == RAISE) {
-        return {{CALL, activeBet}, {RAISE, activeBet}, {FOLD, 0}};
-    }
-    else {
+    } else if (lastAction == BLIND || lastAction == BET || lastAction == RAISE || lastAction == ALL_IN_BET || lastAction == ALL_IN_CALL) {
+        if (playerCanRaise) {
+            return {{CALL, activeBet}, {RAISE, activeBet}, {FOLD, 0}};
+        } else {
+            return {{CALL, activeBet}, {FOLD, 0}};
+        }
+    } else {
         // All players before have voluntarily folded.
         return {{CHECK, 0}, {BET, activeBet}, {FOLD, 0}};
     }
 }
 
 bool ActionManager::isActionsFinished(int numPlayers) const {
-
     // If there are n players and a player initiates a bet/raise, n-1 players must call/fold
+    int activeBet = 0;
     int numCalls = 0;
     int numChecks = 0;
-
-    // numBets is subtracted from num of players to see how many calls are reqiured for betting to be complete
-    // Incremented when there is a new active bet, or when a player goes all in
-    int numBets = 0;
+    int numAllInCall = 0;
+    int numAllInBet = 0;
+    int numPlayersNotInHand = 0;
+    bool isBlind = false;
 
     // Iterate through the action timeline
     for (const auto& actionPtr : actionTimeline) {
         ActionType actionType = actionPtr->getActionType();
 
         // If we encounter a 'new' active bet, reset the number of calls
-        if (actionType == BLIND || actionType == BET || actionType == RAISE) {
+        if (actionType == BET || actionType == RAISE || actionType == ALL_IN_BET) {
             numCalls = 0;
-            numBets = 1;
+            isBlind = false;
+
+            if (numAllInBet > 0) numPlayersNotInHand = numAllInBet;
+            if (actionType == ALL_IN_BET) numAllInBet++;
         }
 
-        // If we encounter all in bet, reset the number of calls and increment number of bets
-        else if (actionType == ALL_IN_BET) {
+        // A blind functions like a bet, except we need an additional 'call' (a check) from the blind
+        else if (actionType == BLIND) {
             numCalls = 0;
-            numBets++;
+            isBlind = true;
+
+            if (numAllInBet > 0) numPlayersNotInHand = numAllInBet;
         }
 
         // If a player calls an active bet, increment the number of calls
@@ -76,7 +81,8 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
 
         // If a player calls all in, increment number of bets
         else if (actionType == ALL_IN_CALL) {
-            numBets++;
+            numAllInCall++;
+            numPlayersNotInHand += numAllInCall;
         }
 
         // If a player folds, decrement number of active players
@@ -89,10 +95,16 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
             numChecks++;
         }
 
-        // Betting is over when all players have called, folded, or are all in to the current bet
-        // or when all players have checked
-        if (numCalls == (numPlayers - numBets) || numChecks == numPlayers) {
-            return true;
+        // cout << "numCalls: " << numCalls << " | numPlayersNotInHand: " << numPlayersNotInHand << endl;
+
+        // If all players have checked, betting street is complete
+        if (numChecks == numPlayers) return true;
+
+        // Preflop, n players need to 'call' the active bet for a street to be complete (the BB check functions as a 'call')
+        if (isBlind == true) {
+            if (numCalls == (numPlayers - numPlayersNotInHand)) return true;
+        } else {
+            if (numCalls == (numPlayers - numPlayersNotInHand - 1)) return true;
         }
     }
 
@@ -128,7 +140,7 @@ ActionType ActionManager::getLastAction() const {
     throw runtime_error("No valid action found!");
 }
 
-void ActionManager::displayPossibleActions(vector<PossibleAction>& actions) {
+void ActionManager::displayPossibleActions(vector<PossibleAction>& actions, bool isBigBlind) {
     for (size_t i = 0; i < actions.size(); ++i) {
         PossibleAction action = actions[i];
 
@@ -137,7 +149,11 @@ void ActionManager::displayPossibleActions(vector<PossibleAction>& actions) {
         } else if (action.type == BET) {
             cout << "   Option: Bet" << endl;
         } else if (action.type == CALL) {
-            cout << "   Option: Call (amount: " << action.amount << ")" << endl;
+            if (isBigBlind) {
+                cout << "   Option: Check (amount: " << action.amount << ")" << endl;
+            } else {
+                cout << "   Option: Call (amount: " << action.amount << ")" << endl;
+            }
         } else if (action.type == RAISE) {
             cout << "   Option: Raise (amount must exceed the current bet of: " << action.amount << ")" << endl;
         } else if (action.type == FOLD) {

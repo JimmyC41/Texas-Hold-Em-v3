@@ -16,15 +16,15 @@ protected:
     shared_ptr<Player> p9;
 
     TurnTest() {
-        p1 = make_shared<Player>("P1", Position::SMALL_BLIND, 500);
-        p2 = make_shared<Player>("P2", Position::BIG_BLIND, 500);
-        p3 = make_shared<Player>("P3", Position::UTG, 500);
-        p4 = make_shared<Player>("P4", Position::UTG_1, 500);
-        p5 = make_shared<Player>("P5", Position::MIDDLE, 500);
-        p6 = make_shared<Player>("P6", Position::LOJACK, 500);
-        p7 = make_shared<Player>("P7", Position::HIJACK, 500);
-        p8 = make_shared<Player>("P8", Position::CUT_OFF, 500);
-        p9 = make_shared<Player>("P9", Position::DEALER, 500);
+        p1 = make_shared<Player>("P1", Position::SMALL_BLIND, 10);
+        p2 = make_shared<Player>("P2", Position::BIG_BLIND, 20);
+        p3 = make_shared<Player>("P3", Position::UTG, 30);
+        p4 = make_shared<Player>("P4", Position::UTG_1, 40);
+        p5 = make_shared<Player>("P5", Position::MIDDLE, 50);
+        p6 = make_shared<Player>("P6", Position::LOJACK, 60);
+        p7 = make_shared<Player>("P7", Position::HIJACK, 70);
+        p8 = make_shared<Player>("P8", Position::CUT_OFF, 80);
+        p9 = make_shared<Player>("P9", Position::DEALER, 90);
     }
 
     void TearDown() override {
@@ -201,4 +201,15 @@ TEST_F(TurnTest, RemoveBlinds) {
 
     turnManager.setSmallBlindToAct();
     ASSERT_EQ(turnManager.getPlayerToAct(), p3);
+}
+
+TEST_F(TurnTest, BigStackTest) {
+    addPlayersToHand({p1, p2, p3, p4});
+    ASSERT_EQ(turnManager.getBigStackChipCount(), 40);
+
+    addPlayersToHand({p5});
+    ASSERT_EQ(turnManager.getBigStackChipCount(), 50);
+
+    addPlayersToHand({p6, p7, p8});
+    ASSERT_EQ(turnManager.getBigStackChipCount(), 80);
 }
