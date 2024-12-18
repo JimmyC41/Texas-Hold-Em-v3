@@ -1,17 +1,16 @@
 #ifndef HAND_EVALUATOR
 #define HAND_EVALUATOR
 
-#include "Player.h"
 #include "Card.h"
 #include <array>
 #include <iostream>
 #include <algorithm>
 #include <assert.h>
+#include <iomanip>
+#include "Player.h"
 using namespace std;
 
-const int NUM_SUITS = 4;
 const int MIN_HAND_SIZE = 5;
-const int NUM_VALUES = 13;
 const int MAX_HAND_SIZE = 7;
 
 enum HandCategory {
@@ -29,28 +28,30 @@ enum HandCategory {
 };
 
 const uint64_t straightMasks[] = {
-    0x100F, // 5-high
-    0x1F, // 6-high
-    0x3E, // 7-high
-    0x7C, // 8-high
-    0xF8, // 9-high
-    0x1F0, // 10-high
-    0x3E0, // J-high
-    0x7C0, // Q-high
-    0xF80, // K-high
-    0x1F00 // A-high
+    0x1F00, // A-high
+    0xF80,  // K-high
+    0x7C0,  // Q-high
+    0x3E0,  // J-high
+    0x1F0,  // 10-high
+    0xF8,   // 9-high
+    0x7C,   // 8-high
+    0x3E,   // 7-high
+    0x1F,   // 6-high
+    0x100F  // 5-high
 };
 
 const uint64_t BITMASK_13_BITS = 0x1FFF;
 const uint64_t BITMASK_ACE_STRAIGHT = 0x1F00;
 
 typedef struct PokerHand {
-    uint64_t bitwise;       // 64 bit representation of hand
+    uint64_t bitwise;           // 64 bit representation of hand
     HandCategory category;      // Category of hand (e.g. flush)
     vector<Card> hand;          // Sorted vector of hole and community cards  
     vector<Card> bestFiveCards; // Best 5 card combination
     int handSize;               // Sum of hole and community card count
-};
+
+    PokerHand();
+} PokerHand;
 
 class HandEvaluator {
 private:
@@ -89,19 +90,27 @@ private:
     Value straightMaskToHighCard(uint64_t straightMask);
 
 public:
+    HandEvaluator();
+
+    // Returns the playerHands hashmap
+    unordered_map<shared_ptr<Player>, PokerHand>& getPlayerHandsMap();
+
     // Updates each player's PokerHand in the hashmap
     void addDealtCard(shared_ptr<Player> player, const Card& card);
 
     // Evaluates the hand category and best 5 card combination for each player in the hashmap
     void evaluatePlayerHands();
 
-    // Returns a vector of players sorted by the strength of their hand.
-    // Called when action is finished and pots must be awarded.
-    // Parsed as an argument to the awardPots method in PotManager.
+    // Returns a vector of players sorted by the strength of their hand
+    // Called when action is finished and pots must be awarded
+    // Parsed as an argument to the awardPots method in PotManager
     vector<shared_ptr<Player>> getPlayerHandRanking();
 
     // Clears the playerHands hash map. Called at the end of each round.
-    void resetPlayerHands();
+    void clearPlayerHands();
+
+    // Displays the player hands hash map for debugging purposes
+    void printPlayerHands() const;
 };
 
 #endif // HAND_EVALUATOR

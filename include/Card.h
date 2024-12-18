@@ -5,7 +5,7 @@
 #include <string>
 using namespace std;
 
-const int NUM_SUIT = 4;
+const int NUM_VALUES = 13;
 
 enum class Suit {
     HEARTS = 0,
