@@ -31,7 +31,7 @@ protected:
     }
 
     void TearDown() override {
-        handEvaluator.clearPlayerHands();
+        handEvaluator.clearHandEvaluator();
     }
 
     vector<Card> createDeck() {
@@ -450,7 +450,7 @@ TEST_F(HandEvalTest, FullHouseTie) {
     handEvaluator.evaluatePlayerHands();
 
     // SORT PLAYERS BY HAND AND CHECK IF EXPECTED
-    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.sortPlayersByHandStrength();
+    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.getSortedPlayers();
     vector<shared_ptr<Player>> expectedPlayers = {player1, player2};
     EXPECT_TRUE(isPlayerVectorsEqual(sortedPlayers, expectedPlayers));
 };
@@ -509,7 +509,7 @@ TEST_F(HandEvalTest, FlushTie) {
     handEvaluator.evaluatePlayerHands();
 
     // SORT PLAYERS BY HAND AND CHECK IF EXPECTED
-    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.sortPlayersByHandStrength();
+    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.getSortedPlayers();
     vector<shared_ptr<Player>> expectedPlayers = {player3, player1, player2, player4};
     EXPECT_TRUE(isPlayerVectorsEqual(sortedPlayers, expectedPlayers));
 };
@@ -556,7 +556,7 @@ TEST_F(HandEvalTest, StraightTie) {
     handEvaluator.evaluatePlayerHands();
 
     // SORT PLAYERS BY HAND AND CHECK IF EXPECTED
-    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.sortPlayersByHandStrength();
+    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.getSortedPlayers();
     vector<shared_ptr<Player>> expectedPlayers = {player3, player1, player2};
     EXPECT_TRUE(isPlayerVectorsEqual(sortedPlayers, expectedPlayers));
 };
@@ -591,7 +591,7 @@ TEST_F(HandEvalTest, ThreeOfAKindTie) {
     handEvaluator.evaluatePlayerHands();
 
     // SORT PLAYERS BY HAND AND CHECK IF EXPECTED
-    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.sortPlayersByHandStrength();
+    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.getSortedPlayers();
     vector<shared_ptr<Player>> expectedPlayers = {player2, player1};
     EXPECT_TRUE(isPlayerVectorsEqual(sortedPlayers, expectedPlayers));
 };
@@ -638,7 +638,7 @@ TEST_F(HandEvalTest, TwoPairTie) {
     handEvaluator.evaluatePlayerHands();
 
     // SORT PLAYERS BY HAND AND CHECK IF EXPECTED
-    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.sortPlayersByHandStrength();
+    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.getSortedPlayers();
     vector<shared_ptr<Player>> expectedPlayers = {player1, player2, player3};
     EXPECT_TRUE(isPlayerVectorsEqual(sortedPlayers, expectedPlayers));
 };
@@ -685,7 +685,7 @@ TEST_F(HandEvalTest, OnePairTie) {
     handEvaluator.evaluatePlayerHands();
 
     // SORT PLAYERS BY HAND AND CHECK IF EXPECTED
-    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.sortPlayersByHandStrength();
+    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.getSortedPlayers();
     vector<shared_ptr<Player>> expectedPlayers = {player2, player1, player3};
     EXPECT_TRUE(isPlayerVectorsEqual(sortedPlayers, expectedPlayers));
 };
@@ -712,7 +712,7 @@ TEST_F(HandEvalTest, ComplexHandRankings) {
         {Suit::CLUBS, Value::KING},
         {Suit::CLUBS, Value::QUEEN}
     };
-    vector<Card> cardsToDealPlayer2 = selectCards(deck, StraightFlush);
+    vector<Card> cardsToDealPlayer2 = selectCards(deck, KingHighFlush);
     dealCards(handEvaluator, player2, cardsToDealPlayer2);
 
     vector<pair<Suit, Value>> FourFiveTwoPair = {
@@ -739,19 +739,19 @@ TEST_F(HandEvalTest, ComplexHandRankings) {
     vector<Card> cardsToDealPlayer4 = selectCards(deck, NineHighStraight);
     dealCards(handEvaluator, player4, cardsToDealPlayer4);
 
-    vector<pair<Suit, Value>> AcePairTwoEightKicker = {
+    vector<pair<Suit, Value>> AcePairTwoSevenKicker = {
         {Suit::CLUBS, Value::FOUR},
         {Suit::CLUBS, Value::FIVE},
         {Suit::CLUBS, Value::SIX},
         {Suit::SPADES, Value::SEVEN},
         {Suit::SPADES, Value::ACE},
         {Suit::HEARTS, Value::ACE},
-        {Suit::HEARTS, Value::EIGHT}
+        {Suit::HEARTS, Value::TWO}
     };
-    vector<Card> cardsToDealPlayer5 = selectCards(deck, AcePairTwoEightKicker);
+    vector<Card> cardsToDealPlayer5 = selectCards(deck, AcePairTwoSevenKicker);
     dealCards(handEvaluator, player5, cardsToDealPlayer5);
 
-    vector<pair<Suit, Value>> AcePairTwoTenKicker = {
+    vector<pair<Suit, Value>> AcePairTenKicker = {
         {Suit::CLUBS, Value::FOUR},
         {Suit::CLUBS, Value::FIVE},
         {Suit::CLUBS, Value::SIX},
@@ -760,7 +760,7 @@ TEST_F(HandEvalTest, ComplexHandRankings) {
         {Suit::DIAMONDS, Value::ACE},
         {Suit::HEARTS, Value::TEN}
     };
-    vector<Card> cardsToDealPlayer6 = selectCards(deck, AcePairTwoTenKicker);
+    vector<Card> cardsToDealPlayer6 = selectCards(deck, AcePairTenKicker);
     dealCards(handEvaluator, player6, cardsToDealPlayer6);
 
     vector<pair<Suit, Value>> AceSevenTwoPair = {
@@ -803,7 +803,7 @@ TEST_F(HandEvalTest, ComplexHandRankings) {
     handEvaluator.evaluatePlayerHands();
 
     // SORT PLAYERS BY HAND AND CHECK IF EXPECTED
-    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.sortPlayersByHandStrength();
-    vector<shared_ptr<Player>> expectedPlayers = {player1, player2, player8, player4, player9, player7, player4, player6, player5};
+    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.getSortedPlayers();
+    vector<shared_ptr<Player>> expectedPlayers = {player1, player2, player8, player4, player9, player7, player3, player6, player5};
     EXPECT_TRUE(isPlayerVectorsEqual(sortedPlayers, expectedPlayers));
 }

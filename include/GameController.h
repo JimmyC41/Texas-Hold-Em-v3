@@ -18,6 +18,7 @@
 #include "TurnManager.h"
 #include "Deck.h"
 #include "Board.h"
+#include "HandEvaluator.h"
 
 #include <string>
 #include <memory.h>
@@ -45,6 +46,7 @@ private:
     TurnManager turnManager;
     ClientManager clientManager;
     PotManager potManager;
+    HandEvaluator handEvaluator;
 
     // Helper function to convert Street to string
     string streetToStr(Street street);
@@ -72,11 +74,19 @@ private:
     // Street helper function to check if all players have acted in a given round
     bool isStreetOver(int initialPlayersInhand);
 
+    // Round helper function to populate the hashmap in the hand evaluator class
+    // playerHands maps players to their hole and community cards
+    void populatePlayerHandsMap();
+
+    // Round function to award pots when betting action is complete
+    void evaluateHandsAndAwardPots();
+
     // Round helper function to resets the game state before a new round
     // Called at the end of each round
     // TurnManager: Resets folded players and rotates posiitions
     // ActionManager: Clear the action timeline
     // PotManager: Reset recent bets and dead money
+    // HandEvaluator: Clear the playerHands map
     void setupNewRound();
 
     // Game helper function if there are at least two players in the game

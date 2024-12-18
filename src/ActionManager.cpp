@@ -52,6 +52,7 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
     int numAllInBet = 0;
     int numPlayersNotInHand = 0;
     bool isBlind = false;
+    bool isNewBet = false;
 
     // Iterate through the action timeline
     for (const auto& actionPtr : actionTimeline) {
@@ -60,7 +61,7 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
         // If we encounter a 'new' active bet, reset the number of calls
         if (actionType == BET || actionType == RAISE || actionType == ALL_IN_BET) {
             numCalls = 0;
-            isBlind = false;
+            isNewBet = true;
 
             if (numAllInBet > 0) numPlayersNotInHand = numAllInBet;
             if (actionType == ALL_IN_BET) numAllInBet++;
@@ -69,8 +70,9 @@ bool ActionManager::isActionsFinished(int numPlayers) const {
         // A blind functions like a bet, except we need an additional 'call' (a check) from the blind
         else if (actionType == BLIND) {
             numCalls = 0;
-            isBlind = true;
 
+            if (!isNewBet) isBlind = true;
+            else isBlind = false;
             if (numAllInBet > 0) numPlayersNotInHand = numAllInBet;
         }
 

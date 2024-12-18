@@ -100,10 +100,11 @@ public:
     // Returns a vector of players sorted by the strength of their hand
     // Called when betting action is finished and pots must be awarded
     // Parsed as an argument to the awardPots method in PotManager
-    vector<shared_ptr<Player>> sortPlayersByHandStrength();
+    vector<shared_ptr<Player>> getSortedPlayers();
 
-    // Clears the playerHands hash map. Called at the end of each round.
-    void clearPlayerHands();
+    // Clears the playerHands hash map
+    // Called at the end of each round.
+    void clearHandEvaluator();
 
     // Displays the player hands hash map for testing
     void printPlayerHands() const;

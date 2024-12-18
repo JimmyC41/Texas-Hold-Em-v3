@@ -62,11 +62,12 @@ public:
     // Increments dead money and sets folded player's recent bet to 0.
     void foldPlayerBet(const shared_ptr<Player>& player);
 
-    // Calculates pots after betting action in a street is finished. Called at the end of each round.
+    // Calculates pots after betting action in a street is finished.
+    // Called at the end of each round.
     void calculatePots();
 
     // Awards all pots to players according to a vector of players sorted by the strength of their hand.
-    // Called AFTER calcualte pots but BEFORE resetting player bets at the end of each round.
+    // Called AFTER calculating pots but BEFORE resetting player bets at the end of each round.
     void awardPots(vector<shared_ptr<Player>>& sortedPlayers);
 
     // Resets recent bets and dead money to 0. Called at the end of each round.

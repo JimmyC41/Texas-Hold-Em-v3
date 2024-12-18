@@ -8,7 +8,7 @@ PokerHand::PokerHand() : bitwise(0), handSize(0), category(HandCategory::NONE) {
 
 HandEvaluator::HandEvaluator() : playerHands() {}
 
-vector<shared_ptr<Player>> HandEvaluator::sortPlayersByHandStrength() {
+vector<shared_ptr<Player>> HandEvaluator::getSortedPlayers() {
     vector<shared_ptr<Player>> players;
     for (const auto& entry : playerHands) players.push_back(entry.first);
 
@@ -40,7 +40,15 @@ unordered_map<shared_ptr<Player>, PokerHand>& HandEvaluator::getPlayerHandsMap()
     return playerHands;
 }
 
-void HandEvaluator::clearPlayerHands() {
+void HandEvaluator::clearHandEvaluator() {
+    for (auto& [player, pokerHand] : playerHands) {
+        pokerHand.hand.clear();
+        pokerHand.bestFiveCards.clear();
+        pokerHand.bitwise = 0;
+        pokerHand.category = HandCategory::NONE;
+        pokerHand.handSize = 0;
+    }
+    
     playerHands.clear();
 }
 

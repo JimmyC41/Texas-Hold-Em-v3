@@ -11,7 +11,8 @@ GameController::GameController(size_t smallBlind, size_t bigBlind) :
     actionManager(),
     turnManager(),
     clientManager(bigBlind),
-    potManager() {}
+    potManager(),
+    handEvaluator() {}
 
 // GAME STATE INFORMATION METHODS
 
@@ -158,9 +159,26 @@ void GameController::startRound() {
     startStreet(TURN);
     startStreet(RIVER);
 
+    // No more action! Evaluate hands and award pots
     potManager.displayPots();
+    populatePlayerHandsMap();
+    vector<shared_ptr<Player>> sortedPlayers = handEvaluator.getSortedPlayers();
+    potManager.awardPots(sortedPlayers);
 
     cout << "Round completed!\n" << endl;
+}
+
+void GameController::populatePlayerHandsMap() {
+    for (const auto& player : gamePlayers.getGamePlayers()) {
+        // Add hole cards
+        for (const auto& holeCard : player->getHand()) {
+            handEvaluator.addDealtCard(player, holeCard);
+        }
+        // Add community cards
+        for (const auto& communityCard : board.getCommunityCards()) {
+            handEvaluator.addDealtCard(player, communityCard);
+        }
+    }
 }
 
 // GAME SPECIFIC METHODS
@@ -302,6 +320,9 @@ void GameController::setupNewRound() {
     // New deck and clear board
     dealer.resetDeck();
     dealer.resetBoard();
+
+    // Clear the playerHands map
+    handEvaluator.clearHandEvaluator();
 }
 
 bool GameController::verifyNumPlayers() {

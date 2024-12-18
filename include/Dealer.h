@@ -4,6 +4,7 @@
 #include "Deck.h"
 #include "Player.h"
 #include "Board.h"
+#include "HandEvaluator.h"
 #include <vector>
 using namespace std;
 
