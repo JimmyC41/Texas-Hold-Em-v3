@@ -8,8 +8,15 @@ PokerHand::PokerHand() : bitwise(0), handSize(0), category(HandCategory::NONE) {
 
 HandEvaluator::HandEvaluator() : playerHands() {}
 
-unordered_map<shared_ptr<Player>, PokerHand>& HandEvaluator::getPlayerHandsMap() {
-    return playerHands;
+vector<shared_ptr<Player>> HandEvaluator::sortPlayersByHandStrength() {
+    vector<shared_ptr<Player>> players;
+    for (const auto& entry : playerHands) players.push_back(entry.first);
+
+    sort(players.begin(), players.end(), [this](const shared_ptr<Player>& a, const shared_ptr<Player>& b) {
+        return compareHands(playerHands.at(a), playerHands.at(b));
+    });
+
+    return players;
 }
 
 void HandEvaluator::addDealtCard(shared_ptr<Player> player, const Card& card) {
@@ -29,20 +36,34 @@ void HandEvaluator::addDealtCard(shared_ptr<Player> player, const Card& card) {
     hand.bitwise |= card.getBitMask();
 }
 
+unordered_map<shared_ptr<Player>, PokerHand>& HandEvaluator::getPlayerHandsMap() {
+    return playerHands;
+}
+
+void HandEvaluator::clearPlayerHands() {
+    playerHands.clear();
+}
+
 void HandEvaluator::evaluatePlayerHands() {
     for (auto& [player, pokerHand] : playerHands) {
         evaluateHand(pokerHand);
     }
 }
 
-// TO DO..
-vector<shared_ptr<Player>> HandEvaluator::getPlayerHandRanking() {
-    vector<shared_ptr<Player>> sortedPlayers;
-    return sortedPlayers;
-}
+bool HandEvaluator::compareHands(const PokerHand& handA, const PokerHand& handB) {
+    // Compare by hand category first (higher is stronger)
+    if (handA.category != handB.category) {
+        return handA.category > handB.category;
+    }
 
-void HandEvaluator::clearPlayerHands() {
-    playerHands.clear();
+    // Compare best five cards lexicographically
+    for (size_t i = 0; i < handA.bestFiveCards.size(); ++i) {
+        if (handA.bestFiveCards[i].getValue() != handB.bestFiveCards[i].getValue()) {
+            return handA.bestFiveCards[i].getValue() > handB.bestFiveCards[i].getValue();
+        }
+    }
+
+    return false;
 }
 
 void HandEvaluator::evaluateHand(PokerHand& hand) {

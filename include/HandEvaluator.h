@@ -58,11 +58,13 @@ private:
     // Hash map which keeps track of each player's hand (best 5 cards)
     unordered_map<shared_ptr<Player>, PokerHand> playerHands;
 
-    // Evaluates category and bestFiveCards for a given hand
+    // Helper method to compare strengths of two hands
+    bool compareHands(const PokerHand& handA, const PokerHand& handB);
+
+    // Evaluates category and bestFiveCards for a given player's hand
     void evaluateHand(PokerHand& hand);
 
-    // Helper methods for hand evaluation
-    // Sets hand category and calls helper methods below
+    // Helper methods to categorise hands using bitwise operations
     bool isRoyalFlush(PokerHand& hand);
     bool isStraightFlush(PokerHand& hand);
     bool isFullHouse(PokerHand& hand);
@@ -72,7 +74,7 @@ private:
     bool isTwoPair(PokerHand& hand);
     bool isHighCard(PokerHand& hand);
 
-    // Helper methods to find the best 5 card combination
+    // Helper methods to find the best 5 card combination given the hand category
     void findStraight(PokerHand& hand, Value highCard, bool isFlush, Suit flushSuit);
     void findFourOfAKind(PokerHand& hand, Value quads);
     void findFullHouse(PokerHand& hand, Value trips, Value pair);
@@ -82,7 +84,7 @@ private:
     void findOnePair(PokerHand& hand, Value pair);
     void findHighCard(PokerHand& hand);
 
-    // Helper methods for bitwise operations (used to categorise hands)
+    // Helper methods for bitwise operations
     uint64_t getAllSuitsMask(uint64_t hand);
     uint64_t getSuitMask(uint64_t hand, int suit);
     int countSetBits(uint64_t mask);
@@ -92,25 +94,26 @@ private:
 public:
     HandEvaluator();
 
-    // Returns the playerHands hashmap
-    unordered_map<shared_ptr<Player>, PokerHand>& getPlayerHandsMap();
-
     // Updates each player's PokerHand in the hashmap
     void addDealtCard(shared_ptr<Player> player, const Card& card);
 
-    // Evaluates the hand category and best 5 card combination for each player in the hashmap
-    void evaluatePlayerHands();
-
     // Returns a vector of players sorted by the strength of their hand
-    // Called when action is finished and pots must be awarded
+    // Called when betting action is finished and pots must be awarded
     // Parsed as an argument to the awardPots method in PotManager
-    vector<shared_ptr<Player>> getPlayerHandRanking();
+    vector<shared_ptr<Player>> sortPlayersByHandStrength();
 
     // Clears the playerHands hash map. Called at the end of each round.
     void clearPlayerHands();
 
-    // Displays the player hands hash map for debugging purposes
+    // Displays the player hands hash map for testing
     void printPlayerHands() const;
+
+    // Evaluates each player's hand for testing
+    void evaluatePlayerHands();
+
+    // Fetches the playerHands hashmap for testing
+    unordered_map<shared_ptr<Player>, PokerHand>& getPlayerHandsMap();
+
 };
 
 #endif // HAND_EVALUATOR
