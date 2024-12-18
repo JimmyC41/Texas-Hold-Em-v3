@@ -5,10 +5,14 @@
 #include "Card.h"
 #include <array>
 #include <iostream>
+#include <algorithm>
+#include <assert.h>
 using namespace std;
 
+const int NUM_SUITS = 4;
 const int MIN_HAND_SIZE = 5;
 const int NUM_VALUES = 13;
+const int MAX_HAND_SIZE = 7;
 
 enum HandCategory {
     NONE, // In Preflop, hand size is less than 5
@@ -41,10 +45,11 @@ const uint64_t BITMASK_13_BITS = 0x1FFF;
 const uint64_t BITMASK_ACE_STRAIGHT = 0x1F00;
 
 typedef struct PokerHand {
-    uint64_t handBitMask;
-    HandCategory category;
-    vector<Card> bestHand;
-    int handSize;
+    uint64_t bitwise;       // 64 bit representation of hand
+    HandCategory category;      // Category of hand (e.g. flush)
+    vector<Card> hand;          // Sorted vector of hole and community cards  
+    vector<Card> bestFiveCards; // Best 5 card combination
+    int handSize;               // Sum of hole and community card count
 };
 
 class HandEvaluator {
@@ -52,24 +57,43 @@ private:
     // Hash map which keeps track of each player's hand (best 5 cards)
     unordered_map<shared_ptr<Player>, PokerHand> playerHands;
 
-    // Helper methods for hand categorisation
-    HandCategory computeHandCategory(PokerHand& hand);
-    bool isRoyalFlush(uint64_t hand);
-    bool isStraightFlush(uint64_t hand);
-    bool isQuads(uint64_t hand);
-    bool isFullHouse(uint64_t hand);
-    bool isFlush(uint64_t hand);
-    bool isStraight(uint64_t hand);
-    bool isTrips(uint64_t hand);
-    bool isTwoPair(uint64_t hand);
-    bool isOnePair(uint64_t hand);
+    // Evaluates category and bestFiveCards for a given hand
+    void evaluateHand(PokerHand& hand);
+
+    // Helper methods for hand evaluation
+    // Sets hand category and calls helper methods below
+    bool isRoyalFlush(PokerHand& hand);
+    bool isStraightFlush(PokerHand& hand);
+    bool isFullHouse(PokerHand& hand);
+    bool isFlush(PokerHand& hand);
+    bool isStraight(PokerHand& hand);
+    bool isNOfAKind(PokerHand& hand, int n);
+    bool isTwoPair(PokerHand& hand);
+    bool isHighCard(PokerHand& hand);
+
+    // Helper methods to find the best 5 card combination
+    void findStraight(PokerHand& hand, Value highCard, bool isFlush, Suit flushSuit);
+    void findFourOfAKind(PokerHand& hand, Value quads);
+    void findFullHouse(PokerHand& hand, Value trips, Value pair);
+    void findFlush(PokerHand& hand, Suit suit);
+    void findThreeOfAKind(PokerHand& hand, Value trips);
+    void findTwoPair(PokerHand& hand, Value pairOne, Value pairTwo);
+    void findOnePair(PokerHand& hand, Value pair);
+    void findHighCard(PokerHand& hand);
+
+    // Helper methods for bitwise operations (used to categorise hands)
     uint64_t getAllSuitsMask(uint64_t hand);
     uint64_t getSuitMask(uint64_t hand, int suit);
     int countSetBits(uint64_t mask);
+    int countBitsForValue(uint64_t hand, int value);
+    Value straightMaskToHighCard(uint64_t straightMask);
 
 public:
-    // Updates each player's PokerHand in the hashmap.
+    // Updates each player's PokerHand in the hashmap
     void addDealtCard(shared_ptr<Player> player, const Card& card);
+
+    // Evaluates the hand category and best 5 card combination for each player in the hashmap
+    void evaluatePlayerHands();
 
     // Returns a vector of players sorted by the strength of their hand.
     // Called when action is finished and pots must be awarded.
