@@ -1,71 +1,48 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(PokerTesting VERSION 1.0 LANGUAGES CXX)
+project(PokerTests VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
-
 file(GLOB SRC_FILES
-    src/Board.cpp
-    src/Card.cpp
-    src/Dealer.cpp
-    src/Deck.cpp
-    src/Player.cpp
-    src/PotManager.cpp
-    src/TurnManager.cpp
-    src/ActionManager.cpp
-    src/GamePlayers.cpp
-    src/ClientManager.cpp
-    src/GameController.cpp
-    src/HandEvaluator.cpp
+    src/*.cpp
 )
 
 add_library(PokerLib ${SRC_FILES})
+
+# TESTS
 
 enable_testing()
 
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
-add_executable(DealTest test/DealTest.cpp)
-target_link_libraries(DealTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
+function(addPokerTest TEST_NAME TEST_FILE)
+    add_executable(${TEST_NAME} ${TEST_FILE})
+    target_link_libraries(${TEST_NAME} PRIVATE PokerLib GTest::GTest GTest::Main pthread)
+    add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
+endfunction()
 
-add_executable(PotManagerTest test/PotManagerTest.cpp)
-target_link_libraries(PotManagerTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
+set(TEST_FILES
+    DealTest
+    PotManagerTest
+    TurnManagerTest
+    ActionTest
+    AllInActionTest
+    GamePlayersTest
+    ClientManagerTest
+    GameControllerTest
+    AwardPotTest
+    HandEvaluationTest
+)
 
-add_executable(TurnManagerTest test/TurnManagerTest.cpp)
-target_link_libraries(TurnManagerTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
+foreach(TEST_NAME IN LISTS TEST_FILES)
+    addPokerTest(${TEST_NAME}  test/${TEST_NAME}.cpp)
+endforeach()
 
-add_executable(ActionTest test/ActionTest.cpp)
-target_link_libraries(ActionTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
 
-add_executable(AllInActionTest test/AllInActionTest.cpp)
-target_link_libraries(AllInActionTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
-
-add_executable(GamePlayersTest test/GamePlayersTest.cpp)
-target_link_libraries(GamePlayersTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
-
-add_executable(ClientManagerTest test/ClientManagerTest.cpp)
-target_link_libraries(ClientManagerTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
-
-add_executable(GameControllerTest test/GameControllerTest.cpp)
-target_link_libraries(GameControllerTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
-
-add_executable(AwardPotTest test/AwardPotTest.cpp)
-target_link_libraries(AwardPotTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
-
-add_executable(HandEvaluationTest test/HandEvaluationTest.cpp)
-target_link_libraries(HandEvaluationTest PRIVATE PokerLib GTest::GTest GTest::Main pthread)
-
-add_test(NAME DealTest COMMAND DealTest)
-add_test(NAME PotManagerTest COMMAND PotManagerTest)
-add_test(NAME TurnManagerTest COMMAND TurnManagerTest)
-add_test(NAME ActionTest COMMAND ActionTest)
-add_test(NAME GamePlayersTest COMMAND GamePlayersTest)
-add_test(NAME ClientManagerTest COMMAND ClientManagerTest)
-add_test(NAME GameControllerTest COMMAND GameControllerTest)
-add_test(NAME AwardPotTest COMMAND AwardPotTest)
-add_test(NAME HandEvaluationTest COMMAND HandEvaluationTest)
-
+# MAIN FUNCTION
+add_executable(PokerV3 main.cpp)
+target_link_libraries(PokerV3 PRIVATE PokerLib)

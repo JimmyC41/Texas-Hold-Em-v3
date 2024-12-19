@@ -20,6 +20,8 @@ ClientAction ClientManager::getClientAction(bool isPreFlop, shared_ptr<Player>& 
     // Fetch bet amount from client
     size_t amount = getClientBetAmount(playerToAct, clientActionType, possibleActions, bigBlind, initialChips, bigStackChips);
 
+    cout << "BET AMOUNT IS " << amount << endl;
+
     ClientAction clientAction = ClientAction{playerToAct, clientActionType, amount};
     // displayClientAction(clientAction);
 
@@ -51,7 +53,12 @@ size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, Action
         return 0;
     }
 
-    size_t maxBet = min(initialChips, bigStackAmongOthers);
+    // maxBet is the maximum amount the client can 'bet' provided how many chips they have, and the stack of others
+    // If the player is the big stack among the table, the max they can bet is the next biggest stack
+    // If everyone else has gone all-in or folded, by definition, the player to act must be at least the biggest stack,
+    // so they just end up calling the active bet, and the callAmount will never be greater than their initial chips!
+
+    size_t maxBet = (bigStackAmongOthers == 0) ? initialChips : min(initialChips, bigStackAmongOthers);
     // cout << "initial, bigStackOthers, maxBet is: " << initialChips << bigStackAmongOthers << maxBet << endl;
 
     // Case 2: Call (Call amount is previous bet amount)
@@ -137,7 +144,6 @@ size_t ClientManager::getRelevantBet(vector<PossibleAction>& possibleActions, Ac
     for (const auto& action : possibleActions) {
         if (action.type == chosenAction) return action.amount;
     }
-
     cout << "Could not find a relevant bet for the chosen action!" << endl;
     return 0;
 }

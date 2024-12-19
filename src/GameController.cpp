@@ -109,7 +109,8 @@ void GameController::startStreet(Street newStreet) {
         // The player is the biggest stack, and the next biggest stack has gone all in
         if (initialChips < activeBet || activeBet >= bigStackAmongOthers && initialChips > bigStackAmongOthers) {
             playerCanRaise = false;
-            // cout << "Player can NOT raise!" << endl;
+            cout << "Player can NOT raise!" << endl;
+            cout << "Player's initial chips and active bet:" << initialChips << activeBet << endl;
         }
 
         // Get possible actions for player
@@ -269,8 +270,10 @@ shared_ptr<Action> GameController::createAction(const ClientAction& action, size
             return make_shared<BlindAction>(action.player, action.amount);
         case CALL:
             if (action.amount == initialChips) {
+                cout << "All in Call triggered" << endl;
                 return make_shared<AllInCallAction>(action.player, action.amount);
             }
+            cout << "Just a normal call?" << endl;
             return make_shared<CallAction>(action.player, action.amount);
         case CHECK:
             return make_shared<CheckAction>(action.player);
