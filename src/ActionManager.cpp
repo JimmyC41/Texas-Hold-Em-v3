@@ -3,17 +3,19 @@
 #include <iostream>
 using namespace std;
 
-ActionManager::ActionManager() : actionTimeline(), activeBet(0) {}
+ActionManager::ActionManager() : actionTimeline(), actionState(), activeBet(0) {}
 
 void ActionManager::clearActionTimeline() {
     actionTimeline.clear();
+    resetActionState();
     activeBet = 0;
 }
 
 void ActionManager::addActionToTimeline(shared_ptr<Action> action) {
     actionTimeline.push_back(action);
-    ActionType actiontype = action->getActionType();
+    updateActionState(action);
 
+    ActionType actiontype = action->getActionType();
     if (actiontype == BLIND || actiontype == BET || actiontype == RAISE || actiontype == ALL_IN_BET) {
         // Update the active bet if the bet/raise is greater than the current bet to be matched
         if (action->getAmount() > activeBet) {
@@ -44,71 +46,17 @@ vector<PossibleAction> ActionManager::getAllowedActionTypes(bool playerCanRaise)
 }
 
 bool ActionManager::isActionsFinished(int numPlayers) const {
-    // If there are n players and a player initiates a bet/raise, n-1 players must call/fold
-    int activeBet = 0;
-    int numCalls = 0;
-    int numChecks = 0;
-    int numAllInCall = 0;
-    int numAllInBet = 0;
-    int numPlayersNotInHand = 0;
-    bool isBlind = false;
-    bool isNewBet = false;
+    printActionState();
+    
+    int checks = actionState.getChecks();
+    int calls = actionState.getCalls();
+    int sittingOut = actionState.getSittingOut();
+    int folded = actionState.getFolded();
 
-    // Iterate through the action timeline
-    for (const auto& actionPtr : actionTimeline) {
-        ActionType actionType = actionPtr->getActionType();
+    if (checks == numPlayers) return true;
 
-        // If we encounter a 'new' active bet, reset the number of calls
-        if (actionType == BET || actionType == RAISE || actionType == ALL_IN_BET) {
-            numCalls = 0;
-            isNewBet = true;
-
-            if (numAllInBet > 0) numPlayersNotInHand = numAllInBet;
-            if (actionType == ALL_IN_BET) numAllInBet++;
-        }
-
-        // A blind functions like a bet, except we need an additional 'call' (a check) from the blind
-        else if (actionType == BLIND) {
-            numCalls = 0;
-
-            if (!isNewBet) isBlind = true;
-            else isBlind = false;
-            if (numAllInBet > 0) numPlayersNotInHand = numAllInBet;
-        }
-
-        // If a player calls an active bet, increment the number of calls
-        else if (actionType == CALL) {
-            numCalls++;
-        }
-
-        // If a player calls all in, increment number of bets
-        else if (actionType == ALL_IN_CALL) {
-            numAllInCall++;
-            numPlayersNotInHand += numAllInCall;
-        }
-
-        // If a player folds, decrement number of active players
-        else if (actionType == FOLD) {
-            numPlayers--;
-        }
-
-        // If a player checks, increment number of checks
-        else if (actionType == CHECK) {
-            numChecks++;
-        }
-
-        // cout << "numCalls: " << numCalls << " | numPlayersNotInHand: " << numPlayersNotInHand << endl;
-
-        // If all players have checked, betting street is complete
-        if (numChecks == numPlayers) return true;
-
-        // Preflop, n players need to 'call' the active bet for a street to be complete (the BB check functions as a 'call')
-        if (isBlind == true) {
-            if (numCalls == (numPlayers - numPlayersNotInHand)) return true;
-        } else {
-            if (numCalls == (numPlayers - numPlayersNotInHand - 1)) return true;
-        }
-    }
+    if (actionState.isLimpedPreFlop()) return calls == (numPlayers - sittingOut - folded);
+    else return calls == (numPlayers - sittingOut - folded - 1);
 
     return false;
 }
@@ -142,6 +90,62 @@ ActionType ActionManager::getLastAction() const {
     throw runtime_error("No valid action found!");
 }
 
+void ActionManager::updateActionState(shared_ptr<Action> action) {
+    ActionType type = action->getActionType();
+
+    // When we encounter an all-in bet, all other players that were previously
+    // all-in are effectively sitting out of the betting action.
+    // There are TWO implications that follow for all-in bets:
+    // 1) numSittingOut is set BEFORE incrementing the all-in bet counter
+    // We don't care about the most recent all-in bet because that acts as the 'agressor'
+    // 2) numSittingOut is only updated if there is at least 2 all-in bets!
+    // If there is only 1, it just acts as a normal bet and there is no need to adjust
+    // for 1 fewer call!
+
+    switch(type) {
+        case BET:
+        case RAISE:
+            actionState.clearCalls();
+            actionState.setNumSittingOut();
+            actionState.setLimpAroundFalse();
+            break;
+        case ALL_IN_BET:
+            actionState.clearCalls(); 
+            actionState.setNumSittingOut();
+            actionState.incrementAllInBets();
+            actionState.setLimpAroundFalse();
+            break;
+        case BLIND:
+            actionState.clearCalls();
+        case CALL:
+            actionState.incrementCalls();
+            break;
+        case ALL_IN_CALL:
+            actionState.incrementAllInCalls();
+            actionState.incrementSittingOut();
+            break;
+        case FOLD:
+            actionState.incrementFolded();
+            break;
+        case CHECK:
+            actionState.incrementChecks();
+            actionState.setLimpAroundFalse();
+            break;
+        default:
+            break;
+    }
+}
+
+void ActionManager::resetActionState() {
+    actionState.numCalls = 0;
+    actionState.numChecks = 0;
+    actionState.numFolded = 0;
+    actionState.numAllInBet = 0;
+    actionState.numAllInCall = 0;
+    actionState.numSittingOut = 0;
+    actionState.limpAround = true;
+}
+
 void ActionManager::displayPossibleActions(vector<PossibleAction>& actions, bool isBigBlind) {
     for (size_t i = 0; i < actions.size(); ++i) {
         PossibleAction action = actions[i];
@@ -162,4 +166,16 @@ void ActionManager::displayPossibleActions(vector<PossibleAction>& actions, bool
             cout << "   Option: Fold" << endl;
         }
     }
+}
+
+void ActionManager::printActionState() const {
+    cout << "===== Action State =====" << endl;
+    cout << "Number of Calls: " << actionState.getCalls() << endl;
+    cout << "Number of Checks: " << actionState.getChecks() << endl;
+    cout << "Number of Folded Players: " << actionState.getFolded() << endl;
+    cout << "Number of All-In Bets: " << actionState.numAllInBet << endl;
+    cout << "Number of All-In Calls: " << actionState.numAllInCall << endl;
+    cout << "Total Sitting Out: " << actionState.getSittingOut() << endl;
+    cout << "Is Limped Around: " << (actionState.isLimpedPreFlop() ? "Yes" : "No") << endl;
+    cout << "========================" << endl;
 }

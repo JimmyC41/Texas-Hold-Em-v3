@@ -248,6 +248,8 @@ TEST_F(ActionTest, BetCalledFalse) {
     actionManager.addActionToTimeline(call_1);
     actionManager.addActionToTimeline(call_2);
 
+    actionManager.printActionState();
+
     ASSERT_EQ(actionManager.isActionsFinished(4), false);
 }
 

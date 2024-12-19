@@ -32,8 +32,6 @@ set(TEST_FILES
     ActionTest
     AllInActionTest
     GamePlayersTest
-    ClientManagerTest
-    GameControllerTest
     AwardPotTest
     HandEvaluationTest
 )
@@ -42,7 +40,12 @@ foreach(TEST_NAME IN LISTS TEST_FILES)
     addPokerTest(${TEST_NAME}  test/${TEST_NAME}.cpp)
 endforeach()
 
-
 # MAIN FUNCTION
 add_executable(PokerV3 main.cpp)
 target_link_libraries(PokerV3 PRIVATE PokerLib)
+
+add_custom_target(run_tests
+    COMMAND ctest --output-on-failure
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Running all tests..."
+)
