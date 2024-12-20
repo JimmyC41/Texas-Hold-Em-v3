@@ -6,23 +6,20 @@
 
 ClientManager::ClientManager(size_t bigBlind) : bigBlind(bigBlind) {}
 
-ClientAction ClientManager::getClientAction(bool isPreFlop, shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions, size_t initialChips, size_t bigStackChips) {
+ClientAction ClientManager::getClientAction(const StreetState& streetState, vector<PossibleAction>& possibleActions) {
     // If betting street is preflop and the player to act is big blind, the 'check' is a call of the active bet.
-    // This mustbe reflected when displaying possible actions, and also fetching of the action type.
-    bool isBigBlind = false;
-    if (playerToAct->getPosition() == Position::BIG_BLIND && isPreFlop) isBigBlind = true;
-    
-    displayPossibleActions(playerToAct, isBigBlind, possibleActions);
+    // This must be reflected when displaying possible actions, and also fetching of the action type.
+    displayPossibleActions(streetState, possibleActions);
 
     // Fetch action type from client
-    ActionType clientActionType = getClientActionType(possibleActions, isBigBlind);
+    ActionType clientActionType = getClientActionType(streetState, possibleActions);
 
     // Fetch bet amount from client
-    size_t amount = getClientBetAmount(playerToAct, clientActionType, possibleActions, bigBlind, initialChips, bigStackChips);
+    size_t amount = getClientBetAmount(streetState, possibleActions, clientActionType);
 
     cout << "BET AMOUNT IS " << amount << endl;
 
-    ClientAction clientAction = ClientAction{playerToAct, clientActionType, amount};
+    ClientAction clientAction = ClientAction{streetState.getCurPlayer(), clientActionType, amount};
     // displayClientAction(clientAction);
 
     cout << "\n" << endl;
@@ -31,7 +28,7 @@ ClientAction ClientManager::getClientAction(bool isPreFlop, shared_ptr<Player>& 
 
 // Client Helper Function
 
-ActionType ClientManager::getClientActionType(vector<PossibleAction>& possibleActions, bool isBigBlind) {
+ActionType ClientManager::getClientActionType(const StreetState& streetState, vector<PossibleAction>& possibleActions) {
     string actionStr;
     ActionType actionType;
 
@@ -39,15 +36,13 @@ ActionType ClientManager::getClientActionType(vector<PossibleAction>& possibleAc
         cout << "Please enter a valid action: ";
         getline(cin, actionStr);
 
-        actionType = strToActionType(actionStr, isBigBlind);
-        if (isValidAction(possibleActions, actionType)) {
-            break;
-        }
+        actionType = strToActionType(actionStr, streetState.isPlayerBigBlindPreFlop());
+        if (isValidAction(possibleActions, actionType)) break;
     }
     return actionType;
 }
 
-size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, ActionType clientAction, vector<PossibleAction>& possibleActions, size_t bigBlind, size_t initialChips, size_t bigStackAmongOthers) {
+size_t ClientManager::getClientBetAmount(const StreetState& streetState, vector<PossibleAction>& possibleActions, ActionType clientAction) {
     // Case 1: Check or Fold (Bet Amount is 0)
     if (clientAction == ActionType::CHECK || clientAction == ActionType::FOLD) {
         return 0;
@@ -57,7 +52,8 @@ size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, Action
     // If the player is the big stack among the table, the max they can bet is the next biggest stack
     // If everyone else has gone all-in or folded, by definition, the player to act must be at least the biggest stack,
     // so they just end up calling the active bet, and the callAmount will never be greater than their initial chips!
-
+    size_t bigStackAmongOthers = streetState.getBigStackAmongOthers();
+    size_t initialChips = streetState.getPlayerInitialChips();
     size_t maxBet = (bigStackAmongOthers == 0) ? initialChips : min(initialChips, bigStackAmongOthers);
     // cout << "initial, bigStackOthers, maxBet is: " << initialChips << bigStackAmongOthers << maxBet << endl;
 
@@ -104,9 +100,9 @@ size_t ClientManager::getClientBetAmount(shared_ptr<Player>& playerToAct, Action
 
 // Helper Functions
 
-void ClientManager::displayPossibleActions(shared_ptr<Player>& playerToAct, bool isBigBlind, vector<PossibleAction>& possibleActions) {
-    cout << "Displaying possible actions for " << playerToAct->getName() << ":" << endl;
-    ActionManager::displayPossibleActions(possibleActions, isBigBlind);
+void ClientManager::displayPossibleActions(const StreetState& streetState, vector<PossibleAction>& possibleActions) {
+    cout << "Displaying possible actions for " << streetState.getCurPlayer()->getName() << ":" << endl;
+    ActionManager::displayPossibleActions(possibleActions, streetState.isPlayerBigBlindPreFlop());
 }
 
 void ClientManager::displayClientAction(const ClientAction& clientAction) {

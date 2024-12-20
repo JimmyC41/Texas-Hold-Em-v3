@@ -2,6 +2,7 @@
 #define ACTION_MANAGER_H
 
 #include "Action.h"
+#include "StreetState.h"
 #include <vector>
 using namespace std;
 
@@ -34,6 +35,16 @@ typedef struct ActionState {
     int getCalls() const { return numCalls; }
     int getFolded() const { return numFolded; }
     bool isLimpedPreFlop() const { return limpAround; }
+
+    void resetActionState() {
+        numCalls = 0;
+        numChecks = 0;
+        numFolded = 0;
+        numAllInBet = 0;
+        numAllInCall = 0;
+        numSittingOut = 0; // Players that are all-in that cannot contribute to action
+        limpAround = true;
+    }
 } ActionState;
 
 typedef struct PossibleAction {
@@ -63,25 +74,22 @@ private:
     // Helper function to update the action state given a new action
     void updateActionState(shared_ptr<Action> action);
 
-    // Helper function to reset the action state
-    void resetActionState();
-
 public:
     ActionManager();
 
     // Clear action timeline and set active bet to 0.
     // Clears action state struct.
     // Called at the END of each street.
-    void clearActionTimeline();
+    void clearActionTimelineAndResetActionState();
 
     // Adds an Action object to the actionTimeline and sets active bet.
     // Calls the update action state
     // Called when a player action is recorded.
-    void addActionToTimeline(shared_ptr<Action> action);
+    void addActionToTimelineAndUpdateActionState(shared_ptr<Action> action);
 
     // Retrieves possible action types given the betting action.
     // Called when player is prompted for their action.
-    vector<PossibleAction> getAllowedActionTypes(bool playerCanRaise);
+    vector<PossibleAction> getAllowedActionTypes(bool isPlayerCanRaise);
 
     // Checks if betting action is complete given the current action state
     bool isActionsFinished(int numPlayers) const;

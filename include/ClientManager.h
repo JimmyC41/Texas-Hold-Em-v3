@@ -4,6 +4,7 @@
 #include "Action.h"
 #include "ActionManager.h"
 #include "TurnManager.h"
+#include "StreetState.h"
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -21,22 +22,21 @@ public:
     ClientManager(size_t bigBlind);
 
     // Queries the client for a valid client action object to be processed by the action manager
-    ClientAction getClientAction(bool isPreFlop, shared_ptr<Player>& playerToAct, vector<PossibleAction>& possibleActions, size_t initialChips, size_t bigStackAmongOthers);
+    ClientAction getClientAction(const StreetState& streetState, vector<PossibleAction>& possibleActions);
 private:
     size_t bigBlind;
 
     // Print possible actions for the player to act
-    void displayPossibleActions(shared_ptr<Player>& playerToAct, bool isBigBlind, vector<PossibleAction>& possibleActions);
+    void displayPossibleActions(const StreetState& streetState, vector<PossibleAction>& possibleActions);
 
     // Print a given client action object
     void displayClientAction(const ClientAction& clientAction);
 
     // Fetch the action type from the client (stdin)
-    ActionType getClientActionType(vector<PossibleAction>& possibleActions, bool isBigBlind);
+    ActionType getClientActionType(const StreetState& streetState, vector<PossibleAction>& possibleActions);
 
     // Fetch the bet amount from the client (stdin)
-    size_t getClientBetAmount(shared_ptr<Player>& playerToAct, ActionType clientAction, 
-                                vector<PossibleAction>& possibleActions, size_t bigBlind, size_t initialChips, size_t bigStackAmongOthers);
+    size_t getClientBetAmount(const StreetState& streetState, vector<PossibleAction>& possibleActions, ActionType clientAction);
 
     // Convert string (client input) into an ActionType
     ActionType strToActionType(string& string, bool isBigBlind);

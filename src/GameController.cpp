@@ -12,7 +12,8 @@ GameController::GameController(size_t smallBlind, size_t bigBlind) :
     turnManager(),
     clientManager(bigBlind),
     potManager(),
-    handEvaluator() {}
+    handEvaluator(),
+    streetState() {}
 
 // GAME STATE INFORMATION METHODS
 
@@ -79,76 +80,85 @@ void GameController::validateChipCounts() {
 
 // STREET SPECIFIC METHODS
 
-void GameController::startStreet(Street newStreet) {
-    if (isNoMoreAction()) {
+bool GameController::isNoMoreAction(Street newStreet) {
+    // If there is only one player left in the hand, betting action is complete!
+    if (turnManager.getNumPlayersInHand() == 1) {
         cout << "No more players to act. Skipping " << streetToStr(newStreet) << endl;
-        return;
+        return true;
     }
 
-    if (isPlayersInHandAllIn()) {
+    // If all players are all in, betting action is complete!
+    bool allPlayersAllIn = true;
+    for (auto const& player : turnManager.getPlayersInHand()) {
+        if (player->getChips() != 0) allPlayersAllIn = false;
+    }
+
+    if (allPlayersAllIn) {
         cout << "Players in the hand are all in. Skipping " << streetToStr(newStreet) << endl;
-        return;
+        return true;
+    } else {
+        return false;
     }
+}
 
+void GameController::startStreet(Street newStreet) {
+    if (isNoMoreAction(newStreet)) return;
     cout << "\nStarting " << streetToStr(newStreet) << " Street\n" << endl;
 
     setupStreet(newStreet);
-    int initialPlayersInHand = turnManager.getNumPlayersInHand();
-
-    while (!isStreetOver(initialPlayersInHand)) {
-        // Get player to act
+    while (!isStreetOver(streetState.getInitialNumPlayers())) {
+        // Get player to act and fetch possible actions
         shared_ptr<Player> curPlayer = turnManager.getPlayerToAct();
-        
-        size_t activeBet = actionManager.getActiveBet();
-        size_t initialChips = potManager.getInitialChips(curPlayer); // Chips the player to act started with
-        size_t bigStackAmongOthers = potManager.getBigStackAmongOthers(curPlayer, turnManager.getPlayersInHand()); // Chips of the biggest stack among other active players
-
-        bool playerCanRaise = true;
-        // Player cannot raise under the following circumstances (respectively)
-        // The player is all in to call (i.e. initial chips < active bet)
-        // The player is the biggest stack, and the next biggest stack has gone all in
-        if (initialChips < activeBet || activeBet >= bigStackAmongOthers && initialChips > bigStackAmongOthers) {
-            playerCanRaise = false;
-            cout << "Player can NOT raise!" << endl;
-            cout << "Player's initial chips and active bet:" << initialChips << activeBet << endl;
-        }
-
-        // Get possible actions for player
-        vector<PossibleAction> possibleActions = actionManager.getAllowedActionTypes(playerCanRaise);
+        udpateStreetStateForCurPlayer(curPlayer);
+        vector<PossibleAction> possibleActions = actionManager.getAllowedActionTypes(streetState.getPlayerCanRaise());
 
         // Request client action given possible actions
-        bool isPreFlop = false;
-        if (newStreet == Street::PRE_FLOP) isPreFlop = true;
-        ClientAction clientAction = clientManager.getClientAction(isPreFlop, curPlayer, possibleActions, initialChips, bigStackAmongOthers);
+        ClientAction clientAction = clientManager.getClientAction(streetState, possibleActions);
 
         // Add action to the action timeline
-        shared_ptr<Action> playerAction = createAction(clientAction, initialChips);
-        actionManager.addActionToTimeline(playerAction);
+        shared_ptr<Action> playerAction = createAction(clientAction, streetState.getPlayerInitialChips());
 
-        // Update the pot manager after action
-        ActionType playerActionType = playerAction->getActionType();
-        if (playerActionType == BET || playerActionType == RAISE || playerActionType == CALL || playerActionType == BLIND) {
-            potManager.addPlayerBet(curPlayer, playerAction->getAmount(), false);
-        } else if (playerActionType == FOLD) {
-            potManager.foldPlayerBet(curPlayer);
-            turnManager.addPlayerNotInHand(curPlayer);
-        } else if (playerActionType == ALL_IN_BET || playerActionType == ALL_IN_CALL) {
-            potManager.addPlayerBet(curPlayer, playerAction->getAmount(), true);
-            turnManager.addPlayerNotInHand(curPlayer);
-        }
-
-        // cout << curPlayer->getName() << " chip count: " << curPlayer->getChips() << endl;
-        // potManager.displayPlayerBets();
-        turnManager.displayPlayerChipCount();
+        // Process the new action in ActionManager, potManager and turnManager
+        processNewAction(curPlayer, playerAction);
     }
 
-    // Clear action timeline
-    actionManager.clearActionTimeline();
+    cleanupStreet();
+}
 
-    // Calculate pots
+void GameController::processNewAction(shared_ptr<Player>& player, const shared_ptr<Action>& playerAction) {
+    actionManager.addActionToTimelineAndUpdateActionState(playerAction);
+
+    ActionType playerActionType = playerAction->getActionType();
+    switch (playerActionType) {
+        case BET:
+        case RAISE:
+        case CALL:
+        case BLIND:
+            potManager.addPlayerBet(player, playerAction->getAmount(), false);
+            break;
+        case FOLD:
+            potManager.foldPlayerBet(player);
+            turnManager.addPlayerNotInHand(player);
+            break;
+        case ALL_IN_BET:
+        case ALL_IN_CALL:
+            potManager.addPlayerBet(player, playerAction->getAmount(), true);
+            turnManager.addPlayerNotInHand(player);
+            break;
+        default:
+            break;
+    }
+}
+
+void GameController::cleanupStreet() {
+    // Reset street state
+    streetState.resetStreetState();
+
+    // Clear action timeline and reset action state
+    actionManager.clearActionTimelineAndResetActionState();
+
+    // Calculate pots and reset player bets
     potManager.calculatePots();
-
-    // Reset player bets in pots
     potManager.resetPlayerBets();
 }
 
@@ -159,14 +169,15 @@ void GameController::startRound() {
     startStreet(FLOP);
     startStreet(TURN);
     startStreet(RIVER);
+    evaluatePots();
+    cout << "Round completed!\n" << endl;
+}
 
-    // No more action! Evaluate hands and award pots
+void GameController::evaluatePots() {
     potManager.displayPots();
     populatePlayerHandsMap();
     vector<shared_ptr<Player>> sortedPlayers = handEvaluator.getSortedPlayers();
     potManager.awardPots(sortedPlayers);
-
-    cout << "Round completed!\n" << endl;
 }
 
 void GameController::populatePlayerHandsMap() {
@@ -230,26 +241,22 @@ void GameController::dealBoard(int numCards) {
     cout << "----------------------------------------\n" << endl;
 }
 
+inline void handleBlind(TurnManager& turnManager, ActionManager& actionManager, PotManager& potManager, int blindAmount, bool isSmallBlind) {
+    if (isSmallBlind) turnManager.setSmallBlindToAct();
+    auto player = turnManager.getPlayerToAct();
+    auto blindAction = std::make_shared<BlindAction>(player, blindAmount);
+    actionManager.addActionToTimelineAndUpdateActionState(blindAction);
+    potManager.addPlayerBet(player, blindAmount, false);
+}
+
 void GameController::setupStreet(Street newStreet) {
+    streetState.setStreet(newStreet);
+    streetState.setInitialNumPlayers(turnManager.getNumPlayersInHand());
+
     if (newStreet == PRE_FLOP) {
-        // Deal players hole cards
         dealPlayers();
-
-        // Small blind
-        turnManager.setSmallBlindToAct();
-        auto smallBlindPlayer= turnManager.getPlayerToAct();
-        auto postSmallBlind = make_shared<BlindAction>(smallBlindPlayer, smallBlind);
-        
-        actionManager.addActionToTimeline(postSmallBlind);
-        potManager.addPlayerBet(smallBlindPlayer, smallBlind, false);
-
-        // Big blind
-        auto bigBlindPlayer = turnManager.getPlayerToAct();
-        auto postBigBlind = make_shared<BlindAction>(bigBlindPlayer, bigBlind);
-
-        actionManager.addActionToTimeline(postBigBlind);
-        potManager.addPlayerBet(bigBlindPlayer, bigBlind, false);
-
+        handleBlind(turnManager, actionManager, potManager, smallBlind, true);
+        handleBlind(turnManager, actionManager, potManager, bigBlind, false);
     } else if (newStreet == FLOP) {
         dealBoard(3);
         turnManager.setEarlyPositionToAct();
@@ -294,29 +301,49 @@ bool GameController::isStreetOver(int initialPlayersInHand) {
     return actionManager.isActionsFinished(initialPlayersInHand);
 }
 
-bool GameController::isPlayersInHandAllIn() {
-    for (auto const& player : turnManager.getPlayersInHand()) {
-        if (player->getChips() != 0) return false;
-    }
-    return true;
-}
+void GameController::udpateStreetStateForCurPlayer(const shared_ptr<Player>& player) {
+    streetState.setCurPlayer(player);
+    streetState.setActiveBet(actionManager.getActiveBet());
+    streetState.setPlayerInitialChips(potManager.getInitialChips(player));
+    streetState.setBigStackAmongOthers(potManager.getBigStackAmongOthers(player, turnManager.getPlayersInHand()));
 
-bool GameController::isNoMoreAction() {
-    return (turnManager.getNumPlayersInHand() == 1);
+    if ((streetState.getCurPlayer()->getPosition() == Position::BIG_BLIND) &&
+        (streetState.getStreet() == Street::PRE_FLOP)) {
+            streetState.setIsBigBlindPreFlop(true);
+    } else {
+            streetState.setIsBigBlindPreFlop(false);
+    }
+    
+
+    if (streetState.getActiveBet() > streetState.getPlayerInitialChips()) {
+        cout << "Player does not have sufficient chips to raise!" << endl;
+        streetState.setPlayerCanRaise(false);
+        return;
+    }
+    if ((streetState.getPlayerInitialChips() > streetState.getBigStackAmongOthers()) &&
+        (streetState.getActiveBet() >= streetState.getBigStackAmongOthers())) {
+        cout << "Player can not raise because the next biggest stack is already all-in to match the active bet!" << endl;
+        streetState.setPlayerCanRaise(false);
+        return;
+    }
+
+    streetState.setPlayerCanRaise(true);
 }
 
 void GameController::setupNewRound() {
+    // Reset street state
+    streetState.resetStreetState();
+
+    // Clear action timeline
+    actionManager.clearActionTimelineAndResetActionState();
+
     // Reset folded players
     turnManager.moveAllPlayersToInHand();
 
     // Rotate positions
     turnManager.rotatePositions();
 
-    // Clear action timeline
-    actionManager.clearActionTimeline();
-
-    // Reset player bets and dead money
-    // Reset pots
+    // Reset player bets, dead money and pots
     potManager.resetPlayerBets();
     potManager.resetPots();
 
@@ -374,7 +401,6 @@ size_t GameController::queryPlayerChips() {
     return chips;
 }
 
-// Helper function to query the number of chips to add
 size_t GameController::queryChipsToAdd(size_t minChips, size_t currentChips) const {
     size_t chipsToAdd;
     while (true) {

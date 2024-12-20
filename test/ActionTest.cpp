@@ -25,7 +25,7 @@ protected:
     }
 
     void TearDown() override {
-        actionManager.clearActionTimeline();
+        actionManager.clearActionTimelineAndResetActionState();
     }
 };
 
@@ -37,17 +37,17 @@ TEST_F(ActionTest, AddingActionsToTimeline) {
     auto callBig_1 = make_shared<CallAction>(player1, 2);
     auto check_2 = make_shared<CheckAction>(player2);
 
-    actionManager.addActionToTimeline(postSmall_1);
+    actionManager.addActionToTimelineAndUpdateActionState(postSmall_1);
     ASSERT_EQ(actionManager.getActiveBet(), 1);
-    actionManager.addActionToTimeline(postBig_2);
-    actionManager.addActionToTimeline(callBig_4);
-    actionManager.addActionToTimeline(callBig_1);
-    actionManager.addActionToTimeline(check_2);
+    actionManager.addActionToTimelineAndUpdateActionState(postBig_2);
+    actionManager.addActionToTimelineAndUpdateActionState(callBig_4);
+    actionManager.addActionToTimelineAndUpdateActionState(callBig_1);
+    actionManager.addActionToTimelineAndUpdateActionState(check_2);
     ASSERT_EQ(actionManager.getActiveBet(), 2);
 
     ASSERT_EQ(actionManager.getNumActions(), 5);
 
-    actionManager.clearActionTimeline();
+    actionManager.clearActionTimelineAndResetActionState();
     ASSERT_EQ(actionManager.getNumActions(), 0);
 }
 
@@ -60,7 +60,7 @@ TEST_F(ActionTest, AllowedActionsToNoAction) {
 
 TEST_F(ActionTest, AllowedActionsToCheck) {
     auto check_1 = make_shared<CheckAction>(player1);
-    actionManager.addActionToTimeline(check_1);
+    actionManager.addActionToTimelineAndUpdateActionState(check_1);
     ASSERT_EQ(actionManager.getActiveBet(), 0);
 
     vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
@@ -72,8 +72,8 @@ TEST_F(ActionTest, AllowedActionsToBigBlind) {
     auto postSmall_1 = make_shared<BlindAction>(player1, 1);
     auto postBig_2 = make_shared<BlindAction>(player2, 2);
 
-    actionManager.addActionToTimeline(postSmall_1);
-    actionManager.addActionToTimeline(postBig_2);
+    actionManager.addActionToTimelineAndUpdateActionState(postSmall_1);
+    actionManager.addActionToTimelineAndUpdateActionState(postBig_2);
 
     vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
     vector<PossibleAction> expected = {{CALL, 2}, {RAISE, 2}, {FOLD, 0}};
@@ -84,9 +84,9 @@ TEST_F(ActionTest, AllowedActionsToBet) {
     auto check_1 = make_shared<CheckAction>(player1);
     auto bet_2 = make_shared<BetAction>(player2, 10);
 
-    actionManager.addActionToTimeline(check_1);
+    actionManager.addActionToTimelineAndUpdateActionState(check_1);
     ASSERT_EQ(actionManager.getActiveBet(), 0);
-    actionManager.addActionToTimeline(bet_2);
+    actionManager.addActionToTimelineAndUpdateActionState(bet_2);
     ASSERT_EQ(actionManager.getActiveBet(), 10);
 
     vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
@@ -100,13 +100,13 @@ TEST_F(ActionTest, AllowedActionsToRaise) {
     auto fold_3 = make_shared<FoldAction>(player3);
     auto raise_4 = make_shared<RaiseAction>(player4, 40);
 
-    actionManager.addActionToTimeline(check_1);
+    actionManager.addActionToTimelineAndUpdateActionState(check_1);
     ASSERT_EQ(actionManager.getActiveBet(), 0);
-    actionManager.addActionToTimeline(bet_2);
+    actionManager.addActionToTimelineAndUpdateActionState(bet_2);
     ASSERT_EQ(actionManager.getActiveBet(), 10);
-    actionManager.addActionToTimeline(fold_3);
+    actionManager.addActionToTimelineAndUpdateActionState(fold_3);
     ASSERT_EQ(actionManager.getActiveBet(), 10);
-    actionManager.addActionToTimeline(raise_4);
+    actionManager.addActionToTimelineAndUpdateActionState(raise_4);
     ASSERT_EQ(actionManager.getActiveBet(), 40);
 
     vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
@@ -120,13 +120,13 @@ TEST_F(ActionTest, AllowedActionsToCall) {
     auto fold_3 = make_shared<FoldAction>(player3);
     auto call_4 = make_shared<CallAction>(player4, 10);
 
-    actionManager.addActionToTimeline(check_1);
+    actionManager.addActionToTimelineAndUpdateActionState(check_1);
     ASSERT_EQ(actionManager.getActiveBet(), 0);
-    actionManager.addActionToTimeline(bet_2);
+    actionManager.addActionToTimelineAndUpdateActionState(bet_2);
     ASSERT_EQ(actionManager.getActiveBet(), 10);
-    actionManager.addActionToTimeline(fold_3);
+    actionManager.addActionToTimelineAndUpdateActionState(fold_3);
     ASSERT_EQ(actionManager.getActiveBet(), 10);
-    actionManager.addActionToTimeline(call_4);
+    actionManager.addActionToTimelineAndUpdateActionState(call_4);
     ASSERT_EQ(actionManager.getActiveBet(), 10);
 
     vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
@@ -138,9 +138,9 @@ TEST_F(ActionTest, AllowedActionsToFold_1) {
     auto check_1 = make_shared<CheckAction>(player1);
     auto fold_2 = make_shared<FoldAction>(player2);
 
-    actionManager.addActionToTimeline(check_1);
+    actionManager.addActionToTimelineAndUpdateActionState(check_1);
     ASSERT_EQ(actionManager.getActiveBet(), 0);
-    actionManager.addActionToTimeline(fold_2);
+    actionManager.addActionToTimelineAndUpdateActionState(fold_2);
     ASSERT_EQ(actionManager.getActiveBet(), 0);
 
     vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
@@ -155,15 +155,15 @@ TEST_F(ActionTest, AllowedActionsToFold_2) {
     auto raise_4 = make_shared<RaiseAction>(player4, 40);
     auto fold_1 = make_shared<FoldAction>(player1);
 
-    actionManager.addActionToTimeline(check_1);
+    actionManager.addActionToTimelineAndUpdateActionState(check_1);
     ASSERT_EQ(actionManager.getActiveBet(), 0);
-    actionManager.addActionToTimeline(bet_2);
+    actionManager.addActionToTimelineAndUpdateActionState(bet_2);
     ASSERT_EQ(actionManager.getActiveBet(), 10);
-    actionManager.addActionToTimeline(fold_3);
+    actionManager.addActionToTimelineAndUpdateActionState(fold_3);
     ASSERT_EQ(actionManager.getActiveBet(), 10);
-    actionManager.addActionToTimeline(raise_4);
+    actionManager.addActionToTimelineAndUpdateActionState(raise_4);
     ASSERT_EQ(actionManager.getActiveBet(), 40);
-    actionManager.addActionToTimeline(fold_1);
+    actionManager.addActionToTimelineAndUpdateActionState(fold_1);
     ASSERT_EQ(actionManager.getActiveBet(), 40);
 
     vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
@@ -176,10 +176,10 @@ TEST_F(ActionTest, BetAllIn) {
     auto bet_2 = make_shared<BetAction>(player2, 10);
     auto raise_3 = make_shared<RaiseAction>(player3, 500);
 
-    actionManager.addActionToTimeline(check_1);
-    actionManager.addActionToTimeline(bet_2);
+    actionManager.addActionToTimelineAndUpdateActionState(check_1);
+    actionManager.addActionToTimelineAndUpdateActionState(bet_2);
     ASSERT_EQ(actionManager.getActiveBet(), 10);
-    actionManager.addActionToTimeline(raise_3);
+    actionManager.addActionToTimelineAndUpdateActionState(raise_3);
     ASSERT_EQ(actionManager.getActiveBet(), 500);
 
     vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
@@ -191,9 +191,9 @@ TEST_F(ActionTest, CallAllIn) {
     auto bet_1 = make_shared<BetAction>(player2, 1000);
     auto call_2 = make_shared<CallAction>(player3, 500);
 
-    actionManager.addActionToTimeline(bet_1);
+    actionManager.addActionToTimelineAndUpdateActionState(bet_1);
     ASSERT_EQ(actionManager.getActiveBet(), 1000);
-    actionManager.addActionToTimeline(call_2);
+    actionManager.addActionToTimelineAndUpdateActionState(call_2);
     ASSERT_EQ(actionManager.getActiveBet(), 1000);
 
     vector<PossibleAction> actual = actionManager.getAllowedActionTypes(true);
@@ -207,10 +207,10 @@ TEST_F(ActionTest, AllPlayersChecked) {
     auto check_3 = make_shared<CheckAction>(player3);
     auto check_4 = make_shared<CheckAction>(player4);
 
-    actionManager.addActionToTimeline(check_1);
-    actionManager.addActionToTimeline(check_2);
-    actionManager.addActionToTimeline(check_3);
-    actionManager.addActionToTimeline(check_4);
+    actionManager.addActionToTimelineAndUpdateActionState(check_1);
+    actionManager.addActionToTimelineAndUpdateActionState(check_2);
+    actionManager.addActionToTimelineAndUpdateActionState(check_3);
+    actionManager.addActionToTimelineAndUpdateActionState(check_4);
 
     ASSERT_EQ(actionManager.isActionsFinished(4), true);
 }
@@ -223,12 +223,12 @@ TEST_F(ActionTest, BetCalledTrue) {
     auto call_1 = make_shared<CallAction>(player1, 10);
     auto call_2 = make_shared<CallAction>(player2, 10);
 
-    actionManager.addActionToTimeline(blind_1);
-    actionManager.addActionToTimeline(blind_2);
-    actionManager.addActionToTimeline(raise_3);
-    actionManager.addActionToTimeline(call_4);
-    actionManager.addActionToTimeline(call_1);
-    actionManager.addActionToTimeline(call_2);
+    actionManager.addActionToTimelineAndUpdateActionState(blind_1);
+    actionManager.addActionToTimelineAndUpdateActionState(blind_2);
+    actionManager.addActionToTimelineAndUpdateActionState(raise_3);
+    actionManager.addActionToTimelineAndUpdateActionState(call_4);
+    actionManager.addActionToTimelineAndUpdateActionState(call_1);
+    actionManager.addActionToTimelineAndUpdateActionState(call_2);
 
     ASSERT_EQ(actionManager.isActionsFinished(4), true);
 }
@@ -241,12 +241,12 @@ TEST_F(ActionTest, BetCalledFalse) {
     auto call_1 = make_shared<CallAction>(player1, 10);
     auto call_2 = make_shared<CallAction>(player2, 10);
 
-    actionManager.addActionToTimeline(blind_1);
-    actionManager.addActionToTimeline(blind_2);
-    actionManager.addActionToTimeline(call_3);
-    actionManager.addActionToTimeline(raise_4);
-    actionManager.addActionToTimeline(call_1);
-    actionManager.addActionToTimeline(call_2);
+    actionManager.addActionToTimelineAndUpdateActionState(blind_1);
+    actionManager.addActionToTimelineAndUpdateActionState(blind_2);
+    actionManager.addActionToTimelineAndUpdateActionState(call_3);
+    actionManager.addActionToTimelineAndUpdateActionState(raise_4);
+    actionManager.addActionToTimelineAndUpdateActionState(call_1);
+    actionManager.addActionToTimelineAndUpdateActionState(call_2);
 
     actionManager.printActionState();
 
@@ -261,12 +261,12 @@ TEST_F(ActionTest, BetFoldedTo) {
     auto fold_1 = make_shared<FoldAction>(player1);
     auto fold_2 = make_shared<FoldAction>(player2);
 
-    actionManager.addActionToTimeline(bet_1);
-    actionManager.addActionToTimeline(call_2);
-    actionManager.addActionToTimeline(fold_3);
-    actionManager.addActionToTimeline(raise_4);
-    actionManager.addActionToTimeline(fold_1);
-    actionManager.addActionToTimeline(fold_2);
+    actionManager.addActionToTimelineAndUpdateActionState(bet_1);
+    actionManager.addActionToTimelineAndUpdateActionState(call_2);
+    actionManager.addActionToTimelineAndUpdateActionState(fold_3);
+    actionManager.addActionToTimelineAndUpdateActionState(raise_4);
+    actionManager.addActionToTimelineAndUpdateActionState(fold_1);
+    actionManager.addActionToTimelineAndUpdateActionState(fold_2);
 
     ASSERT_EQ(actionManager.isActionsFinished(4), true);
 }

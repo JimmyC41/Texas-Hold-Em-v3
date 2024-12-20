@@ -5,13 +5,13 @@ using namespace std;
 
 ActionManager::ActionManager() : actionTimeline(), actionState(), activeBet(0) {}
 
-void ActionManager::clearActionTimeline() {
+void ActionManager::clearActionTimelineAndResetActionState() {
     actionTimeline.clear();
-    resetActionState();
+    actionState.resetActionState();
     activeBet = 0;
 }
 
-void ActionManager::addActionToTimeline(shared_ptr<Action> action) {
+void ActionManager::addActionToTimelineAndUpdateActionState(shared_ptr<Action> action) {
     actionTimeline.push_back(action);
     updateActionState(action);
 
@@ -24,7 +24,7 @@ void ActionManager::addActionToTimeline(shared_ptr<Action> action) {
     }
 }
 
-vector<PossibleAction> ActionManager::getAllowedActionTypes(bool playerCanRaise) {
+vector<PossibleAction> ActionManager::getAllowedActionTypes(bool isPlayerCanRaise) {
     // No player has acted. Player to act can check or bet.
     if (actionTimeline.empty()) return {{CHECK, 0}, {BET, activeBet}, {FOLD, 0}};
 
@@ -34,7 +34,7 @@ vector<PossibleAction> ActionManager::getAllowedActionTypes(bool playerCanRaise)
     if (lastAction == CHECK) {
         return {{CHECK, 0}, {BET, activeBet}, {FOLD, 0}};
     } else if (lastAction == BLIND || lastAction == BET || lastAction == RAISE || lastAction == ALL_IN_BET || lastAction == ALL_IN_CALL) {
-        if (playerCanRaise) {
+        if (isPlayerCanRaise) {
             return {{CALL, activeBet}, {RAISE, activeBet}, {FOLD, 0}};
         } else {
             return {{CALL, activeBet}, {FOLD, 0}};
@@ -117,6 +117,7 @@ void ActionManager::updateActionState(shared_ptr<Action> action) {
             break;
         case BLIND:
             actionState.clearCalls();
+            break;
         case CALL:
             actionState.incrementCalls();
             break;
@@ -134,16 +135,6 @@ void ActionManager::updateActionState(shared_ptr<Action> action) {
         default:
             break;
     }
-}
-
-void ActionManager::resetActionState() {
-    actionState.numCalls = 0;
-    actionState.numChecks = 0;
-    actionState.numFolded = 0;
-    actionState.numAllInBet = 0;
-    actionState.numAllInCall = 0;
-    actionState.numSittingOut = 0;
-    actionState.limpAround = true;
 }
 
 void ActionManager::displayPossibleActions(vector<PossibleAction>& actions, bool isBigBlind) {

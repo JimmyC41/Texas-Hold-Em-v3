@@ -25,7 +25,7 @@ protected:
     }
 
     void TearDown() override {
-        actionManager.clearActionTimeline();
+        actionManager.clearActionTimelineAndResetActionState();
     }
 };
 
@@ -34,9 +34,9 @@ TEST_F(AllInTest, AB) {
     auto call_2 = make_shared<CallAction>(player2, 1000);
     auto call_3 = make_shared<CallAction>(player3, 1000);
 
-    actionManager.addActionToTimeline(a_bet_1);
-    actionManager.addActionToTimeline(call_2);
-    actionManager.addActionToTimeline(call_3);
+    actionManager.addActionToTimelineAndUpdateActionState(a_bet_1);
+    actionManager.addActionToTimelineAndUpdateActionState(call_2);
+    actionManager.addActionToTimelineAndUpdateActionState(call_3);
 
     ASSERT_EQ(actionManager.getActiveBet(), 1000);
     ASSERT_EQ(actionManager.isActionsFinished(3), true);
@@ -48,10 +48,10 @@ TEST_F(AllInTest, AR) {
     auto call_3 = make_shared<CallAction>(player3, 2000);
     auto fold_1 = make_shared<FoldAction>(player1);
 
-    actionManager.addActionToTimeline(bet_1);
-    actionManager.addActionToTimeline(a_raise_2);
-    actionManager.addActionToTimeline(call_3);
-    actionManager.addActionToTimeline(fold_1);
+    actionManager.addActionToTimelineAndUpdateActionState(bet_1);
+    actionManager.addActionToTimelineAndUpdateActionState(a_raise_2);
+    actionManager.addActionToTimelineAndUpdateActionState(call_3);
+    actionManager.addActionToTimelineAndUpdateActionState(fold_1);
 
     ASSERT_EQ(actionManager.getActiveBet(), 2000);
     ASSERT_EQ(actionManager.isActionsFinished(3), true);
@@ -63,10 +63,10 @@ TEST_F(AllInTest, AC) {
     auto call_3 = make_shared<CallAction>(player3, 1500);
     auto a_call_1 = make_shared<AllInCallAction>(player1, 1000);
 
-    actionManager.addActionToTimeline(check_1);
-    actionManager.addActionToTimeline(bet_2);
-    actionManager.addActionToTimeline(call_3);
-    actionManager.addActionToTimeline(a_call_1);
+    actionManager.addActionToTimelineAndUpdateActionState(check_1);
+    actionManager.addActionToTimelineAndUpdateActionState(bet_2);
+    actionManager.addActionToTimelineAndUpdateActionState(call_3);
+    actionManager.addActionToTimelineAndUpdateActionState(a_call_1);
 
     ASSERT_EQ(actionManager.getActiveBet(), 1500);
     ASSERT_EQ(actionManager.isActionsFinished(3), true);
@@ -77,9 +77,9 @@ TEST_F(AllInTest, AB_AR) {
     auto a_raise_2 = make_shared<AllInBetAction>(player2, 2000);
     auto call_3 = make_shared<CallAction>(player3, 2000);
 
-    actionManager.addActionToTimeline(a_bet_1);
-    actionManager.addActionToTimeline(a_raise_2);
-    actionManager.addActionToTimeline(call_3);
+    actionManager.addActionToTimelineAndUpdateActionState(a_bet_1);
+    actionManager.addActionToTimelineAndUpdateActionState(a_raise_2);
+    actionManager.addActionToTimelineAndUpdateActionState(call_3);
 
     ASSERT_EQ(actionManager.getActiveBet(), 2000);
     ASSERT_EQ(actionManager.isActionsFinished(3), true);
@@ -91,10 +91,10 @@ TEST_F(AllInTest, AB_AC) {
     auto fold_3 = make_shared<FoldAction>(player3);
     auto a_call_1 = make_shared<AllInCallAction>(player1, 1000);
 
-    actionManager.addActionToTimeline(check_1);
-    actionManager.addActionToTimeline(a_bet_2);
-    actionManager.addActionToTimeline(fold_3);
-    actionManager.addActionToTimeline(a_call_1);
+    actionManager.addActionToTimelineAndUpdateActionState(check_1);
+    actionManager.addActionToTimelineAndUpdateActionState(a_bet_2);
+    actionManager.addActionToTimelineAndUpdateActionState(fold_3);
+    actionManager.addActionToTimelineAndUpdateActionState(a_call_1);
 
     ASSERT_EQ(actionManager.getActiveBet(), 2000);
     ASSERT_EQ(actionManager.isActionsFinished(3), true);
@@ -106,10 +106,10 @@ TEST_F(AllInTest, AR_AC) {
     auto call_3 = make_shared<CallAction>(player3, 2000);
     auto a_call_1 = make_shared<AllInCallAction>(player1, 1000);
 
-    actionManager.addActionToTimeline(bet_1);
-    actionManager.addActionToTimeline(a_bet_2);
-    actionManager.addActionToTimeline(call_3);
-    actionManager.addActionToTimeline(a_call_1);
+    actionManager.addActionToTimelineAndUpdateActionState(bet_1);
+    actionManager.addActionToTimelineAndUpdateActionState(a_bet_2);
+    actionManager.addActionToTimelineAndUpdateActionState(call_3);
+    actionManager.addActionToTimelineAndUpdateActionState(a_call_1);
 
     ASSERT_EQ(actionManager.getActiveBet(), 2000);
     ASSERT_EQ(actionManager.isActionsFinished(3), true);
@@ -123,12 +123,12 @@ TEST_F(AllInTest, AC_AR) {
     auto a_raise_2 = make_shared<AllInBetAction>(player2, 2000);
     auto call_3 = make_shared<CallAction>(player3, 2000);
 
-    actionManager.addActionToTimeline(check_1);
-    actionManager.addActionToTimeline(check_2);
-    actionManager.addActionToTimeline(bet_3);
-    actionManager.addActionToTimeline(a_call_1);
-    actionManager.addActionToTimeline(a_raise_2);
-    actionManager.addActionToTimeline(call_3);
+    actionManager.addActionToTimelineAndUpdateActionState(check_1);
+    actionManager.addActionToTimelineAndUpdateActionState(check_2);
+    actionManager.addActionToTimelineAndUpdateActionState(bet_3);
+    actionManager.addActionToTimelineAndUpdateActionState(a_call_1);
+    actionManager.addActionToTimelineAndUpdateActionState(a_raise_2);
+    actionManager.addActionToTimelineAndUpdateActionState(call_3);
 
     ASSERT_EQ(actionManager.getActiveBet(), 2000);
     ASSERT_EQ(actionManager.isActionsFinished(3), true);
@@ -143,11 +143,11 @@ TEST_F(AllInTest, AB_AR_AC) {
     auto a_call_4 = make_shared<AllInCallAction>(player4, 500);
     auto a_fold_1 = make_shared<FoldAction>(player1);
 
-    actionManager.addActionToTimeline(a_check_1);
-    actionManager.addActionToTimeline(a_raise_2);
-    actionManager.addActionToTimeline(a_raise_3);
-    actionManager.addActionToTimeline(a_call_4);
-    actionManager.addActionToTimeline(a_fold_1);
+    actionManager.addActionToTimelineAndUpdateActionState(a_check_1);
+    actionManager.addActionToTimelineAndUpdateActionState(a_raise_2);
+    actionManager.addActionToTimelineAndUpdateActionState(a_raise_3);
+    actionManager.addActionToTimelineAndUpdateActionState(a_call_4);
+    actionManager.addActionToTimelineAndUpdateActionState(a_fold_1);
 
     ASSERT_EQ(actionManager.getActiveBet(), 3000);
     ASSERT_EQ(actionManager.isActionsFinished(4), true);
@@ -176,20 +176,20 @@ TEST_F(AllInTest, AllActions) {
     auto fold_4 = make_shared<FoldAction>(player4);
     auto call_6 = make_shared<CallAction>(player6, 5000);
 
-    actionManager.addActionToTimeline(check_1);
-    actionManager.addActionToTimeline(raise_2);
-    actionManager.addActionToTimeline(raise_3);
-    actionManager.addActionToTimeline(call_4);
-    actionManager.addActionToTimeline(a_call_5);
-    actionManager.addActionToTimeline(raise_6);
-    actionManager.addActionToTimeline(a_raise_7);
-    actionManager.addActionToTimeline(a_call_8);
-    actionManager.addActionToTimeline(a_raise_9);
-    actionManager.addActionToTimeline(fold_1);
-    actionManager.addActionToTimeline(fold_2);
-    actionManager.addActionToTimeline(a_call_3);
-    actionManager.addActionToTimeline(fold_4);
-    actionManager.addActionToTimeline(call_6);
+    actionManager.addActionToTimelineAndUpdateActionState(check_1);
+    actionManager.addActionToTimelineAndUpdateActionState(raise_2);
+    actionManager.addActionToTimelineAndUpdateActionState(raise_3);
+    actionManager.addActionToTimelineAndUpdateActionState(call_4);
+    actionManager.addActionToTimelineAndUpdateActionState(a_call_5);
+    actionManager.addActionToTimelineAndUpdateActionState(raise_6);
+    actionManager.addActionToTimelineAndUpdateActionState(a_raise_7);
+    actionManager.addActionToTimelineAndUpdateActionState(a_call_8);
+    actionManager.addActionToTimelineAndUpdateActionState(a_raise_9);
+    actionManager.addActionToTimelineAndUpdateActionState(fold_1);
+    actionManager.addActionToTimelineAndUpdateActionState(fold_2);
+    actionManager.addActionToTimelineAndUpdateActionState(a_call_3);
+    actionManager.addActionToTimelineAndUpdateActionState(fold_4);
+    actionManager.addActionToTimelineAndUpdateActionState(call_6);
 
     ASSERT_EQ(actionManager.getActiveBet(), 5000);
     ASSERT_EQ(actionManager.isActionsFinished(9), true);
