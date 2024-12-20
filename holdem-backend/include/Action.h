@@ -32,20 +32,13 @@ public:
 
     static string actionTypeToStr(ActionType action) {
         switch (action) {
-            case CHECK:
-                return "Check";
-            case BET:
-                return "Bet";
-            case CALL:
-                return "Call";
-            case RAISE:
-                return "Raise";
-            case FOLD:
-                return "Fold";
-            case BLIND:
-                return "Blind";
-            default:
-                return "Invalid Action";
+            case CHECK: return "Check";
+            case BET: return "Bet";
+            case CALL: return "Call";
+            case RAISE: return "Raise";
+            case FOLD: return "Fold";
+            case BLIND: return "Blind";
+            default: return "Invalid Action";
         }
     }
 };

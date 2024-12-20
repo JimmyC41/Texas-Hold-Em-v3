@@ -116,14 +116,14 @@ private:
     // Helper function to validate player chips input
     size_t queryPlayerChips();
 
+    // Helper function to validate chip counts of players
+    void validateChipCounts();
+
     // Helper function to query the number of chips to add
     size_t queryChipsToAdd(size_t minChips, size_t currentChips) const;
 public:
     GameController(size_t smallBlind, size_t bigBlind);
-
-    // Validate chip counts of players
-    void validateChipCounts();
-
+    
     // Initiates a new betting street
     void startStreet(Street newStreet);
 

@@ -4,7 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/homebrew/opt/googletest/include"
+                "/opt/homebrew/opt/googletest/include",
+                "/opt/homebrew/opt/googletest/include/gtest"
             ],
             "defines": [],
             "macFrameworkPath": [

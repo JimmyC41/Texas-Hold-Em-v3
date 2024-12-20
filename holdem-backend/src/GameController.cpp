@@ -21,63 +21,6 @@ void GameController::displayPlayersInGame() const {
     gamePlayers.displayPlayersInGame();
 }
 
-// PLAYER SPECIFIC METHODS
-
-void GameController::queryNewPlayer() {
-    while (true) {
-        cout << "Would you like to add a new player? (y/n): ";
-        string input;
-        cin >> input;
-
-        transform(input.begin(), input.end(), input.begin(), ::tolower);
-
-        if (input != "y") {
-            cout << "No more players will be added!" << endl;
-            break;
-        }
-
-        string name = queryPlayerName();
-        size_t chips = queryPlayerChips();
-
-        shared_ptr<Player> newPlayer = gamePlayers.addPlayerToGame(name, chips);
-        if (newPlayer != nullptr) turnManager.addPlayerInHand(newPlayer);
-    }
-}
-
-void GameController::queryRemovePlayer() {
-    while (true) {
-        cout << "Would you like to remove an existing player? (y/n: ";
-        string input;
-        cin >> input;
-
-        transform(input.begin(), input.end(), input.begin(), ::tolower);
-
-        if (input != "y") {
-            cout << "No more players will be removed.\n" << endl;
-            break;
-        }
-
-        string playerName = queryPlayerName();
-
-        shared_ptr<Player> oldPlayer = gamePlayers.removePlayerFromGame(playerName);
-        if (oldPlayer != nullptr) turnManager.removePlayerFromHand(oldPlayer);
-    }
-}
-
-void GameController::validateChipCounts() {
-    for (auto& player : gamePlayers.getGamePlayers()) {
-        if (player->getChips() < bigBlind) {
-            cout << "Player " << player->getName() << " has less than the minimum required chips (" << bigBlind << "). Current chips: " << player->getChips() << endl;
-            size_t chipsToAdd = queryChipsToAdd(bigBlind, player->getChips());
-            player->addChips(chipsToAdd);
-            cout << "Player " << player->getName() << " now has " << player->getChips() << " chips." << endl;
-        }
-        else {
-            cout << "Player " << player->getName() << "has sufficient chips to continue." << endl;
-        }
-    }
-}
-
 // STREET SPECIFIC METHODS
 
 bool GameController::isNoMoreAction(Street newStreet) {
@@ -205,22 +148,73 @@ void GameController::main() {
     cout << "Ending the application! Game Over!\n" << endl;
 }
 
+// PLAYER SPECIFIC METHODS
+
+void GameController::queryNewPlayer() {
+    while (true) {
+        cout << "Would you like to add a new player? (y/n): ";
+        string input;
+        cin >> input;
+
+        transform(input.begin(), input.end(), input.begin(), ::tolower);
+
+        if (input != "y") {
+            cout << "No more players will be added!" << endl;
+            break;
+        }
+
+        string name = queryPlayerName();
+        size_t chips = queryPlayerChips();
+
+        shared_ptr<Player> newPlayer = gamePlayers.addPlayerToGame(name, chips);
+        if (newPlayer != nullptr) turnManager.addPlayerInHand(newPlayer);
+    }
+}
+
+void GameController::queryRemovePlayer() {
+    while (true) {
+        cout << "Would you like to remove an existing player? (y/n: ";
+        string input;
+        cin >> input;
+
+        transform(input.begin(), input.end(), input.begin(), ::tolower);
+
+        if (input != "y") {
+            cout << "No more players will be removed.\n" << endl;
+            break;
+        }
+
+        string playerName = queryPlayerName();
+
+        shared_ptr<Player> oldPlayer = gamePlayers.removePlayerFromGame(playerName);
+        if (oldPlayer != nullptr) turnManager.removePlayerFromHand(oldPlayer);
+    }
+}
+
+void GameController::validateChipCounts() {
+    for (auto& player : gamePlayers.getGamePlayers()) {
+        if (player->getChips() < bigBlind) {
+            cout << "Player " << player->getName() << " has less than the minimum required chips (" << bigBlind << "). Current chips: " << player->getChips() << endl;
+            size_t chipsToAdd = queryChipsToAdd(bigBlind, player->getChips());
+            player->addChips(chipsToAdd);
+            cout << "Player " << player->getName() << " now has " << player->getChips() << " chips." << endl;
+        }
+        else {
+            cout << "Player " << player->getName() << "has sufficient chips to continue." << endl;
+        }
+    }
+}
+
 // HELPER FUNCTIONS
 
 string GameController::streetToStr(Street street) {
     switch(street) {
-        case PRE_FLOP:
-            return "Pre-Flop";
-        case FLOP:
-            return "Flop";
-        case TURN:
-            return "Turn";
-        case RIVER:
-            return "River";
-        case SHOWDOWN:
-            return "Showdown";
-        default:
-            return "Unknown Street";
+        case PRE_FLOP: return "Pre-Flop";
+        case FLOP: return "Flop";
+        case TURN: return "Turn";
+        case RIVER: return "River";
+        case SHOWDOWN: return "Showdown";
+        default: return "Unknown Street";
     }
 }
 
@@ -277,10 +271,8 @@ shared_ptr<Action> GameController::createAction(const ClientAction& action, size
             return make_shared<BlindAction>(action.player, action.amount);
         case CALL:
             if (action.amount == initialChips) {
-                cout << "All in Call triggered" << endl;
                 return make_shared<AllInCallAction>(action.player, action.amount);
             }
-            cout << "Just a normal call?" << endl;
             return make_shared<CallAction>(action.player, action.amount);
         case CHECK:
             return make_shared<CheckAction>(action.player);
