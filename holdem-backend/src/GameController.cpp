@@ -15,14 +15,10 @@ GameController::GameController(size_t smallBlind, size_t bigBlind) :
     handEvaluator(),
     streetState() {}
 
-// GAME STATE INFORMATION METHODS
-
-void GameController::displayPlayersInGame() const {
-    gamePlayers.displayPlayersInGame();
-}
-
 // STREET SPECIFIC METHODS
 
+// Move to turnManager?
+// Change name to: canStartNewStreet
 bool GameController::isNoMoreAction(Street newStreet) {
     // If there is only one player left in the hand, betting action is complete!
     if (turnManager.getNumPlayersInHand() == 1) {
@@ -44,28 +40,61 @@ bool GameController::isNoMoreAction(Street newStreet) {
     }
 }
 
+// While loop can be simplified to:
+// Display info
+// Ask info
+// Process info
 void GameController::startStreet(Street newStreet) {
     if (isNoMoreAction(newStreet)) return;
-    cout << "\nStarting " << streetToStr(newStreet) << " Street\n" << endl;
+    setupStreet(newStreet); // UPDATE GAME STATE
 
-    setupStreet(newStreet);
     while (!isStreetOver(streetState.getInitialNumPlayers())) {
+
         // Get player to act and fetch possible actions
-        shared_ptr<Player> curPlayer = turnManager.getPlayerToAct();
+        shared_ptr<Player> curPlayer = turnManager.getPlayerToAct(); // UPDATE GAME STATE
         udpateStreetStateForCurPlayer(curPlayer);
-        vector<PossibleAction> possibleActions = actionManager.getAllowedActionTypes(streetState.getPlayerCanRaise());
+        vector<PossibleAction> possibleActions = actionManager.getAllowedActionTypes(streetState.getPlayerCanRaise()); // UPDATE GAME STATE
+
+        // DISPLAY GAME STATE
+        // REQUEST CLIENT INPUT
 
         // Request client action given possible actions
         ClientAction clientAction = clientManager.getClientAction(streetState, possibleActions);
 
-        // Add action to the action timeline
+        // Process the new action object in ActionManager, potManager and turnManager
+        // Refactor: We can chuck the client Action inside processNewAction
         shared_ptr<Action> playerAction = createAction(clientAction, streetState.getPlayerInitialChips());
-
-        // Process the new action in ActionManager, potManager and turnManager
-        processNewAction(curPlayer, playerAction);
+        processNewAction(curPlayer, playerAction); // UPDATE GAME STATE
     }
 
-    cleanupStreet();
+    cleanupStreet(); // UPDATE GAME STATE
+}
+
+void GameController::setupStreet(Street newStreet) {
+    cout << "\nStarting " << streetToStr(newStreet) << " Street\n" << endl;
+
+    streetState.setStreet(newStreet);
+    streetState.setInitialNumPlayers(turnManager.getNumPlayersInHand());
+
+    if (newStreet == PRE_FLOP) {
+        dealPlayers();
+        handleBlind(turnManager, actionManager, potManager, smallBlind, true);
+        handleBlind(turnManager, actionManager, potManager, bigBlind, false);
+    } else if (newStreet == FLOP) {
+        dealBoard(3);
+        turnManager.setEarlyPositionToAct();
+    } else if (newStreet == TURN || newStreet == RIVER) {
+        dealBoard(1);
+        turnManager.setEarlyPositionToAct();
+    }
+}
+
+inline void handleBlind(TurnManager& turnManager, ActionManager& actionManager, PotManager& potManager, int blindAmount, bool isSmallBlind) {
+    if (isSmallBlind) turnManager.setSmallBlindToAct();
+    auto player = turnManager.getPlayerToAct();
+    auto blindAction = std::make_shared<BlindAction>(player, blindAmount);
+    actionManager.addActionToTimelineAndUpdateActionState(blindAction);
+    potManager.addPlayerBet(player, blindAmount, false);
 }
 
 void GameController::processNewAction(shared_ptr<Player>& player, const shared_ptr<Action>& playerAction) {
@@ -108,11 +137,13 @@ void GameController::cleanupStreet() {
 // ROUND SPECIFIC METHODS
 
 void GameController::startRound() {
+    // DISPLAY THE GAME STATE TO THE CLIENT
     startStreet(PRE_FLOP);
     startStreet(FLOP);
     startStreet(TURN);
     startStreet(RIVER);
-    evaluatePots();
+    evaluatePots(); // UPDATE STATE
+    // DISPLAY STATE
     cout << "Round completed!\n" << endl;
 }
 
@@ -123,6 +154,7 @@ void GameController::evaluatePots() {
     potManager.awardPots(sortedPlayers);
 }
 
+// Move to handEvaluator
 void GameController::populatePlayerHandsMap() {
     for (const auto& player : gamePlayers.getGamePlayers()) {
         // Add hole cards
@@ -205,8 +237,6 @@ void GameController::validateChipCounts() {
     }
 }
 
-// HELPER FUNCTIONS
-
 string GameController::streetToStr(Street street) {
     switch(street) {
         case PRE_FLOP: return "Pre-Flop";
@@ -235,31 +265,7 @@ void GameController::dealBoard(int numCards) {
     cout << "----------------------------------------\n" << endl;
 }
 
-inline void handleBlind(TurnManager& turnManager, ActionManager& actionManager, PotManager& potManager, int blindAmount, bool isSmallBlind) {
-    if (isSmallBlind) turnManager.setSmallBlindToAct();
-    auto player = turnManager.getPlayerToAct();
-    auto blindAction = std::make_shared<BlindAction>(player, blindAmount);
-    actionManager.addActionToTimelineAndUpdateActionState(blindAction);
-    potManager.addPlayerBet(player, blindAmount, false);
-}
-
-void GameController::setupStreet(Street newStreet) {
-    streetState.setStreet(newStreet);
-    streetState.setInitialNumPlayers(turnManager.getNumPlayersInHand());
-
-    if (newStreet == PRE_FLOP) {
-        dealPlayers();
-        handleBlind(turnManager, actionManager, potManager, smallBlind, true);
-        handleBlind(turnManager, actionManager, potManager, bigBlind, false);
-    } else if (newStreet == FLOP) {
-        dealBoard(3);
-        turnManager.setEarlyPositionToAct();
-    } else if (newStreet == TURN || newStreet == RIVER) {
-        dealBoard(1);
-        turnManager.setEarlyPositionToAct();
-    }
-}
-
+// Move to Client Manager
 shared_ptr<Action> GameController::createAction(const ClientAction& action, size_t initialChips) {
     switch (action.type) {
         case BET:
@@ -289,6 +295,7 @@ shared_ptr<Action> GameController::createAction(const ClientAction& action, size
     }
 }
 
+// Move to actionManager
 bool GameController::isStreetOver(int initialPlayersInHand) {
     return actionManager.isActionsFinished(initialPlayersInHand);
 }
@@ -329,10 +336,8 @@ void GameController::setupNewRound() {
     // Clear action timeline
     actionManager.clearActionTimelineAndResetActionState();
 
-    // Reset folded players
+    // Reset folded players and rotate positions
     turnManager.moveAllPlayersToInHand();
-
-    // Rotate positions
     turnManager.rotatePositions();
 
     // Reset player bets, dead money and pots
@@ -361,6 +366,8 @@ bool GameController::verifyGamePlayers() {
     validateChipCounts();
     return verifyNumPlayers();
 }
+
+// STDOUT STUFF
 
 string GameController::queryPlayerName() {
     string name;
@@ -409,4 +416,12 @@ size_t GameController::queryChipsToAdd(size_t minChips, size_t currentChips) con
         }
     }
     return chipsToAdd;
+}
+
+// TO DELETE LATER:
+
+// GAME STATE INFORMATION METHODS
+
+void GameController::displayPlayersInGame() const {
+    gamePlayers.displayPlayersInGame();
 }
