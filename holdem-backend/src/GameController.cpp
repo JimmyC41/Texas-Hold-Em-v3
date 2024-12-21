@@ -126,24 +126,11 @@ void GameController::startRound() {
 
 void GameController::evaluatePots() {
     potManager.displayPots();
-    populatePlayerHandsMap();
+    handEvaluator.populatePlayerHandsMap(gamePlayers.getGamePlayers(), board.getCommunityCards());
     vector<shared_ptr<Player>> sortedPlayers = handEvaluator.getSortedPlayers();
     potManager.awardPots(sortedPlayers);
 }
 
-// Move to handEvaluator
-void GameController::populatePlayerHandsMap() {
-    for (const auto& player : gamePlayers.getGamePlayers()) {
-        // Add hole cards
-        for (const auto& holeCard : player->getHand()) {
-            handEvaluator.addDealtCard(player, holeCard);
-        }
-        // Add community cards
-        for (const auto& communityCard : board.getCommunityCards()) {
-            handEvaluator.addDealtCard(player, communityCard);
-        }
-    }
-}
 
 // GAME SPECIFIC METHODS
 

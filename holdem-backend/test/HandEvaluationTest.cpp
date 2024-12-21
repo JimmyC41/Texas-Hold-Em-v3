@@ -56,7 +56,7 @@ protected:
         return selectedCards;
     }
 
-    void dealCards(HandEvaluator& evaluator, shared_ptr<Player>& player, vector<Card>& cards) {
+    void dealCards(HandEvaluator& handEvaluator, shared_ptr<Player>& player, vector<Card>& cards) {
         for (const auto& card : cards) {
             handEvaluator.addDealtCard(player, card);
         }

@@ -38,7 +38,7 @@ Position Player::getPosition() const {
     return position;
 }
 
-const std::vector<Card>& Player::getHand() const {
+const vector<Card>& Player::getHand() const {
     return hand;
 }
 

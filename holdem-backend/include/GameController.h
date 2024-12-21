@@ -80,10 +80,6 @@ private:
     // Street helper function to update the street state after fetching the current player
     void udpateStreetStateForCurPlayer(const shared_ptr<Player>& player);
 
-    // Round helper function to populate the hashmap in the hand evaluator class
-    // playerHands maps players to their hole and community cards
-    void populatePlayerHandsMap();
-
     // Round function to award pots when betting action is complete
     void evaluateHandsAndAwardPots();
 

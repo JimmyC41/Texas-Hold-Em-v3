@@ -9,14 +9,14 @@ PokerHand::PokerHand() : bitwise(0), handSize(0), category(HandCategory::NONE) {
 HandEvaluator::HandEvaluator() : playerHands() {}
 
 vector<shared_ptr<Player>> HandEvaluator::getSortedPlayers() {
-    vector<shared_ptr<Player>> players;
-    for (const auto& entry : playerHands) players.push_back(entry.first);
+    vector<shared_ptr<Player>> sortedPlayers;
+    for (const auto& entry : playerHands) sortedPlayers.push_back(entry.first);
 
-    sort(players.begin(), players.end(), [this](const shared_ptr<Player>& a, const shared_ptr<Player>& b) {
+    sort(sortedPlayers.begin(), sortedPlayers.end(), [this](const shared_ptr<Player>& a, const shared_ptr<Player>& b) {
         return compareHands(playerHands.at(a), playerHands.at(b));
     });
 
-    return players;
+    return sortedPlayers;
 }
 
 void HandEvaluator::addDealtCard(shared_ptr<Player> player, const Card& card) {
@@ -446,5 +446,18 @@ Value HandEvaluator::straightMaskToHighCard(uint64_t straightMask) {
         case 0xF80: return Value::KING;
         case 0x1F00:return Value::ACE;
         default: return Value::TWO;
+    }
+}
+
+void HandEvaluator::populatePlayerHandsMap(const vector<shared_ptr<Player>>& players, const vector<Card>& board) {
+    for (const auto& player : players) {
+        // Add hole cards
+        for (const auto& holeCard : player->getHand()) {
+            addDealtCard(player, holeCard);
+        }
+        // Add community cards
+        for (const auto& communityCard : board) {
+            addDealtCard(player, communityCard);
+        }
     }
 }

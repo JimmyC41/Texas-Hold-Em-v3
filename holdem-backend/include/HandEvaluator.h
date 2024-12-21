@@ -94,6 +94,8 @@ private:
 public:
     HandEvaluator();
 
+    void populatePlayerHandsMap(const vector<shared_ptr<Player>>& players, const vector<Card>& board);
+
     // Updates each player's PokerHand in the hashmap
     void addDealtCard(shared_ptr<Player> player, const Card& card);
 
