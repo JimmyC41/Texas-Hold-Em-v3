@@ -39,6 +39,8 @@ private:
 public:
     TurnManager();
 
+    bool isNewStreetPossible(); // 
+
     // Adds a player to the playersInHand vector.
     // Sorts players, sets blinds and button.
     // Called for each player before starting a new round.

@@ -15,29 +15,13 @@ GameController::GameController(size_t smallBlind, size_t bigBlind) :
     handEvaluator(),
     streetState() {}
 
-// STREET SPECIFIC METHODS
 
-// Move to turnManager?
-// Change name to: canStartNewStreet
-bool GameController::isNoMoreAction(Street newStreet) {
-    // If there is only one player left in the hand, betting action is complete!
-    if (turnManager.getNumPlayersInHand() == 1) {
-        cout << "No more players to act. Skipping " << streetToStr(newStreet) << endl;
-        return true;
-    }
-
-    // If all players are all in, betting action is complete!
-    bool allPlayersAllIn = true;
-    for (auto const& player : turnManager.getPlayersInHand()) {
-        if (player->getChips() != 0) allPlayersAllIn = false;
-    }
-
-    if (allPlayersAllIn) {
-        cout << "Players in the hand are all in. Skipping " << streetToStr(newStreet) << endl;
-        return true;
-    } else {
-        return false;
-    }
+inline void handleBlind(TurnManager& turnManager, ActionManager& actionManager, PotManager& potManager, int blindAmount, bool isSmallBlind) {
+    if (isSmallBlind) turnManager.setSmallBlindToAct();
+    auto player = turnManager.getPlayerToAct();
+    auto blindAction = std::make_shared<BlindAction>(player, blindAmount);
+    actionManager.addActionToTimelineAndUpdateActionState(blindAction);
+    potManager.addPlayerBet(player, blindAmount, false);
 }
 
 // While loop can be simplified to:
@@ -45,10 +29,11 @@ bool GameController::isNoMoreAction(Street newStreet) {
 // Ask info
 // Process info
 void GameController::startStreet(Street newStreet) {
-    if (isNoMoreAction(newStreet)) return;
+    if (!turnManager.isNewStreetPossible()) return; // UPDATE GAME STATE
+
     setupStreet(newStreet); // UPDATE GAME STATE
 
-    while (!isStreetOver(streetState.getInitialNumPlayers())) {
+    while (!actionManager.isActionsFinished(streetState.getInitialNumPlayers())) {
 
         // Get player to act and fetch possible actions
         shared_ptr<Player> curPlayer = turnManager.getPlayerToAct(); // UPDATE GAME STATE
@@ -87,14 +72,6 @@ void GameController::setupStreet(Street newStreet) {
         dealBoard(1);
         turnManager.setEarlyPositionToAct();
     }
-}
-
-inline void handleBlind(TurnManager& turnManager, ActionManager& actionManager, PotManager& potManager, int blindAmount, bool isSmallBlind) {
-    if (isSmallBlind) turnManager.setSmallBlindToAct();
-    auto player = turnManager.getPlayerToAct();
-    auto blindAction = std::make_shared<BlindAction>(player, blindAmount);
-    actionManager.addActionToTimelineAndUpdateActionState(blindAction);
-    potManager.addPlayerBet(player, blindAmount, false);
 }
 
 void GameController::processNewAction(shared_ptr<Player>& player, const shared_ptr<Action>& playerAction) {

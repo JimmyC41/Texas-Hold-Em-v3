@@ -200,3 +200,21 @@ size_t TurnManager::getBigStackChipCount() {
 
     return (*it)->getChips();
 }
+
+bool TurnManager::isNewStreetPossible() {
+    // If there is only one player left in the hand, no betting action is possible!
+    if (getNumPlayersInHand() == 1) {
+        cout << "No more players to act. Skipping the current street." << endl;
+        return false;
+    }
+
+    // If there are at least two players in the hand and at least one player
+    // is not all in, there is still betting action to be had!
+    bool allPlayersAllIn = true;
+    for (auto const& player : getPlayersInHand()) {
+        if (player->getChips() != 0) return true;
+    }
+
+    cout << "Players in the hand are all in. Skipping the current street." << endl;
+    return false;
+}
