@@ -74,9 +74,6 @@ private:
     // Street helper function to create an action object from a client object
     shared_ptr<Action> createAction(const ClientAction& clientAction, size_t initialChips);
 
-    // Street helper function to check if all players have acted in a given round
-    bool isStreetOver(int initialPlayersInhand);
-
     // Street helper function to update the street state after fetching the current player
     void udpateStreetStateForCurPlayer(const shared_ptr<Player>& player);
 

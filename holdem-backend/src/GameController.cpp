@@ -259,11 +259,6 @@ shared_ptr<Action> GameController::createAction(const ClientAction& action, size
     }
 }
 
-// Move to actionManager
-bool GameController::isStreetOver(int initialPlayersInHand) {
-    return actionManager.isActionsFinished(initialPlayersInHand);
-}
-
 void GameController::udpateStreetStateForCurPlayer(const shared_ptr<Player>& player) {
     streetState.setCurPlayer(player);
     streetState.setActiveBet(actionManager.getActiveBet());
