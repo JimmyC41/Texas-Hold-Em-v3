@@ -68,5 +68,6 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "algorithm": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "/Users/jimmy/Desktop/TexasHoldEmV3/holdem-backend"
 }
